@@ -1,0 +1,20 @@
+Dicop::Data::Proxy {
+  description = "All your client are belong to us"
+  dirty = ""
+  done_chunks = 0
+  done_keys = 0
+  failed_chunks = 0
+  fan = ""
+  group = 1
+  id = 10
+  ip = ""
+  last_chunk = 0
+  last_connect = 0
+  lost_chunks = 0
+  lost_keys = 1
+  mask = ""
+  name = "Kelly"
+  temp = ""
+  uptime = 0
+  version = unknown
+  }

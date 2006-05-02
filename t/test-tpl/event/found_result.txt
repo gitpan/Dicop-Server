@@ -1,0 +1,3 @@
+##localtime##
+Found a result for job ###jobid## (##jobdescription##): '##result_ascii##' (##result_hex##)
+

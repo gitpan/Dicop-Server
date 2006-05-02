@@ -1,0 +1,97 @@
+=pod
+
+=head1 NAME
+
+DICOPD - Details for the dicopd daemon.
+
+Last update: 2004-11-25
+
+=head1 OVERVIEW
+
+C<dicopd> is the master server daemon. Use the C<Dicop::Proxy> package
+if you want to setup a proxy.
+
+=head2 Installing
+
+Follow the instructions in INSTALL before you attempt to start the daemon.
+
+=head2 Starting
+
+To start the daemon in the foreground, type
+
+	./dicopd
+
+It is recommended to run it in the background, as well as redirect its STDERR
+output to a file with:
+
+	./dicopd 2>stderr.txt &
+
+You can then follow the startup phase with C<tail -f stderr.txt>, which might
+take a few seconds to complete.
+
+=head2 Connecting to it, Administration
+
+You can connect with any webbrowser to the running daemon like it where a web
+server. If your daemon is on IP 192.168.0.1 and listening on port 8888 (the
+default), then connect to:
+
+	http://192.168.0.1:8888/
+
+From there on you should be able to navigate through the pages.
+
+=head2 Troubleshooting
+
+=over 2
+
+=item Taint checking
+
+Please note that
+
+	perl dicopd
+
+will not work, since then the taint checking won't work. You must either start
+it with C<-T> on the commandline like this:
+
+	perl -w -T dicopd
+
+or this:
+
+	./dicopd
+
+=item ssh
+
+When using C<ssh> to connect to a machine, and then starting the daemon from
+there, it is possible that the daemon is killed when you simple close the
+terminal window. You need to logout first, the logout might hang, but you can
+then safely close the terminal window.
+
+=back
+
+=head2 PORT, GROUP, USER
+
+The port to bind on, the user and group can be set in C<config/server.cfg>. You
+should, for security reasons, create a new user and group for the daemon.
+
+Please make sure that the user and group actually exist, or the daemon will not
+start.
+
+=head2 CHROOT
+
+Setting the C<chroot> key in the config file to an non-empty string will cause
+the daemon to attempt to change the root directory to the specified directory
+while running. The usual setting is:
+
+	chroot	= "."
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

@@ -1,0 +1,12 @@
+<li><a href="##selfhelp_new##">What's new </a>
+<li><a href="##selfhelp_config##">DiCoP Config file format and documentation </a>
+<li><a href="##selfhelp_client##">This covers the DiCoP client from the end-user's point of view</a>
+<li><a href="##selfhelp_dicop##">Overview and the communication between server, proxy, client and worker in depth</a>
+<li><a href="##selfhelp_dicopd##">Details for the dicopd daemon</a>
+<li><a href="##selfhelp_files##">File structure of the server/client</a>
+<li><a href="##selfhelp_glossary##">Glossary with often used acronyms or words</a>
+<li><a href="##selfhelp_objects##">Overview over the objects and data structures used in Dicop::Server </a>
+<li><a href="##selfhelp_security##">Security aspects of the server, clients and workers</a>
+<li><a href="##selfhelp_server##">This documentations covers the DiCoP server's gory guts</a>
+<li><a href="##selfhelp_trouble##">Troubleshooting </a>
+<li><a href="##selfhelp_worker##">The workers started by the client </a>

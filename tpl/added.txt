@@ -1,0 +1,36 @@
+
+##include_menu_added.inc##
+
+<h1><a class="h" href="##selfstatus_main##">DiCoP</a> - Added ##type##</h1>
+
+<div class="text">
+
+<p>
+In case of a job with a normal file as target, the script output was:
+</p>
+
+<pre>
+##output##
+</pre>
+
+<p>
+The ##type## was added with the following parameters:
+</p>
+
+<table>
+
+##params##
+
+</table>
+
+<p>
+You can <a href="##selfform_##simpletype####;id_##id##">change</a> the created
+##type## or add <a href="##selfform_##simpletype####">another</a>, or
+<a href="##selfconfirm_##simpletype####;id_##id##">delete it</a>.
+</p>
+
+<p>
+Go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

@@ -1,0 +1,259 @@
+
+=pod
+
+=head1 History revision for DiCoP
+
+This document details the complete changes of version v2.23.
+
+See the CHANGES-2.20 file for the full version history up to version v2.20,
+and the CHANGES-2.22 file for the full version history up to version v2.22,
+
+=head2 2004-01-21 (Server/Client v2.23 build 14)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	print output of scripts when add failed (because script did not run)
+	when adding a new job automatically, don't disable newjob, so that
+	 we add a new job for each found result
+	improve detection of whether target is a file
+	Chunk.pm: deal with non-existant clients
+	Data.pm: fix bug in deleting clients with outstanding chunks
+	wcr lib: Total: lines 16204, words 59729, chars 434798
+	4941 tests ()
+
+=back
+
+=head2 2004-01-20 (Server/Client v2.23 build 13)
+
+=over 2
+
+=item added
+
+	maxchunksize param for adding jobs
+
+=item fixed
+
+	wcr lib: Total: lines 16204, words 59729, chars 434798
+	4941 tests (maxchunksize for new jobs)
+
+=back
+
+=head2 2004-01-19 (Server/Client v2.23 build 12)
+
+=over 2
+
+=item added
+
+	tpl/massadd_failed.txt - mass add clients
+	Request.pm: allow cmd_add;type_client;count_1
+	adding client(s) needs a pwdrepeat, too
+
+=item fixed
+
+	Data.pm: use $client, not $clientid in del_verifier()
+	Item.pm, Data.pm: work better with non-numerical IDs (like "foo01")
+	Data.pm: undef warning in line 858
+	wcr lib: Total: lines 16204, words 59729, chars 434798
+	4896 tests (mass-add clients)
+
+=back
+
+=head2 2004-01-16 (Server/Client v2.23 build 11)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	require Math::BigInt v1.69
+	amended NEW
+	(c) and URL in CHANGES, README, TODO etc
+	wcr lib: Total: lines 16143, words 59469, chars 432908
+	4820 tests ()
+
+=back
+
+=head2 2003-12-09 (Server/Client v2.23 build 10)
+
+=over 2
+
+=item added
+
+	Added pwd field in tpl/changeclient.txt	
+
+=item fixed
+
+	4820 tests ()
+
+=back
+
+=head2 2003-12-08 (Server/Client v2.23 build 9)
+
+=over 2
+
+=item added
+
+	changing of client settings is possible now
+	Warn if chunk/job actual size differs from on disk stored version
+	Warn if simple character set contains double characters
+
+=item fixed
+
+	Item.pm: make shallow copies of Dicop::Data:: items in copy()
+	Client.pm: fixed can_change() to actually work
+	Client.pm: fixed construct() to not construct groups twice
+	4820 tests (more in data_chg.t)
+
+=back
+
+=head2 2003-11-28 (Server/Client v2.23 build 8)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	chunk secret stored in hex, not ASCII
+	wcr lib: Total: lines 16122, words 59298, chars 431659
+	4811 tests (more tests for chunk split)
+
+=back
+
+=head2 2003-11-27 (Server/Client v2.23 build 7)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	adding a simple or extract charset did not write out charsets.def
+	wcr lib: Total: lines 16122, words 59298, chars 431659
+	4807 tests ()
+
+=back
+
+=head2 2003-11-10 (Server/Client v2.23 build 6)
+
+=over 2
+
+=item added
+
+	field=value to filter items that are included in a SELECT list (as to
+	 allow only certain types of item when only these make sense)
+
+=item fixed
+
+	removed unused config var test_job_speed
+	Dicop::Event::lock(...) instead lock(...) inside Event.pm for 5.8.1
+	wcr lib: Total: lines 16106, words 59200, chars 430936
+	4807 tests ()
+
+=back
+
+=head2 2003-10-16 (Server/Client v2.23 build 5)
+
+=over 2
+
+=item added
+
+	Request.pm: allow add of extractcharset
+	Form to add extractcharset to tpl/addcharset.txt
+
+=item fixed
+
+	type() in Dictionary.pm
+	wcr lib: Total: lines 16106, words 59200, chars 430908
+	4807 tests (add extractcharset)
+
+=back
+
+=head2 2003-10-14 (Server/Client v2.23 build 4)
+
+=over 2
+
+=item added
+
+	Request: allow adding of extractcharset
+	Request: allow parameter "imagefile" when adding jobs
+
+=item fixed
+
+	made Dictionary.pm a subclass of Charset.pm
+	need not to send jobtype over to client
+	teached Client.pm to handle chunks with only chunk file name
+	added input field for imagefile to tpl/addjob.tpl
+	wcr lib: Total: lines 16101, words 59172, chars 430684
+	4803 tests (msg 102, chunk description file in Client)
+
+=back
+
+=head2 2003-10-13 (Server/Client v2.23 build 3)
+
+=over 2
+
+=item added
+
+	Dicop::Data::Charset::Extract.pm
+	Files.pm: write_chunk_description()
+	Client.pm: handle msg 102, and delete temp. files after work
+
+=item fixed
+
+	moved check for start/end from Job.pm to Charset.pm
+	override check for start/end in Extract.pm
+	typos and spelling in Dictionary.pm
+	fixed tests in data_add, data_del, data_chg
+	wcr lib: Total: lines 16022, words 58884, chars 428465
+	4790 tests (extract, Files)
+
+=back
+
+=head2 2003-10-07 (Server/Client v2.23 build 2)
+
+=over 2
+
+=item added
+
+	updated performance section(s) in Dicopd.pod
+
+=item fixed
+
+	amended NEW, server.cfg.sample etc
+	wcr lib: Total: lines 15803, words 58072, chars 422425
+	4778 tests ()
+
+=back
+
+=head2 2003-09-23 (Server/Client v2.23 build 1)
+
+=over 2
+
+=item added
+
+	took over from v2.22
+
+=item fixed
+
+	wcr lib: Total: lines 15803, words 58072, chars 422425
+	4778 tests ()
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut

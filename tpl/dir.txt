@@ -1,0 +1,20 @@
+<!-- template for directory list with one template entry between start/end -->
+
+<table cellspacing="0" cellpadding="0" border="0">
+
+<tr class="thead">
+  <th>Select</th>
+  <th class="DIR">Name</th>
+  <th class="DIR_RIGHT">Size</th>
+</tr>
+
+<!-- start -->
+<tr>
+ <td class="DIR_##entryclass##">##select##</td>
+ <td class="DIR##odd##">##entrylink##</td>
+ <td class="DIR_RIGHT##odd##">##entrysize##</td>
+</tr>
+<!-- end -->
+
+</table>
+

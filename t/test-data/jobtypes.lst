@@ -1,0 +1,50 @@
+Dicop::Data::Jobtype {
+  charset = ""
+  description = "Test job"
+  dirty = ""
+  fixed = 0
+  hash = "123456789,987654321"
+  id = 1
+  name = test
+  script = "testscript"
+  speed = 100
+  version = "2.00"
+  }
+Dicop::Data::Jobtype {
+  charset = 2
+  description = "test jobtype 2"
+  dirty = 0
+  fixed = 3
+  hash = 123456789
+  id = 2
+  name = test
+  script = ""
+  speed = 100
+  version = "2.01"
+  minlen = 6
+  }
+Dicop::Data::Jobtype {
+  charset = 2
+  description = "test jobtype 3"
+  dirty = 0
+  fixed = 3
+  hash = 123456789
+  id = 3
+  name = test
+  script = ""
+  speed = 100
+  version = "2.01"
+  extrafields = "username, haircolor"
+  }
+Dicop::Data::Jobtype {
+  charset = ""
+  description = "Test job"
+  dirty = ""
+  fixed = 0
+  hash = "123456789,987654321"
+  id = 4
+  name = test
+  script = ""
+  speed = 100
+  version = "2.00"
+  }

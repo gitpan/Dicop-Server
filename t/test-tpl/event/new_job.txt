@@ -1,0 +1,3 @@
+Started a new job ###jobid## (##jobdescription##) with charset
+##charsetid## (##charsetdescription##), from ##jobstartlen## to ##jobendlen## characters.
+

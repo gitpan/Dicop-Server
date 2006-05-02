@@ -1,0 +1,97 @@
+<html>
+<head>
+ <title>##title##</title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  body {
+    background: white;
+    }
+  h1, h2, h3, h4, h5, h6, h7 {
+    background: #46a0B4;
+    border-color: black;
+    color: white;
+    }
+  div.menu {
+    background: #46a0B4;
+    border-color: black;
+    color: white;
+    }
+  div.text {
+    background: #ffffff;
+    }
+  td.DIR_RIGHT_ODD, td.DIR_ODD
+    {
+    background: #d0f0f0;
+    }
+  th.auth {
+    background: #46a0B4;
+    color: white;
+    }
+  td {
+    background: #e0fff0;
+    }
+  td.editfieldname, td.editfield {
+    background: #e0fff0;
+    }
+  td.indend, td.editfieldname1, td.editfieldname2 {
+    background: #b0f0e0;
+    }
+  th {
+    background: #46a0B4;
+    color: #f0f0ff;
+    border-color: black;
+    }
+  p {
+    color: black;
+    }
+  p.footer {
+    background: #ffffff;
+    }
+  div.footerhead {
+    background: #46a0B4;
+    border-color: black;
+    }
+  div.footer {
+    background: #ffffff;
+    border-color: black; 
+    color: black;
+    }
+  input.submit, input.browse, input.reset, input.refresh {
+    background: #3098a8;
+    border-color: black;
+    color: white;
+    }
+  a:link { 
+    color: black;
+    }
+  a:link.h { 
+    color: white;
+    background: #46a0B4;
+    }
+  a:visited.h { 
+    color: white;
+    background: #46a0B4;
+    }
+  a:visited { 
+    color: black;
+    }
+  a:hover.m { 
+    background-color: 105070;
+    color: #ffffff;
+    }
+  a:hover { 
+    background: #105070;
+    color: #ffffff;
+    }
+  a:hover.h { 
+    background: #001040;
+    color: #ffffff;
+    }
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#e0e0e0 textcolor="#303030">
+

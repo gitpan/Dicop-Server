@@ -1,0 +1,1905 @@
+
+=pod
+
+=head1 History revision for DiCoP
+
+This document details the complete changes from v3.00 onwards.
+
+See the CHANGES-2.20 file for the full version history up to version v2.20,
+and the CHANGES-2.22 file for the full version history up to version v2.22,
+and the CHANGES-2.23 file for the full version history up to version v2.23.
+
+=head2 2005-02-15 (Server/Client v3.00 build 101)
+
+=item fixed
+
+	amend README.client and NEW
+	always write charset definition file when adding charsets
+	wcr lib: Total: lines 11066, words 41900, chars 310685
+	4827 tests ()
+
+=back
+
+=head2 2005-02-02 (Server/Client v3.00 build 100)
+
+=item fixed
+
+	fix menu and sort links in tpl/cases.tpl
+	wcr lib: Total: lines 11067, words 41900, chars 310720
+	4827 tests ()
+
+=back
+
+=head2 2005-01-03 (Server/Client v3.00 build 99)
+
+=item fixed
+
+	check for proper version of Math::BigInt::GMP
+	require Math::BigInt v1.74
+	prepare for release
+	wcr lib: Total: lines 11067, words 41900, chars 310720
+	4827 tests ()
+
+=back
+
+=head2 2004-12-22 (Server/Client v3.00 build 98)
+
+=item fixed
+
+	amended NEW, doc/Glossary.pod, doc/Dicop.pod
+	wcr lib: Total: lines 11052, words 41826, chars 310132
+	4827 tests ()
+
+=back
+
+=head2 2004-12-21 (Server/Client v3.00 build 97)
+
+=item fixed
+
+	amend NEW
+	change "requests" to "messages" in extended server status page
+	wcr lib: Total: lines 11052, words 41826, chars 310132
+	4827 tests ()
+
+=back
+
+=head2 2004-12-20 (Server/Client v3.00 build 96)
+
+=over 2
+
+=item added
+
+	sort cases by default by their name/number
+	config key 'debug_level' (plus doc)
+
+=item fixed
+
+	fix percentages of hits/misses in cache stats
+        include more versions in cmd_status;type_debug
+	allow sorting list of case list by name, ID, description, referee
+	wcr lib: Total: lines 11052, words 41826, chars 310132
+	4827 tests ()
+
+=back
+
+=head2 2004-12-16 (Server/Client v3.00 build 95)
+
+=over 2
+
+=item fixed
+
+	require Base build 78 (for hash fixes)
+	Data: error msg on hashing a file missed a final "\n"
+	wcr lib: Total: lines 11020, words 41727, chars 309318
+	4827 tests ()
+
+=back
+
+=head2 2004-12-15 (Server/Client v3.00 build 94)
+
+=over 2
+
+=item added
+
+	debug status: include memory and stats for request cache
+	more CSS for class "small"
+
+=item fixed
+
+	use Time::HiRes for debug status
+	require Base build 77 (for cache fixes)
+	wcr lib: Total: lines 11018, words 41706, chars 309147
+	4827 tests ()
+
+=back
+
+=head2 2004-12-13 (Server/Client v3.00 build 93)
+
+=over 2
+
+=item fixed
+
+	Client: include ID when printing number of messages from server
+	include test.pl that finally handles single parameter style calling
+	wcr lib: Total: lines 11006, words 41637, chars 308460
+	4827 tests ()
+
+=back
+
+=head2 2004-12-09 (Server/Client v3.00 build 92)
+
+=over 2
+
+=item added
+
+	status_debug: list used module versions
+	allow sorting list of jobtypes by name, ID, description
+
+=item fixed
+
+	tpl/clients.tpl: CSS for links in table header
+	wcr lib: Total: lines 11006, words 41637, chars 308460
+	4827 tests (types with 's' at end in name_from_type() vi del)
+
+=back
+
+=head2 2004-12-08 (Server/Client v3.00 build 91)
+
+=over 2
+
+=item fixed
+
+	remove double entries in build/BUNDLE_CLIENT
+	Data: use _flush_data() & _construct_file_names() from Base
+	require Base build 75
+	wcr lib: Total: lines 10984, words 41583, chars 307808
+	4798 tests ()
+
+=back
+
+=head2 2004-12-06 (Server/Client v3.00 build 90)
+
+=over 2
+
+=item fixed
+
+	Data.pm: when adding a case, leave 'url' empty
+	Data.pm: fix check_auth_request() to always return 'req0000' 
+	Dicop: base_version(), BASE_MIN_VER
+	Makefile: use Dicop->base_version
+	wcr lib: Total: lines 10999, words 41635, chars 308231
+	4798 tests (base_version)
+
+=back
+
+=head2 2004-11-30 (Server/Client v3.00 build 89)
+
+=over 2
+
+=item fixed
+
+	amend NEW, Dicop.pod, README
+	require BASE build 73 (457 error message fix)
+	browser-check: Explorer is really MSIE
+	fix typo in client.tpl
+	wcr lib: Total: lines 10999, words 41633, chars 308229
+	4796 tests ()
+
+=back
+
+=head2 2004-11-25 (Server/Client v3.00 build 88)
+
+=over 2
+
+=item fixed
+
+	CSS code on the style.tpl page (upper text box extends below tables)
+	added some more help into def/objects.def
+	amended TODO, some pods in doc/
+	add titles to "sort-by"-links on client list
+	wcr lib: Total: lines 10999, words 41631, chars 308231
+	4796 tests ()
+
+=back
+
+=head2 2004-11-23 (Server/Client v3.00 build 87)
+
+=over 2
+
+=item added
+
+	CSS: class "radio" and "check" to radio buttons and checkboxes
+	CSS: highlight input fields on hover and focus (white on deep orange)
+	extractset: allow stages, mutations, add help in def/objects
+	Data: _check_event_templates()
+	config var: eventtxt_dir
+
+=item fixed
+
+	allow changing of "trusted" setting for clients
+	removed superflous '"' in checkboxes that broke Konqueror form
+	 rendering, as well as non-empty check boxes
+	Data: removed unnecc. imports from Event.pm, and unused constants
+	amended INSTALL, README
+	setup: salt must be an ASCII string, so use a2h()
+	setup: chown on .
+	Data: check event templates on startup
+	Dicop::Base test in Makefile.PL
+	Data::status_debug: more detailed report, and size is Kb, not Mb
+	wcr lib: Total: lines 10999, words 41631, chars 308231
+	4796 tests (charset requests, debug)
+
+=back
+
+=head2 2004-11-22 (Server/Client v3.00 build 86)
+
+=over 2
+
+=item added
+
+	add a menu entry to clientlist
+	setup - incorporated touch_files, adduser.pl and added a lot of things
+
+=item fixed
+
+	adduser.pl: use random() for salt
+	converted t/datapm2.t to Test::More
+	Data: add default charsets, client, group, jobtype if none exists
+	adduser.pl: nits, and print "Error" on errors
+	adduser.pl: remove silly question for "type"
+	sorted config entires in config/server.cfg.sample in "want to change"
+	 and "usually don't need to change"
+	Dicop.pm: removed unnec. "use Dicop::Event" and return statements
+	def/requests.def: remove list from help (already covered)
+	update PREREQ
+	MANIFEST: include t/test-config/event.cfg, tpl/help/objects.tpl
+	wcr lib: Total: lines 10991, words 41600, chars 307867
+	4754 tests ()
+
+=back
+
+=head2 2004-11-18 (Server/Client v3.00 build 85)
+
+=over 2
+
+=item fixed
+
+	increase test coverage (Thanx to Devel::Cover!)
+	wcr lib: Total: lines 10955, words 41336, chars 305793
+	4754 tests (_remove_sub_arch, _delete_temp_files, _die_hard)
+
+=back
+
+=head2 2004-11-16 (Server/Client v3.00 build 84)
+
+=over 2
+
+=item fixed
+
+	don't send event "job_failed" when a job with one result get's DONE
+	Job: "addcase-..." fields are virtual
+	Client: fix display of speed factor (output always truncated to int)
+	Data: get_object(): handle type => "chunk" (turned into "chunks")
+	text for Dicop::Base min build was reversed
+	def/objects: remove stray "," in 'fake_keys = "last_chunks",'
+	Result: take over _modified as time, unless already set
+	wcr lib: Total: lines 10953, words 41317, chars 305664
+	4746 tests (speed_factor, get_object, result's time)
+
+=back
+
+=head2 2004-11-15 (Server/Client v3.00 build 83)
+
+=over 2
+
+=item added
+
+	Data: events trigger sending of event_urls
+	Data: _create_event(), _send_event()
+
+=item fixed
+
+	handle non-numeric ('') maxchunksize parameter in jobs
+	require BASE_MIN_BUILD in Dicop to catch old installs
+	require Dicop::Base build 69 in Makefile.PL
+	sort cases by their name in "Add Job" form
+	allow [ +,] in filenames, too
+	wcr lib: Total: lines 10925, words 41244, chars 305103
+	4744 tests (_create_event)
+
+=back
+
+=head2 2004-11-11 (Server/Client v3.00 build 82)
+
+=over 2
+
+=item added
+
+	config key: send_event_url_format
+	tpl/event/*.txt - text templates for send_event()
+
+=item fixed
+
+	define a title for the search result page
+	output in case of a failed search
+	require Dicop::Base build 68
+	when adding a case with a job:
+	 fill in empty fields with defaults and if case add fails, use case #1
+	Client: use _load_connector() and _connect_server() from Base
+	wcr lib: Total: lines 10800, words 40901, chars 301473
+	4734 tests ()
+
+=back
+
+=head2 2004-11-08 (Server/Client v3.00 build 81)
+
+=over 2
+
+=item added
+
+	add cmd_status;type_debug
+
+=item fixed
+
+	require Devel::Size::Report in Makefile.PL
+	wcr lib: Total: lines 10862, words 41127, chars 303209
+	4729 tests ()
+
+=back
+
+=head2 2004-11-04 (Server/Client v3.00 build 80)
+
+=over 2
+
+=item fixed
+
+	converted resultpm.t to Test::More
+	Result: alias get_as_hex() to get_as_string() to allow 'result_ascii'
+	 in mail templates
+	wcr lib: Total: lines 10832, words 41016, chars 302360
+	4725 tests (result.pm)
+
+=back
+
+=head2 2004-11-03 (Server/Client v3.00 build 79)
+
+=over 2
+
+=item fixed
+
+	adding groupedcharset: 'style' was not allowed (typo in def/requests)
+	converted t/data/request.t to Test::More
+	require Dicop::Base build 66
+	4724 tests (style in add groupedcharset)
+
+=back
+
+=head2 2004-10-28 (Server/Client v3.00 build 78)
+
+=over 2
+
+=item fixed
+
+	removed non-working test-worker prime.pl
+	test.pl: handle single parameter style calling
+	Data: retract workaround in change(), because the fields were omitted
+         from Request.pm in Base, not by the browser
+	wcr lib: Total: lines 10827, words 41010, chars 302312
+	4696 tests (.exe.exe, in memory hashing)
+
+=back
+
+=head2 2004-10-27 (Server/Client v3.00 build 77)
+
+=over 2
+
+=item fixed
+
+	converted t/clientpm.t to Test::More
+	Client: fix double double .exe .exe extension under win32
+	Data: fix broken hashing of inline files (hash() with three args)
+	Files: modifying $target broke hashing of the target file if you have
+	 both CDF/JDF and target file
+	wcr lib: Total: lines 10859, words 41161, chars 303358
+	4696 tests (.exe.exe, in memory hashing)
+
+=back
+
+=head2 2004-10-26 (Server/Client v3.00 build 76)
+
+=over 2
+
+=item fixed
+
+	in CDF/JDF, generate path to target/image file w/ ../.. in front
+	Client: using chunkfile (vs. chunk_file)
+	Client: if given a CDF, use this like a chunkfile
+	wcr lib: Total: lines 10838, words 41076, chars 302778
+	4686 tests ()
+
+=back
+
+=head2 2004-10-25 (Server/Client v3.00 build 75)
+
+=over 2
+
+=item added
+
+	added entry about chroot and external scripts into Trouble.pod
+
+=item fixed
+
+	require Math::BigInt v1.73, Dicop::Base build 64
+	Jobtype: allow charset_description
+	Job: untaint extra params for passing them to external script
+	Job: make script-output websafe by escpaping "<>&"
+	Job: quote all params to external script
+	Data: workaround in change() for the problem that browser omits
+	  unchecked checkbox fields completely
+	wcr lib: Total: lines 10827, words 41016, chars 302326
+	4686 tests ()
+
+=back
+
+=head2 2004-10-21 (Server/Client v3.00 build 74)
+
+=over 2
+
+=item added
+
+	Testcase: disabled - disable testcase temp.
+	Testcase: support fake keys startlen/endlen
+
+=item fixed
+
+	render chunk list better (class "code" for start/end, right align size)
+	render jobtype list a bit more compact (use <abbr> in table heads)
+	render testcase list with better start/end/result columns (code, length in title)
+	Jobtype: minlen field is at minimum 1
+	wcr lib: Total: lines 10767, words 40768, chars 300573
+	4676 tests ()
+
+=back
+
+=head2 2004-10-18 (Server/Client v3.00 build 73)
+
+=over 2
+
+=item fixed
+
+	Testcase: display proper charset ID on errors in start/end/result
+	Data.pm: worker_hash(): use error return value from Hash properly
+	Data.pm: request_test(): output error to client in case of missing worker
+	Data.pm: handling of msg 112 in request_test()/request_work() was borked
+	Client.pm: handling of msg 112
+	wcr lib: Total: lines 10754, words 40734, chars 300290
+	4673 tests ()
+
+=back
+
+=head2 2004-10-18 (Server/Client v3.00 build 72)
+
+=over 2
+
+=item fixed
+
+	added note about chroot and external scripts in config/server.cfg.sample
+	added a few missing class="h" to menus (jobtype, charset, proxy)
+	Testcase: also needs extra_params(), so alias it to Job.pm
+	wcr lib: Total: lines 10755, words 40733, chars 300290
+	4670 tests ()
+
+=back
+
+=head2 2004-10-18 (Server/Client v3.00 build 71)
+
+=over 2
+
+=item fixed
+
+	forgot to include tpl/styles/*.inc into MANIFEST
+	Job.pm: small cleanup
+	wcr lib: Total: lines 10756, words 40733, chars 300256
+	4669 tests ()
+
+=back
+
+=head2 2004-10-14 (Server/Client v3.00 build 70)
+
+=over 2
+
+=item added
+
+	CSS: div.footerhead
+	support for layout in style param
+	separate CSS for colors and layout
+	added style 'Ice' - a freezing blue-green style for hot summer days
+	cmd_status;type_jobresults - overview over job's results
+
+=item fixed
+
+	footer.txt: include mouse-over titles for links
+	change_object.tpl: include mouse-over titles for buttons
+	Job: extra_params(), extra_fields: use Jobtype::extrafields()
+	wcr lib: Total: lines 10759, words 40746, chars 300377
+	4669 tests (test for job's extra_fields() and extra_params())
+
+=back
+
+=head2 2004-10-13 (Server/Client v3.00 build 69)
+
+=over 2
+
+=item fixed
+
+	converted t/data/jobpm.t to Test::More
+	shorten headline on charset status page to avoid wrapping
+	append extra params when calling script
+	fix style & layout of "Cancel" button for dir/file selectors
+	wcr lib: Total: lines 10744, words 40715, chars 300154
+	4657 tests (test for job's extra_fields() and extra_params())
+
+=back
+
+=head2 2004-10-12 (Server/Client v3.00 build 68)
+
+=over 2
+
+=item fixed
+
+	added 'Return' button to dir/file selector forms
+	use Base build 61 to fix bug with '_' in file/dir names when selecting them via form
+	amended TODO
+	wcr lib: Total: lines 10721, words 40634, chars 299576
+	4656 tests (adding a job w/ a case at the same time)
+
+=back
+
+=head2 2004-10-11 (Server/Client v3.00 build 67)
+
+=over 2
+
+=item fixed
+
+	adding an object sets the correct user (from the admin name who entered
+	 it, instead of "no user")
+	insert_object(): resolve ARRAY refs, resolve ref to internal objects,
+	 skip empty keys
+	cleanups in build/fix_help.pl
+	typo in charsets.tpl
+	wcr lib: Total: lines 10721, words 40634, chars 299576
+	4652 tests (test for correct owner upon add)
+
+=back
+
+=head2 2004-10-07 (Server/Client v3.00 build 66)
+
+=over 2
+
+=item added
+
+	remove tagged lines from HTML results depending on user_agent (hack
+	 around buggy CSS models in old browsers)
+	class="h" to all links in headlines (allow specific CSS override)
+	CSS classes to all buttons
+	New CSS style: Coral
+	titles to all headline links and form buttons
+	floating authform (used for compact forms like on clientmap)
+
+=item fixed
+
+	Chunk: allow up to 4096 chars for failure reason
+	Client: shorten reason send to server
+	Chunk: decode() reason for failure for display
+	show case name as "Number:" on forms and specify that it should be unique
+	amended NEW (CSS support, typos)
+	Help pages: fixed links to items and shortened title (and thus headline)
+	link colors and joblist menu background color in Black-and-White style
+	better color scheme for Grass, Honey and Salmon
+	authform is a bit more compact by using titles instead of text
+	small code cleanups
+	clientmap.tpl: fixed HTML code
+	wcr lib: Total: lines 10708, words 40595, chars 299308
+	4651 tests ()
+
+=back
+
+=head2 2004-10-06 (Server/Client v3.00 build 65)
+
+=over 2
+
+=item added
+
+	Data: add() - return object ID instead of HTML template of asked
+	Data: _add_case() - add a case unless it's name already exists
+	make it possible to add a new case upon adding a job
+
+=item fixed
+
+	calling conventions for add() and add_clients()
+	indended entryfield colors in CSS for other styles
+	wcr lib: Total: lines 10701, words 40559, chars 299012
+	4651 tests (_add_case(), add w/o template returned)
+
+=back
+
+=head2 2004-10-05 (Server/Client v3.00 build 64)
+
+=over 2
+
+=item added
+
+	Job: "willtakesimple" for left time in simple terms (for joblist)
+
+=item fixed
+
+	Jobtype: allow editing of "minlen" field
+	Jobtype: strip spaces at front and end of extra_files
+	wcr lib: Total: lines 10646, words 40328, chars 297440
+	4646 tests (minlen in changing jobtype)
+
+=back
+
+=head2 2004-10-04 (Server/Client v3.00 build 63)
+
+=over 2
+
+=item added
+
+	config key "cases_list"
+	added solaris as allowed architecture in default config
+	touch log files in touch_files
+	upon adding a testcase, also run script to allow target files
+
+=item fixed
+
+	testcase list has jobtype names as title (shorter table)
+	better debug output for running extractor scripts
+	wcr lib: Total: lines 10643, words 40311, chars 297306
+	4642 tests ()
+
+=back
+
+=head2 2004-09-30 (Server/Client v3.00 build 62)
+
+=over 2
+
+=item added
+
+	request for case by name (cmd_status;type_casebyname)
+
+=item fixed
+
+	msg 430: include 'id' as param to allow "with name '1234' does not exist"
+	wcr lib: Total: lines 10630, words 40227, chars 296762
+	4642 tests ()
+
+=back
+
+=head2 2004-09-29 (Server/Client v3.00 build 61)
+
+=over 2
+
+=item added
+
+	CSS: "td.code" to shorten job lists
+	config field 'case_url_format' to support auto-urls in cases
+	Makefile.PL: better detection and warnings for IO::Socket::SSL
+	support for indended editfields in HTML templates
+	Case: construct URL automatically if empty via _format_string()
+
+=item fixed
+
+	Data: use name_from_type() instead of hand-rolled code
+	lowercase HTML in tpls like setappform.inc
+	amended NEW
+	newjob-end and newjob-start: editlen => 32
+	wcr lib: Total: lines 10604, words 40158, chars 296181
+	4635 tests (change case)
+
+=back
+
+=head2 2004-09-28 (Server/Client v3.00 build 60)
+
+=over 2
+
+=item added
+
+	config setting proto to allow "tcp" or "ssl"
+	menu item "Add" to case list
+	more help in adding a jobtype
+
+
+=item fixed
+
+	require IO::Socket::SSL for proto "ssl"
+	Client: allow other protocols than http (like ftp:// or https://)
+	ordering of fields when editing a job
+	merged menu_case and menu_charset into menu_object
+	wcr lib: Total: lines 10609, words 40205, chars 296324
+	4617 tests ()
+
+=back
+
+=head2 2004-09-23 (Server/Client v3.00 build 59)
+
+=over 2
+
+=item fixed
+
+	Data: worker_hash() - return workername incl. subarch, too
+	Client: sub_arch() was broken
+	msg 404: include client id
+	wcr lib: Total: lines 10608, words 40204, chars 296313
+	4617 tests (sub_arch(), worker_hash())
+
+=back
+
+=head2 2004-09-22 (Server/Client v3.00 build 58)
+
+=over 2
+
+=item fixed
+
+	Data: request_work(): handle the case that client came via proxy
+	Chunk: undef warnings in line 315 in combination with proxies
+	Proxy: order of arguments in report()
+	Client: don't quote error msg from server
+	wcr lib: Total: lines 10601, words 40172, chars 296168
+	4617 tests (for_req0001,req0002)
+
+=back
+
+=head2 2004-09-20 (Server/Client v3.00 build 57)
+
+=over 2
+
+=item fixed
+
+	forgot to include t/test-data/4/check.lst into MANIFEST
+	msg 101 for target files was acc. dropped when no CDF/JDF was written
+	wcr lib: Total: lines 10594, words 40156, chars 295895
+	4609 tests (response for target file, adding/deleting cases)
+
+=back
+
+=head2 2004-09-16 (Server/Client v3.00 build 56)
+
+=over 2
+
+=item added
+
+	Job: flush checklist to disk if modified
+
+=item fixed
+
+	fixed test.pl to cope with new JDF layout
+	prefix in job is already in hex, so don't do a2h() for JDF/CDF
+	missing ';' in some testcase chunks
+	Deleting of proxy warned of non-existant clients
+	allow param "prefix" when changing/adding testcases
+	Data: silently correct wrong job entry in Chunks upon load (that
+	 should not happen, but f.i. the testdata had the chunks pointing
+	 to the wrong job. Theoretically we could just drop the {job} key when
+	 writing out chunks...)
+	Job: when adding a chunk to the checklist, set ourself to modified
+	Job.pm: remove needless field {check}
+	Data.pm: checklist() vs. poking into Job's internals
+	speling in NEWS, Files.pod etc
+	wcr lib: Total: lines 10576, words 40038, chars 295153
+	4589 tests (testcases w/ prefix)
+
+=back
+
+=head2 2004-09-15 (Server/Client v3.00 build 55)
+
+=over 2
+
+=item added
+
+	msg 111 and 112: files for client, but inlined
+	Client: handle msg 111 and 112
+	Client: rewrite target/some.set to ../../target/some.set for worker
+	Data: check peeradress against stored client IP/mask and return msg 457
+	      in case they don't match
+
+=item fixed
+
+	remove needless Security.pm from Client bundle
+	require Base 3.00 build 52 (for inline files and IP check)
+	amended Glossary, TODO, NEW, Client.pod
+	wcr lib: Total: lines 10548, words 39979, chars 294623
+	4570 tests (files)
+
+=back
+
+=head2 2004-09-14 (Server/Client v3.00 build 54)
+
+=over 2
+
+=item added
+
+	write a JDF if possible, otherwise a CDF (former have less overhead)
+
+=item fixed
+
+	Client: undef warning in case of not-set fields (job, chunk)
+	Client: chunkfile vs. chunk_file for CDF
+	Testcase: reuse extra_fields() from Job.pm
+	changed format of extra params to "extra0=444546,303132" for easier
+	 parsing in the worker
+	amended Glossary.pod, Server.pod
+	Files.pod, Worker.pod: amended DOC about CDF and argument passing
+	wcr lib: Total: lines 10455, words 39504, chars 291422
+	4559 tests ()
+
+=back
+
+=head2 2004-09-13 (Server/Client v3.00 build 53)
+
+=over 2
+
+=item added
+
+	Jobtype: extrafields()
+	Files: write_chunk_description() (write a CDF)
+	include extra fields into CDF
+	Testcase, Job: extra_fields()
+
+=item fixed
+
+	CDFs (chunk description files) have '-' not '_' in their name
+	send chunkfile_$filename to client in case of CDF
+	Data: drop write_job_target() - we now always write a CDF instead
+	moved request_auth() and authenticate_user() to Dicop::Base
+	wcr lib: Total: lines 10387, words 39144, chars 289190
+	4555 tests (CDF writing, extrafields in jobtype, extra_fields())
+
+=back
+
+=head2 2004-09-12 (Server/Client v3.00 build 52)
+
+=over 2
+
+=item added
+
+	allow "'a'..'z', '0'..'9'" in charset sequences, too (formerly would
+	 only handle one sequence)
+	Help menu entry to add forms
+
+=item fixed
+
+	adding of simple charsets now works again (form generator and request
+	 pattern disagreed about the name of the type)
+	amended doc/Dicop.pod
+	request_auth(): store error message for requests that are referenced
+	 by an invalid info request (like when the client does not exist)
+	forgot to include test2.cfg into MANIFEST
+	wcr lib: Total: lines 10472, words 39716, chars 293280
+	4544 tests (adding of simple charsets, auth requests)
+
+=back
+
+=head2 2004-09-09 (Server/Client v3.00 build 51)
+
+=over 2
+
+=item added
+
+	Data: _client_from_info() for requests that came via proxy
+ 
+=item fixed
+
+	allow "pid" in info requests
+	chached => cached in info and auth requests
+	remove needless request_file() (handled by Base)
+	wcr lib: Total: lines 10414, words 39438, chars 291183
+	4529 tests ()
+
+=back
+
+=head2 2004-09-08 (Server/Client v3.00 build 50)
+
+=over 2
+
+=item added
+
+	msg 804: key obsolete in config
+	server.tpl: include connect times (average, last, all)
+	support 'default_style' in config file
+
+=item fixed
+
+	move status_style() to Base
+	amended NEW
+	remove obsolete status_config() - handled by Base
+	Client, Proxy: use MAX_CONNECTS instead of hard-wired constant
+	wcr lib: Total: lines 10478, words 39734, chars 293198
+	4529 tests (obsolete keys)
+
+=back
+
+=head2 2004-09-07 (Server/Client v3.00 build 49)
+
+=over 2
+
+=item added
+
+	menu entry "Add" in proxy list
+
+=item fixed
+
+	converted t/srvcfg.t to Test::More
+	remove init things that are now done in base (self, connects etc)
+	converted t/data/proxypm.t to Test::More
+	clicking onto proxy ID in proxy list didn't work
+	editing a proxy actually works now
+	allow only a-z0-9_ and - in subarch
+	wcr lib: Total: lines 10537, words 39922, chars 294608
+	4528 tests (is_proxy())
+
+=back
+
+=head2 2004-09-02 (Server/Client v3.00 build 48)
+
+=over 2
+
+=item fixed
+
+	allow cmd_help;type_trouble as request
+	forgot to include tpl/help/trouble.tpl into MANIFEST
+	Client: LIBRARY vs. LIBARY
+	use min/max to restrict ranges for int fields in def/objects
+	require Dicop::Base build 45, at least
+	when adding a client, last_error and last_error_msg cannot be filled in
+	changed msg 465 for unknown clients to 'no such proxy or client'
+	 (instead of the confusing 'no such proxy')
+	Client: fixes for /win32/i vs. /win32/ and group/user settings
+	Client bundle doesn't need MANIFEST, doc/Dicop.pod nor doc/Server.pod
+	wcr lib: Total: lines 10643, words 40432, chars 297894
+	4517 tests ()
+
+=back
+
+=head2 2004-09-01 (Server/Client v3.00 build 47)
+
+=over 2
+
+=item fixed
+
+	Client.pm: no longer relies on Handler.pm (duplicates two methods,
+	 though)
+	Client bundle no longer needs Handler.pm nor Template.pm
+	Data: read_dictionaries() return hash ref for form
+	def/objects: read_dictionaries() for valid dictionary names
+	def/objects: selector => 'radio' for extract charset skip option
+	editfield_radio.inc
+	wcr lib: Total: lines 10643, words 40410, chars 297828
+	4517 tests ()
+
+=back
+
+=head2 2004-08-31 (Server/Client v3.00 build 46)
+
+=over 2
+
+=item added
+
+	tpl/editfield_hidde.inc - hidden default params
+	tpl/editfield_radiobutton.inc - radio button selector
+	tpl/editfield_check.inc - multiple checkbox selector
+	tpl/add_charset.tpl - select which charset type to add
+	newjob-maxchunksize, newjob-ascii to objects.def, add/edit ranks for
+	 Dicop::Data::Job
+	Entry to edit a charset into menu at charset status page
+
+=item fixed
+
+	'Add' in the charset list menu tried to add a client, not charset
+	Data.pm: removed now no longer needed form() and option_list() routines
+	removed tpl/addcharset.txt and tpl/addjob.txt - adding jobs or charsets
+	 now uses the new auto-form template mechanism
+	Data.pm: speed() - left-over bug from changing job_speed format
+	Troubleshooting doc is now in doc/Trouble.pod and included in Help
+	remove sample from def/requests.def and add ptr to doc
+	wcr lib: Total: lines 10596, words 40280, chars 296636
+	4517 tests ()
+
+=back
+
+=head2 2004-08-30 (Server/Client v3.00 build 45)
+
+=over 2
+
+=item added
+
+	Trouble item why '.htpasswd' files cannot be downloaded by the client
+	Data/Client.pm: when client connects, store a potential error messsage
+	def/client_request.def - define only the few requests the client
+	 actually needs to know: request (test|work|file) and auth
+	show clients last error message and time of error on client status page
+	export LD_LIBRARY_PATH for linux/solaris to enable worker loading local
+	 libs from current worker dir
+
+=item fixed
+
+	amended doc/Dicop.pod a bit
+	Data/Client: keep chunk_time as integer (it's in seconds, after all)
+	client death on too many retries: $self->_die_hard() vs. die_hard()
+	Data/Client: simplify internal storage of job_speed and failure list
+	Client.pm: send error message as reason to server upon failure
+	wcr lib: Total: lines 10757, words 40960, chars 301803
+	4493 tests (client error messages)
+
+=back
+
+=head2 2004-08-28 (Server/Client v3.00 build 44)
+
+=over 2
+
+=item fixed
+
+	amended INSTALL
+	split Dicop-Proxy out to a seperate project
+	Data.pm: removed is_proxy config setting - no longer neccessary
+	Data.pm: removed unused uptime() routines
+	wcr lib: Total: lines 10739, words 40867, chars 301057
+	4468 tests (removed uptime tests)
+
+=back
+
+=head2 2004-08-26 (Server/Client v3.00 build 43)
+
+=over 2
+
+=item added
+
+	sub_arch to commandline options in client
+	Client: full_arch(), sub_arch()
+	testcase list: list extra params (support for fake key 'extras')
+
+=item fixed
+
+	editing chunks should now be possible again
+	allow extra_0 .. extra_7 when adding/changing testcase/job
+	menu background color for style Dust
+	remove needless _status_sort()
+	add sort and sort_by to cmd_status;type_cases to sort cases in reverse
+	Client: remove leading and double '-' from sub_arch
+	client: allow sub_arch on commandline and print full_arch()
+	silence a fake warning in clientpm.t
+	Client.pod, Config.pod: document sub_arch
+	wcr lib: Total: lines 11068, words 42139, chars 309809
+	4500 tests (full_arch())
+
+=back
+
+=head2 2004-08-25 (Server/Client v3.00 build 42)
+
+=over 2
+
+=item added
+
+	Jobtype: fields - optional extra config fields necc. for jobs and testcases
+	Data/Client: architectures() - return list of arch and sub archs
+	Client: append sub_arch from config to architecture to send to server
+	Data/Jobtype: extrafiles(): support subarchs for client
+
+=item fixed
+
+	allow more whitespace in extra files 
+	Data/*: remove doc about fields from pod (will be autogenerated later)
+	amended NEW
+	allow 1024 bytes for extra 'files' in Jobtype
+	def/objects.def - insert linebreaks for clarity
+	wcr lib: Total: lines 11015, words 41971, chars 308616
+	4497 tests (sub architecture)
+
+=back
+
+=head2 2004-08-24 (Server/Client v3.00 build 41)
+
+=over 2
+
+=item added
+
+	tpl/menu_charsets.inc and menu entry to charset list
+	tpl/menu_help.inc and menu entry to add charset/add job
+	msg 701 to log test failure with details into error.log
+
+=item fixed
+
+	Client: don't check files that were already marked as missing/outdated
+	require only v5.8.1 in Dicop (for Client)
+	allow '+' in worker/extra file names (like 'libstdc++.so')
+	amended BUGS
+	silence warnings from no-longer-existing clients in chunks
+	slight fixes to CSS for dir listings
+	wcr lib: Total: lines 11406, words 43144, chars 315017
+	4490 tests ()
+=back
+
+=head2 2004-08-23 (Server/Client v3.00 build 40)
+
+=over 2
+
+=item added
+
+	tpl: file.tpl, dir.tpl, dir.txt, editfield_file.inc
+	modify def/requests to add browse button for the target of testcases
+
+=item fixed
+
+	compacted basecss.inc and added styles for DIR, DIR_RIGHT, DIR_ODD etc
+	charset display in jobtype list
+	Result: removed needless sub keys()
+	allow fields targetname and targetvalue for editing testcases
+	Chunk: let base construct 'job'
+	"Stopcode 'X'" and add doc about additional files in doc/Worker.pod
+	wcr lib: Total: lines 11398, words 43100, chars 314685
+	4489 tests (dir listing)
+
+=back
+
+=head2 2004-08-19 (Server/Client v3.00 build 39)
+
+=over 2
+
+=item added
+
+	case count to server status page
+	title to Job and Client row in result lists
+
+=item fixed
+
+	allow newjob=on when changing a job
+	version displayed in server status page was wrong
+	amended TODO
+	wcr lib: Total: lines 11429, words 43231, chars 315702
+	4475 tests ()
+
+=back
+
+=head2 2004-08-19 (Server/Client v3.00 build 38)
+
+=over 2
+
+=item added
+
+	menu entries "Delete" and "Add" to change_object.tpl
+	menu_added.inc: entries "Help" and "Delete" to added.txt
+
+=item fixed
+
+	amended doc/Worker.pod
+	def/objects: entries for Dictionary and Extract
+	def/objects: fake_keys = "stringlengths" for Charset
+	Extract.pm, Dictionary.pm: del needless _check_field() and change()
+	common mispelings across all files
+	"Add" entry in menu_testcases.inc was borked
+	send testcases sorted on jobtype ID in reverse (newest jobtypes
+	 first)
+	Client: use File::Spec to build paths
+	don't generate error message 91 twice when hashing fails
+	wcr lib: Total: lines 11428, words 43235, chars 315706
+	4471 tests ()
+
+=back
+
+=head2 2004-08-18 (Server/Client v3.00 build 37)
+
+=over 2
+
+=item added
+
+	Case: return fake key "jobs" with count of jobs in that case
+	msg 606 (Could not load Linux::Cpuinfo) for client
+	possibility to terminate one client
+	allow jobtype_description as fake key in Job
+
+=item fixed
+
+	my $uid = ... if $condition is bad... fix undef warning
+	add help to tpl/change_object.tpl
+	allow valid chunk status types upon editing: done, tobedone, solved
+	new edit/add forms broke editing of chunks:
+	  modify get_object() to handle this case
+	##style## param is now in the authform.inc instead in each template
+	 (fixes a couple of places were it was missing and thus the style
+	  was lost after submitting the form)
+	terminate all clients now properly shows the resulting page
+	reset one or all clients no longer needs special code for template
+	Client: print not only error code, but also error msg on failed
+		connects. Also, print both of them for failed downloads, too
+	Client: download workers along with all the other files
+	Client: prepend 'http://' if necc. to 'server' setting in config file
+	wcr lib: Total: lines 11488, words 43397, chars 316728
+	4470 tests ()
+
+=back
+
+=head2 2004-08-17 (Server/Client v3.00 build 36)
+
+=over 2
+
+=item added
+
+	menu_testcases.inc
+
+=item fixed
+
+	amended NEW
+	require Clients to have at least build 36
+	menu entry to reset client in client status page was wrong
+	reset client form lost the style param
+	test.pl: use Dicop::Base vs. Dicop for a2h() and h2a()
+	build script for Client, config/client.cfg.sample
+	drop unnecc. "Dicop::Base" on write_file
+	Client: use Dicop::Base::write_file instead of Dicop::write_file
+	Client: gather all files to download and ask in one connect for them
+	wcr lib: Total: lines 11405, words 43100, chars 314551
+	4468 tests ()
+
+=back
+
+=head2 2004-08-16 (Server/Client v3.00 build 35)
+
+=over 2
+
+=item added
+
+	a menu to the jobtypes list page
+	support for case_name, case_description in job status page
+	list of results for all jobs is displayed on the case status page
+
+=item fixed
+
+	define send_terminate for Dicop::Data::Proxy
+	dicopd: print out used Dicop::Base version and build upon startup
+	replace BGCOLOR by 'class="##trclass##"' in templates
+	use Dicop::Base::replace_templates() more often instead of own code
+	adjust PREREQ in Makefile.PL: BigInt v1.71, Wordlist v0.06
+	wcr lib: Total: lines 11286, words 42621, chars 311645
+	4468 tests ()
+
+=back
+
+=head2 2004-08-12 (Server/Client v3.00 build 34)
+
+=over 2
+
+=item added
+
+	Job.pm: support case_name, case_description in templates
+	Data.pm: sorted_job_list() - reusable job list code from status_main()
+	Data.pm: job_list() - generate job list for a casse
+	link from case name to case status page in caselist
+	document at top of def/*.def that these files are only read at startup
+
+=item fixed
+
+	allow charset and speed when editing jobtypes
+	converted t/data/clientpm.t to Test::More
+	Client.pm: refix client to not loose connects etc upon data reading
+	##checkedvalue## vs. checked=##value## in editfield_bool.inc
+	menu_joblist.inc entry for Failed jobs
+	when warning about new size, set chunk to modified to flush out change
+	allow empty maxchunksize and haltjob, checkothers in changing job
+	wcr lib: Total: lines 11309, words 42678, chars 312232
+	4468 tests (cmd_status;type_case, connects)
+
+=back
+
+=head2 2004-08-11 (Server/Client v3.00 build 33)
+
+=over 2
+
+=item added
+
+	tpl/menu_main.inc - "Help" button for main and server stats page
+	added "empty param ... " to TROUBLES
+	glossar entry "VERIFY"
+	CSS for li.help
+	tpl/editfield_pwd.inc - edit field for password fields
+
+=item fixed
+
+	use \z vs. $ in def/requests
+	CSS menu colors for other styles than Sea
+	removed support for profiles (was broken) complitely
+	Job.pm: last occurance of Dicop::ago to Dicop::Base::ago
+	<li> in help topics carry class "help"
+	allow params 'ascii' and 'checkothers' in cmd_add;type_job
+	add 'case' field to tpl/addjob.tpl
+	adding a case|group uses the new add_object.tpl
+	wcr lib: Total: lines 11332, words 42738, chars 312490
+	4469 tests ()
+
+=back
+
+=head2 2004-08-09 (Server/Client v3.00 build 32)
+
+=over 2
+
+=item fixed
+
+	adduser needs to use Dicop::Base, not Dicop
+	add files input-box to adjobtype.tpl
+	wcr lib: Total: lines 11374, words 42846, chars 313461
+	4513 tests ()
+
+=back
+
+=head2 2004-08-05 (Server/Client v3.00 build 31)
+
+=over 2
+
+=item fixed
+
+	Jobtype: support "all: this.dat" in files
+	Testcase: return '' for empty fields
+	converted t/data/charsetpm.t to Test::More
+	Testcase, Job, Chunk: use _from_string_form()
+	wcr lib: Total: lines 11374, words 42846, chars 313461
+	4513 tests (testcases with len/first/last in start/end, check_strings)
+
+=back
+
+=head2 2004-08-04 (Server/Client v3.00 build 30)
+
+=over 2
+
+=item added
+
+	extra_files() in Job, Jobtype and Data
+	allow param "files" in add jobtype
+	Data: hash_file() to reduce common code bloat
+
+=item fixed
+
+	msg 91: carry hashname, and error message
+	max_requests defaults to 128, document in Config.pod
+	document exit codes in Worker.pod
+	wcr lib: Total: lines 11529, words 43499, chars 318450
+	4506 tests (extra_files())
+
+=back
+
+=head2 2004-07-29 (Server/Client v3.00 build 29)
+
+=over 2
+
+=item added
+
+	tpl/cases.tpl and cmd_status;type_cases
+	tpl/editfield_select.inc
+	tpl/addcase.txt
+	field "files" to Jobtype
+	submit buttons carry a CSS class
+
+=item fixed
+
+	remove needless DONE from filters in joblist menu
+	add url to output for cmd_status;type_case
+	allow searches for cases
+	enable the "confirm delete" request for cases
+	converted t/data_del.t to Test::More
+	allow 'cases' in add_item()
+	del_case(): check that no jobs are using this case prior to delete
+	cmd_change requests were not possible due to type ne 'status'
+	del_user(), del_job() etc renamed to _del_user() etc.
+	some def/objects.def fields
+	wcr lib: Total: lines 11469, words 43444, chars 317734
+	4488 tests (fix regression in clientpm.t, add change/add tests)
+
+=back
+
+=head2 2004-07-28 (Server/Client v3.00 build 28)
+
+=over 2
+
+=item added
+
+	tpl/editform_string.inc
+	some CSS for edit fields and tables in basecss.inc
+
+=item fixed
+
+	inherit AUTOLOAD from Handler via a stub
+	wcr lib: Total: lines 11484, words 43481, chars 318062
+	4444 tests ()
+
+=back
+
+=head2 2004-07-22 (Server/Client v3.00 build 27)
+
+=over 2
+
+=item added
+
+	requests for: add/del/change case, add form for case
+
+=item fixed
+
+	move type/auth tests from security.t to requestpm.t to unify lists
+	restrict types allowed in search requests to the known good list
+	wcr lib: Total: lines 11484, words 43481, chars 318062
+	4444 tests (cases)
+
+=back
+
+=head2 2004-07-21 (Server/Client v3.00 build 26)
+
+=over 2
+
+=item added
+
+	request cmd_status;type_case (id, filter, style)
+	tpl/case.tpl, tpl/menu_case.tpl
+
+=item fixed
+
+	ammended NEW and doc/Glossary.pod
+	allow config var 'title'
+	default case for jobs must be 1, not 0
+	caseid vs. jobcase in job.tpl
+	create class "td.id" for table cells with ID numbers
+	Data: use Dicop::Data::Case->new() instead of from_string
+	Data: set name, description, referee for default Case
+	wcr lib: Total: lines 11484, words 43481, chars 318062
+	4332 tests (case)
+
+=back
+
+=head2 2004-07-20 (Server/Client v3.00 build 25)
+
+=over 2
+
+=item added
+
+	def/objects - entries for Jobtype, Job and Proxy
+
+=item fixed
+
+	t/data/jobtypepm.t - use Test::More
+	remove now needless code in Jobtype.pm, Job.pm and Proxy.pm
+	wcr lib: Total: lines 11478, words 43465, chars 317950
+	4317 tests ()
+
+=back
+
+=head2 2004-07-19 (Server/Client v3.00 build 24)
+
+=over 2
+
+=item added
+
+	cmd_confirmreset;type_client to get form to reset client
+	reset form for client now via menu entry in client page
+
+=item fixed
+
+	Data: put custom flush code into _flush_data()
+	Data: remove now needless flush() routine
+	wcr lib: Total: lines 11606, words 43829, chars 320717
+	4316 tests (confirm reset)
+
+=back
+
+=head2 2004-07-12 (Server/Client v3.00 build 23)
+
+=over 2
+
+=item fixed
+
+	Data: put custom email-replacements into _replace_mail_templates()
+	Data: remove now needless email() routine
+	wcr lib: Total: lines 11623, words 43937, chars 321410
+	4311 tests ()
+
+=back
+
+=head2 2004-07-06 (Server/Client v3.00 build 22)
+
+=over 2
+
+=item fixed
+
+	remove needless stuff in Charset.pm
+	use Test::More for t/data/testcasepm.t
+	{error} is actually {_error} so fix it for all occurances
+	wcr lib: Total: lines 11675, words 44180, chars 323230
+	4311 tests ()
+
+=back
+
+=head2 2004-07-07 (Server/Client v3.00 build 21)
+
+=over 2
+
+=item added
+
+	def/objects - entry for Dicop::Data::Charset
+
+=item fixed
+
+	User.pm: remove unnused methods
+	Client.pm: remove never used change(), plus some now unnecc. stuff
+	wcr lib: Total: lines 11696, words 44261, chars 323647
+	4310 tests ()
+
+=back
+
+=head2 2004-07-06 (Server/Client v3.00 build 20)
+
+=over 2
+
+=item added
+
+	def/objects.def - entries for Case, User, Client, Chunk, Result
+
+=item fixed
+
+	amended README and UPGRADE
+	remove SIGNATURE - detached gnupg .sig is much more convenient
+	def/objects.def - use multiline entries for more readability
+	t/data/userpm.t - use Test::More
+	wcr lib: Total: lines 11790, words 44552, chars 325603
+	4310 tests (userpm.t, resultpm.t)
+
+=back
+
+=head2 2004-07-05 (Server/Client v3.00 build 19)
+
+=over 2
+
+=item added
+
+	def/objects.def - entry for Testcase.pm and Group.pm
+
+=item fixed
+
+	amended TODO
+	remove no unnecc. code in Testcase.pm and Group.pm
+	t/data/testcasepm.t uses common.pl, too
+	common.pl: load def/objects.def, too
+	##canchange$field## no longer supported in HTML templates
+	document patterns_file, objects_def_file and def_dir
+	forgot to add casepm.t to MANIFEST
+	wcr lib: Total: lines 11876, words 44736, chars 327163
+	4304 tests (t/data/casepm.t, testcasepm.t, groupmt.t)
+
+=back
+
+=head2 2004-07-03 (Server/Client v3.00 build 18)
+
+=over 2
+
+=item added
+
+	default for config var req_dir, pattern_file and objects_def_file
+
+=item fixed
+
+	Client.pm: use Dicop::Handler instead of duplicating code
+	moved requests.def to ./def
+	wcr lib: Total: lines 11967, words 44990, chars 329076
+	4301 tests (t/data/casepm.t)
+
+=back
+
+=head2 2004-07-01 (Server/Client v3.00 build 17)
+
+=over 2
+
+=item added
+
+	lib/Dicop/Data/Case.pm - a case (container for jobs)
+	Test::Simple v0.47 to Makefile.PL (for new case tests)
+	require 5.008003 in Makefile.PL
+	disable warnings about missing cases in testsuite (_warn => 1)
+	if no cases defined, add a default one for all jobs
+
+=item fixed
+
+	Job.pm: better catch of startlen/endlen
+	Job.pm: allow changing of case and haltjob
+	allow adding a job only if it's case is defined
+	amended NEW and TODO
+	use Test::More in t/data_add.pm
+	wcr lib: Total: lines 11972, words 44982, chars 329060
+	4301 tests (t/data/casepm.t)
+
+=back
+
+=head2 2004-06-30 (Server/Client v3.00 build 16)
+
+=over 2
+
+=item added
+
+	title tag to status field in main job list, showing appr. finish time
+	fake fields "startlen" and "endlen" to get length of start/end of job
+	display startlen/endlen as title in joblist
+
+=item fixed
+
+	CSS in black&white back to normal
+	use <div ...><span float: left"></span></div> for percentage
+	 bars to fix the "minimum width is one character" problem that caused
+	 percentages under about 2% and over about 97% to render incorrectly
+	wcr lib: Total: lines 11740, words 44156, chars 323362
+	4280 tests ()
+
+=back
+
+=head2 2004-06-29 (Server/Client v3.00 build 15)
+
+=over 2
+
+=item added
+
+	percent_done_int as fake key to Job.pm
+	allow charset_description as Job key
+	client name as title on clientmap links
+
+=item fixed
+
+	small fixes in CSS (more compact)
+	move job status menu (failed, suspended etc) to the upper right corner
+	wcr lib: Total: lines 11740, words 44156, chars 323362
+	4278 tests ()
+
+=back
+
+=head2 2004-06-28 (Server/Client v3.00 build 14)
+
+=over 2
+
+=item added
+
+	tpl/menu_job.inc - menu for job page
+	added a few more mouse-over titles to various links in /tpl
+	added CSS color entry for WAITING status
+
+=item fixed
+
+	main.tpl: don't link to self
+	various CSS/HTML fixes for the percentage bars
+	link to charset from testcase-list was using wrong ID
+	removed some unnecc. things in basecss.inc
+	wcr lib: Total: lines 11735, words 44154, chars 323279
+	4278 tests ()
+
+=back
+
+=head2 2004-06-24 (Server/Client v3.00 build 13)
+
+=over 2
+
+=item added
+
+	render percentage on main page as progress bar (needs work, since its
+	 resolution is char-based, not pixel based)
+
+=item fixed
+
+	use cfg_level(), _construct_item() from Dicop::Base
+	remove _init() - we inherit it now from Dicop::Base
+	wcr lib: Total: lines 11735, words 44154, chars 323279
+	4278 tests ()
+
+=back
+
+=head2 2004-06-23 (Server/Client v3.00 build 12)
+
+=over 2
+
+=item fixed
+
+	Data.pm: moved data loading to _load_data() from _init()
+	Data.pm: cleaned _init() to use _after_load() etc to make generic
+		 _init() routine possible
+	CSS: rounded corners on mozilla for headlines etc
+	HTML output: added some titles to some links (and shortened charset
+		     column in joblist)
+	wcr lib: Total: lines 11776, words 44278, chars 324627
+	4278 tests ()
+
+=back
+
+=head2 2004-06-22 (Server/Client v3.00 build 11)
+
+=over 2
+
+=item added
+
+	Objects.pod - document internal data structures and objects
+	WAITING as status in Dicop.pm
+
+=item fixed
+
+	Client: use $Dicop::BUILD
+	wcr lib: Total: lines 11763, words 44248, chars 324437
+	4278 tests (added t/dicoppm.t)
+
+=back
+
+=head2 2004-06-21 (Server/Client v3.00 build 10)
+
+=over 2
+
+=item added
+
+	newjob-haltjob to cmd_add;type_job
+
+=item fixed
+
+	Job.pm: removed notifyclient
+	users => admins
+	sample server.cfg requires Client v3.00 build 10
+	Client: define own BUILD number
+	forgot to include t/test.cfg & t/data/requestpm.t into MANIFEST
+	wcr lib: Total: lines 11761, words 44230, chars 324332
+	4243 tests (newjob-haltjob_on, haltjob_on)
+
+=back
+
+=head2 2004-06-17 (Server/Client v3.00 build 9)
+
+=over 2
+
+=item added
+
+	open chunk list also shows chunks in VERIFY state
+
+=item fixed
+
+	type in changechunk.txt that left the form garbled
+	security.t: cmd_change;type_chunk;id_1;job_1;status_FOO is valid
+	lib/Dicop/Server/Security.pm really needs to go...
+	main.txt => main.tpl
+	document checklist bugs in Job.pm/Data.pm
+	fixed request.def entries for cmd_status;type_(charsets|users)
+	wcr lib: Total: lines 11761, words 44230, chars 324332
+	4238 tests
+
+=back
+
+=head2 2004-06-16 (Server/Client v3.00 build 8)
+
+=over 2
+
+=item fixed
+
+	Data: call _load_request_patterns() and _security_checks() in Handler
+	search.txt => search.tpl
+	changeuser.tpl: ask for pwd and pwdrepeat
+	lots of fixes in msg/request.def
+	Data.pm: removed doc for routines that are now in Handler.pm
+	wcr lib: Total: lines 11875, words 44658, chars 327407
+	4238 tests (58 tests still fail due to request pattern problems)
+
+=back
+
+=head2 2004-06-15 (Server/Client v3.00 build 7)
+
+=over 2
+
+=item added
+
+	most of the request patterns in msg/request.def
+
+=item fixed
+
+	Client.pm: was loading the request patterns from wrong dir/file
+	testsuite: Dicop::Data::Request => Dicop::Request (require common.pl)
+	wcr lib: Total: lines 11933, words 44871, chars 328620
+	4206 tests (313 tests still fail due to request pattern problems)
+
+=back
+
+=head2 2004-04-27 (Server/Client v3.00 build 6)
+
+=over 2
+
+=item added
+
+	lib/Dicop/Server/Security.pm mysteriously vanished, re-add it
+ 
+=item fixed
+
+	took over Client.pm and t/clientpm.t from Dicop::Base
+	Data.pm, Client.pm: use Dicop::Request instead of Dicop::Data::Request
+	pass patterns to Dicop::Request->new()
+	wcr lib: Total: lines 11313, words 42060, chars 309328
+	4203 tests (2202 tests fail due to missing request patterns)
+
+=back
+
+=head2 2004-01-05 (Server/Client v3.00 build 5)
+
+=over 2
+
+=item fixed
+
+	Data: removed now unnecc. find_title()
+	removed unnecc. Dicop/Data/Security.pm
+	wcr lib: Total: lines 11313, words 42060, chars 309328
+	3284 tests ()
+
+=back
+
+=head2 2004-01-02 (Server/Client v3.00 build 4)
+
+=over 2
+
+=item added
+
+	Data.pm: _status_sort()
+
+=item fixed
+
+	small testsuite fixes
+	moved to Base: Data.pm: status(), _gen_table()
+	wcr lib: Total: lines 11571, words 42993, chars 316111
+	3284 tests ()
+
+=back
+
+=head2 2004-01-30 (Server/Client v3.00 build 3)
+
+=over 2
+
+=item added
+
+	finish_request() and finish_html_request()
+	Request.pm: is_form()
+	other_request()
+
+=item fixed
+
+	Datapm: report_work() => report() and status_table() => status() (for
+	 unified calling scheme)
+	Dicop::Data::Jobtype: limit name to 32 chars, not 8
+	removed handle_request(), parse_requests(), convert_browser_request()
+	wcr lib: Total: lines 11571, words 42993, chars 316111
+	3284 tests ()
+
+=back
+
+=head2 2004-01-27 (Server/Client v3.00 build 2)
+
+=over 2
+
+=item fixed
+
+	allow 32 chars for workername in jobtypes
+	wcr lib: Total: lines 11844, words 44155, chars 325901
+	3284 tests ()
+
+=back
+
+=head2 2004-01-21 (Server/Client v3.00 build 1)
+
+=over 2
+
+=item fixed
+
+	use Dicop::Base and throw out duplicate code
+	wcr lib: Total: lines 11844, words 44155, chars 325901
+	3284 tests ()
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2005
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut

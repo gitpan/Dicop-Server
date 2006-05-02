@@ -1,0 +1,13 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main">DiCoP</a> - Reset of client ###id## successfull</h1>
+
+<div class="text">
+
+<p>
+The client ###id## was successfully reset.
+<br>
+Go to it's <a href="##selfstatus_##type####;id_##id##">status page</a> 
+back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

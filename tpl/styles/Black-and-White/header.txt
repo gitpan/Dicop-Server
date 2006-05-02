@@ -1,0 +1,66 @@
+<html>
+<head>
+ <title>
+ ##title##
+ </title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  body, div.text, div.menu, td, p {
+    background: white;
+    color: black;
+    }
+  h1, h2, h3, h4, h5, h6, h7, div.menu, th.auth {
+    color: white;
+    background: black;
+    opacity: 1;
+    -moz-opacity: 1;
+    filter: alpha(opacity=100); 
+    }
+  th {
+    background: black;
+    color: white;
+    border-color: black;
+    }
+  div.footer {
+    background: white;
+    border-color: black; 
+    color: black;
+    }
+  a:link.h, a:visited.h {
+    background: black;
+    color: white;
+    }
+  a:link, a:visited {
+    color: black;
+    }
+  a:hover.h {
+    background: white;
+    color: black;
+    }
+  a:hover.m, a:hover {
+    background: black;
+    color: white;
+    }
+  td.editfieldname
+    {
+    border-color-right: black;
+    }  
+  td.indend, td.editfieldname1, td.editfieldname2
+    {
+    background: black;
+    color: white;
+    }
+  input.submit, input.browse, input.refresh, input.reset {
+    background: black;
+    color: white;
+    font-weight: bold;
+    }
+  p.small { background: inherit; }
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#ffffff textcolor="#000000">
+

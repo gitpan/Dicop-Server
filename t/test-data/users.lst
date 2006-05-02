@@ -1,0 +1,6 @@
+Dicop::Data::User {
+  name = Gollum
+  id = 1
+  pwdhash = 67bec90bb676ab497383be1759521b64 
+  salt = "OneRing"
+  }

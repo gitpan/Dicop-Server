@@ -1,0 +1,15 @@
+<html>
+<head>
+ <title>
+ ##title##
+ </title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#ffffd0 textcolor="#000000">
+

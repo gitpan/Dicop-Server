@@ -1,0 +1,277 @@
+=pod
+
+=head1 NAME
+
+SERVER - This documentations covers the DiCoP server's gory guts.
+
+Last update: 2004-09-19
+
+=head1 DATA STRUCTURES
+
+=head2 Joblist
+
+The joblist contains all the jobs that were ever entered into the server. Not
+all of them need to be running at the same time, but finished or suspended jobs
+will still exist.
+
+Each job has a L<chunklist|chunklist>, a L<checklist|checklist>,
+is of a certain jobtype and carries a certain rank/priority with it. Each job
+also has a charset, which describes basically the job's keyspace.
+
+=head2 Chunklist
+
+Each job has a so-called I<chunklist>. Each chunk corrospondends to a piece
+or part of the job's keyspace and all chunks together form the keyspace
+of the job.
+
+Chunks can have different status codes as detailed below:
+
+=over 2
+
+=item TOBEDONE
+
+This chunk still needs to be done.
+
+=item DONE
+
+Chunk was completely checked and contains no result.
+
+=item SOLVED
+
+Chunk contains a result.
+
+=item ISSUED
+
+Currently issued to a client.
+
+=item FAILED
+
+Client could not complete chunk (either due to error or due to timeout).
+This chunk will be re-issued later on.
+
+=item TIMEOUT
+
+(not implemented yet) Client could not complete chunk in time.
+
+=item VERIFY
+
+One client reported this chunk back. The chunk is now waiting to be verified
+by another client. Usually only chunks with a solution will be verified, but
+you can change this in the config file, so that each chunk or each Nth chunk
+is verified.
+
+=item BAD
+
+This chunk failed to be verified by a client, because the clients did not
+agree on what the result for this should be, or if there should be one, or
+what the CRC over this chunk is. The chunk will, just like a FAILED one,
+re-issued later.
+
+=back
+
+=head2 Checklist
+
+Each job also has a so-called I<checklist>.
+
+This list contains results (from other jobs) that need to be checked against
+this job. It stores chunk numbers and, optionally, results. The checklist will
+be consulted before finding a chunk for a client in the chunklist.  
+
+To make this possible, chunks in the checklist are as small as possible and
+are created as soon as a result is found.
+
+The checklist contains only chunks from jobs with the same jobtype, in the
+hope is that the result also applies to this job. Since it is not know what
+result (if any) will be found in the chunk to be checked, the checklist does
+not contain a result.
+
+=head1 FINDING A SUITABLE CHUNK
+
+To find a suitable chunk for a client, the server first selects a job. This
+is done by calculating a random value between 0 and 1 and matching it against
+the priorities of the running job. That ensures that the work is distributed
+between the jobs in the intended way, e.g. the percentages match up.
+
+The server then walks the chunklist of a potential job until it finds a 
+suitable chunk. Suitable chunks are chunks that either match roughly the
+size of the work the client requested, or are bigger. In the latter case,
+the chunk will be split up and the smaller, suitable part, will be given to
+the client.
+
+An exeption to this are VERIFY chunks, to properly verify them, they are never
+split up. If a chunk has not been verified for a long time, probably no client
+is fast enough to verify the chunk, so it will go back to the TOBEDONE state
+and can thus be broken up into smaller parts.
+
+To prevent the server from going over the entire chunk list, the process
+selecting a chunk stops as soon as posssible. Also, the server remembers the
+first possible chunk to be selected to be given out, which means on the average
+the server needs only one step to select a chunk.
+
+So, for every chunk the following steps are done, until we find a fitting
+chunk:
+
+=over 2
+
+=item *
+
+First, any C<ISSUED> chunk is converted to C<TOBEDONE> when it is found to be
+too old.  This ensures that C<FAILED> chunks, or chunks that were
+never returned by the client, or in the VERIFY state too long, will be given
+out again.
+
+=item *
+
+If the current chunk has not the C<TOBEDONE> status, skip it.
+
+=item *
+
+Otherwise, mark the chunk as likely candidate and proceed to next step.
+
+=item *
+
+check if the size of the chunk is not too big for the client. If the size is
+in the limits (around 2 times the size of what the client requested), abort
+the search (this causes this chunk to be issued to the client).
+
+=back
+
+After this loop, we are garantueed to come out with either:
+
+=over 2
+
+=item 1 a chunk too big (missfitting chunk)
+
+=item 2 a fitting chunk
+
+=item 3 no chunk at all
+
+=back
+
+In the first case, the chunk is split into two pieces, and the first piece
+is given to the client.
+
+In case 2 the chunk is given "as it is" to the client.
+
+In the last case, the job does no longer contain any C<TOBEDONE> chunks. If
+it also does not contain C<FAILED>, C<VERIF> or C<ISSUED> chunks, it can be
+closed. The server will then try another job to find some work for the client.
+
+=head1 CALCULATING THE CHUNK SIZE
+
+To determine whether a given chunk is suitable or not, the server must know the
+desired chunksize of the client. This value is given in minutes to the server,
+so calculating the size of the chunk in keys (or passwords etc) is neccessary.
+
+Formerly, this was a complicated process involving some guesswork, but with
+Math::String it is very easy.
+
+We first take the client's current speed value for the job in question. 
+
+If this value does not yet exist, we take the client's average speed ratio
+and multiply it with the current jobtype's speed, to account for different
+speeds of different job types, f.i. any job is probably faster than the test
+job.
+
+The reason why to have a speed value for each job rather than only for each
+job type is that clients can differ on a per job basis greatly (some clients
+are suited to certain jobs, others to different ones) and also each job of a
+job type can differ, based on the target information.
+
+The result is the rough number of keys per second a client can make for 
+exactly this job.
+
+After multiplying this speed value by 60 and the desired size of the chunk in
+minutes, we get a grand total of keys the client would like to get.
+
+This can be compared directly to the chunksizes in the chunklist. If no
+suitable chunk is found, we can simple add this number to the start key of
+the biggest chunk and split this chunk there, obtaining an chunk exactly as
+big as the client wanted.
+
+Formerly, the chunk borders were somewhat limited by having the some (mostly
+the last three) chars fixed, this is taken into account upon splitting a
+chunk. Nowadays, chunk borders can be anything and anywhere.
+
+This limitation has historically reasons, and can be adjusted for each jobtype
+to match the implementation of the worker.
+
+Each chunk also has a minimum size, and this is usually the charset's count of
+characters. This is the same as having the last char fixed, and was implemented
+to avoid chunks with a size too small, e.g. a size of 1.
+
+=head2 Mismatching Size
+
+The resulting chunk will not fit exactly the client's need. This is no direct
+problem as long as the size fit's roughly with a factor between 0.1 and 5.
+
+When the client finally delivers the result of the chunk, it also tells the
+server how many seconds it took. From this number and the real chunk size
+the server can calculate how many keys per second the client really did
+and save this as the new speed value of the client.
+
+The change to the client's speed value is limited to be between 0.5 and 2, to
+avoid miscalculations wrecking havoc.
+
+Upon the next connect the client will get a much better fitting chunk and the
+chunksizes will always be adjusted dynamically to the client's speed.
+
+Therefore, changing the client's hardware, having background processes etc
+should all be completely transparent to the user and administrator of the
+server and client.
+
+=head1 READING/FLUSHING
+
+C<dicopd> is a real daemon, it only needs to read the data upon start, and
+then can hold it in memory all the time.
+
+The data is only flushed to disk when it is modified. To further optimize this
+and save time and stress on the external storage media, the flush is only
+executed after a certain (configurable) time has elapsed.
+
+The advantage is that status requests do never flush the data (they don't
+modify it), and all others do so infrequently that the hard disk is not
+stressed.
+
+A disadvantage is that SUCCESS events (finding a result) will only be emailed
+and land in the log, but not result in a data-base sync. Upon finding a 
+result, an extra C<flush()> is issued to correct this.
+
+=head1 CLIENT DATA
+
+Certain data is held for each client, like it's speed, id, name etc.
+
+=head2 Failure counter
+
+Each client has a list of failure counters. The list contains two entries for
+each jobtype, denoting the time of the last failure and a counter.
+
+The counter is reset to zero when a client passes a testcase for this jobtype.
+It is incremented by three if a testcase for this jobtype fails, and
+incremented by one if the client fails a chunk.
+
+Whenever the counter is increased, the time is noted.
+
+When the counter is greater than three, the client will get no more work for
+jobs of the same jobtype until the counter is reset.
+
+=head1 PROXY LIST
+
+The server also contains a list of proxies. These are kept separate from
+clients because they play a special role. Technical proxy connects are treated
+like client connects, with a few extra twists. The reason is that proxies
+request work/files/tests and deliver results on behalf of other clients - they
+never do any work by themselves.
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

@@ -1,0 +1,142 @@
+=pod
+
+=head1 NAME
+
+OBJECTS - Overview over the objects and data structures used in Dicop::Server
+
+Last update: 2004-06-22
+
+=head1 OVERVIEW
+
+This describes the internal object representation and data structure layout in
+a Dicop::Server from v3.00 onwards. This document is meant for developers.
+
+=head2 Arrays vs. Hashes
+
+There are two fundamentally different ways to stores objects: arrays and hashes.
+These corrospondend to the data structures from Perl with the same name.
+
+A hash is organized on a key. In Dicop hashes are usually keyed on the object
+ID. This allows for easy access to an object if its ID is known - and it also
+creates the restriction that each ID must be unique. The disadvantage is that
+it is not very easy to impose a certain order on the objects in the hash,
+unless they can be sorted on one field (like the ID, name etc).
+
+An array is simple a list of things. While this imposes automatically an order,
+it does also allow duplicates and makes finding an object harder.
+
+=head2 Caches
+
+There is also a container class called Dicop::Cache. It contains objects indexed
+by a field (usually the ID), but also can impose a maximum number of objects
+contained in the cache, as well as a maximum age of objects. Their age is
+measured from the time they were last added to the cache, or last retrieved
+from it.
+
+=head2 General layout
+
+The top-most object is C<Dicop::Data> itself. It is a singleton and contains
+hashes of objects as:
+
+	Dicop::Data::Jobtype
+	Dicop::Data::Testcase
+	Dicop::Data::Charset
+	Dicop::Data::Client
+	Dicop::Data::Proxy
+	Dicop::Data::Group
+	Dicop::Data::Case
+
+XXX TODO: make a testcase a list of jobtype?
+
+The most important data structure is a list of C<Dicop::Data::Case> objects, organized
+in a hash:
+
+  +---------+
+  | Data    |
+  +---------+
+       |
+       +------------+------------+----- ...
+       |            |            |
+       v            v            v 
+  +---------+  +---------+  +---------+    
+  | Case #1 |  | Case #1 |  | Case #3 | ...
+  +---------+  +---------+  +---------+    
+
+Each of these cases contains a list of C<Dicop::Data::Job> objects, also organized
+in a hash.
+
+  +---------+
+  | Case #1 | ...
+  +---------+
+       |
+       +------------+------------+----- ...
+       |            |            |
+       v            v            v 
+  +---------+  +---------+  +---------+    
+  | Job #1  |  | Job #2  |  | Job #3  | ...
+  +---------+  +---------+  +---------+
+
+Each job in turn contains a list of C<Dicop::Data::Task> objects. These are stored
+in an array, because their ordering is important:
+
+  +---------+
+  | Data    |
+  +---------+
+       |
+       +------ ...
+       |
+       v
+  +---------+
+  | Case #1 |
+  +---------+
+       |
+       +----- ...
+       |
+       v
+  +---------+      +---------+---------+---------+
+  | Job #1  | -->  | Task #0 | Task #1 | Task #3 |...
+  +---------+      +---------+---------+---------+
+
+For each job, only one task is active and in the TOBEDONE state. The tasks
+before it are either in the FAILED, SUSPENDED or SOLVED state, while the tasks
+after it are in the WAITING state. When one task is finished (solved, failed,
+or suspended), the next waiting task will be set to TOBEDONE.
+
+Each task in turn contains a list of C<Dicop::Data::Chunk> objects. These are
+also stored in an array, because their ordering is important:
+
+  +---------+
+  | Data    |
+  +---------+
+       |
+       +------ ...
+       |
+       v
+  +---------+
+  | Case #1 |
+  +---------+
+       |
+       +----- ...
+       |
+       v
+  +---------+      +---------+
+  | Job #1  | -->  | Task #0 | ...
+  +---------+      +---------+
+			|
+			v
+  		   +----------+----------+----------+
+		   | Chunk #0 | Chunk #1 | Chunk #3 |...
+		   +----------+----------+----------+
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

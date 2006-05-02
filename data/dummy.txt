@@ -1,0 +1,1 @@
+This file is just there so that makemaker creates "data/".

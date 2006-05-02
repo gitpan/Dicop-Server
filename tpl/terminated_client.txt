@@ -1,0 +1,15 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main">DiCoP</a> - Termination scheduled for ###id##</h1>
+
+<div class="text">
+
+<p>
+The termination request to the ##type## ###id## was successfully stored. It will terminate
+itself at the next connect to the server, and then possible upgrade itself to a newer
+version.
+<br>
+Go to it's <a href="##selfstatus_##type####;id_##id##">status page</a> 
+or back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

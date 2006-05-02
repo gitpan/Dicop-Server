@@ -1,0 +1,62 @@
+#############################################################################
+#
+# request.def - definition file for requests (aka messages between client
+# and server).
+
+# Two sample entries:
+
+{
+  # this patterns is valid for all requests that match this pattern. The order
+  # is not important, so "type_test;cmd_status" would also work. All params
+  # that must match must also be present and nonempty, of course (otherwise
+  # the request pattern doesn't match).
+  match = "cmd_status;type_test"
+  # these params must be non-empty (and also present). Default is ""
+  nonempty = "start end description jobtype charset"
+  # These params must be present, but can be empty unless they are listed in
+  # nonempty. Default is "". Any param in 'match' is also automatically added
+  # to 'required'.
+  req = "id"
+  # these params are optional (and can be empty if they are not listed in
+  # nonempty). Default is "style". If you don't want "style" to be optional,
+  # set it to optional = "".
+  opt = "style"
+  # The type of output sent when this pattern matches. Valid is "html" or
+  # "text". Default is "html".
+  output = "html"
+  # name of the template file to reply if this pattern matches. Optional and
+  # only neccessary if type = "html". If left empty, and type is "html", the
+  # vaue will be "TYPE.txt" where type is the value of the type-param of the
+  # request, e.g. here it would be "test" because "cmd_status;type_test" is
+  # the matching request. This if couse works only if "type" is an allowed,
+  # nonempty param and fixed, e.g. mentioned in match.
+  tpl = "test.txt"
+  # the title string, only necc. if output = "html"
+  title = "Test Status Page"
+  # The type of the request. Types: "status", "info", "auth", "request", 
+  # "other". Default is "status". 
+  type = "status"
+  # setting this to 1 means this request can only be done with proper
+  # authentication (e.g. uername and password). Default is 0.
+  auth = 1
+}
+
+{
+  match = "cmd_status;type_main"
+  title = "Main Status"
+}
+
+# All requests that don't match any of the patterns above are automatically
+# invalid and rejected.
+
+# AUTHOR
+#
+# (c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+#
+# DiCoP is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License version 2 as published by the Free
+# Software Foundation.
+#
+# See L<http://www.bsi.de/> for more information.
+#
+

@@ -1,0 +1,44 @@
+Dicop::Data::Chunk {
+  checksum = c9a4b82326c2883736d0bc187974c83f
+  client = 1
+  created = 994690574
+  dirty = 0
+  end = 4141414141
+  id = 1
+  issued = 994690574
+  job = 5
+  modified = 994756869
+  start = 4141414141
+  status = 2
+  token = ""
+  }
+Dicop::Data::Chunk {
+  checksum = c4f2bf0a480ed3b67265ce1acc74cb31
+  client = 2
+  created = 994690574
+  dirty = 0
+  end = 4c51465855
+  id = 2
+  issued = 994692271
+  job = 5
+  modified = 994756869
+  start = 4141414141
+  status = 3
+  token = f7c5304b5fa091a09029e687354462c9
+  }
+Dicop::Data::Chunk {
+  checksum = 3fb2528a5c6c09c63ab1a8000625556c
+  client = 2
+  created = 994691186
+  dirty = 0
+  end = 414141414141
+  id = 3
+  issued = 994692149
+  job = 5
+  modified = 994756869
+  secret = ""
+  start = 4c51465855
+  status = 3
+  token = 2194d8ce9b843a513497ad5b788cc779
+  result = 1
+  }

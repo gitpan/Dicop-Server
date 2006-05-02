@@ -1,0 +1,35 @@
+
+<h1><a class="h" href="##selfstatus_main##">DiCoP</a> - Confirm delete</h1>
+
+<div class="text">
+
+<p>
+Please confirm the deletion of the ##type## with the id ###id##:
+</p>
+
+<p>
+<table>
+
+##params##
+
+</table>
+
+<p>
+Warning: Hitting the button below disposes of the object above forever.
+You will not be able to get it back!
+</p>
+
+##include_authform.inc##
+
+<input type=hidden name="cmd" value="del">
+<input type=hidden name="type" value="##type##">
+<input type=hidden name="id" value="##id##">
+<input class="submit" type=submit name="submit" value="Delete">
+</form>
+
+<p>
+Or you could <a href="##selfform_##type####;id_##id##">change</a> the this
+##type## instead, or add <a href="##selfform_##type####">another ##type##</a>.
+</p>
+
+</div>

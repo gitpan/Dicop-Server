@@ -1,0 +1,1361 @@
+=pod
+
+=head1 NAME
+
+DICOP - Overview and the communication between server, proxy, client and worker in depth.
+
+Last update: 2004-12-22
+
+=head1 OVERVIEW
+
+=head2 General layout
+
+The typical cluster setup looks like this:
+
+                                +--------+
+                                | Server |
+                                +--------+
+                                    |
+      +------------+-----------+----+--------------------+
+      |            |           |                         |
+  +--------+  +--------+  +---------+             +--------------+
+  | Client |  | Client |  | Browser |             | Dicop::Proxy |
+  +--------+  +--------+  +---------+             +--------------+
+                                                         |
+                                             +-----------+------------+
+                                             |           |            |
+                                         +--------+  +--------+  +--------+
+                                         | Client |  | Client |  | Client |
+                                         +--------+  +--------+  +--------+
+
+In the picture above, each box represents one seperate machine. It is possible
+to run the client on the same machine as the server - although this should
+be done for testing purposes only.
+
+The machine denoted with C<Browser> is used to configure the server, although
+it would also possible to run a client on it.
+
+=head2 With fileserver
+
+Usually you want also to have a fileserver, that can serve updated workers and
+target files for jobs. This can be just a service (think Apache) on the same
+box, or an entirely different machine. It is easier to have the fileserver
+serving the same physical files from the server, though.
+
+				+--------+-------------+
+				| Server | File server |
+				+--------+-------------+
+				    |             |
+				    |             +-------------------+
+				    |             |                   |
+      +------------+-----------+----+-------------:------+            |
+      |		   |	       |		  |      |            |
+      |		   |	       |		  |      |            |
+      +------------+-----------+------------------+      |            |
+      |		   |	       |		         |            |
+  +--------+  +--------+  +--------+            +--------------+ +------------+
+  | Client |  | Client |  | Client |	        | Dicop::Proxy | | HTTP proxy | 
+  +--------+  +--------+  +--------+            +--------------+ +------------+
+							 |            |
+					     +-----------+------------+
+					     |           |            |
+ 					 +--------+  +--------+  +--------+ 
+					 | Client |  | Client |  | Client |
+					 +--------+  +--------+  +--------+
+
+Since the fileserver is usually an HTTP server (but FTP would work, too), you
+can set up a normal HTTP proxy between the clients and the fileserver, if you
+want. 
+
+The clients are asking the server for the location (URL) of the files to
+download. The clients behind the proxy could be told by the dicop proxy a
+different URL, so that they automatically use the HTTP proxy, or use a different
+fileserver altogether.
+
+Please see L<REQUESTING FILES (AUTO-UPDATING)|REQUESTING FILES (AUTO-UPDATING)>.
+
+=head2 Layout of services
+
+The next picture details the machines and the "services" that are running at
+them. For simplicity, proxies have been left out.
+
+The following picture assumes that the client is stored locally at each node.
+Workers need not be stored locally at client startup, but will be downloaded
+automatically by the client from file server. Each client has multiple
+workers, one for each jobtype. Only one worker is active (*) at a time:
+
+			     +--------+-------------+
+			     | Server | File server |
+		             +--------+-------------+
+				      ^             
+	 			      |            
+		       +--------------+-------------+
+		       | 	      |		    |		  
+		       | 	      |	            |		 
+		       v 	      v	            v
+		  +---------+ 	 +--------+    +---------+
+		  | Client  | 	 | Client  |   | Client  |	
+		  +---------+ 	 +---------+   +---------+ 
+		  | Worker* | 	 | Worker  |   | Worker* |
+		  +---------+ 	 +---------+   +---------+
+		  | Worker  | 	 | Worker* |    
+		  +---------+ 	 +---------+
+
+Note: It is also possible to run the fileserver on a seperate machine.
+
+=head2 SMP Machines and Hyperthreading
+
+The client and worker only takes advantages of one physical CPU. If you have
+a machine with two (or more) physical or virtual (hyperthreading) CPU cores,
+you can simple start two or more clients on the same machine.
+
+These will each start a worker on their own, and each of these workers will
+be using one CPU core. Of course, you need a good OS that keeps each process
+on one CPU instead of switching them around.
+
+Starting two clients on a machine with only one CPU will probably de-
+instead of increasing performance.
+
+The following picture depicts a SMP machine with two CPUs and a single
+CPU machine. Only one worker is active (*) at a time:
+
+			     +--------+-------------+
+			     | Server | File server |
+		             +--------+-------------+
+				      ^             
+	 			      |            
+		              +-------+---------------+
+		       	      |       		      |		  
+		       	      |       	              | 
+		       	      v       	              v 
+		+---------------------------+  +-------------+
+		| +---------+ 	+---------+ |  | +---------+ |
+		| | Client  | 	| Client  | |  | | Client  | |
+		| +---------+ 	+---------+ |  | +---------+ |
+		| | Worker* | 	| Worker  | |  | | Worker* | |
+		| +---------+ 	+---------+ |  | +---------+ |
+		| | Worker  | 	| Worker* | |  | | Worker  | |
+		| +---------+ 	+---------+ |  | +---------+ |
+		+---------------------------+  +-------------+
+ 
+Note: It is also possible to run the fileserver on a seperate machine.
+
+=head2 Network Mounting vs. Local Copy
+
+The following picture assumes that the client and the workers are on a mounted
+NFS/Samba directory. Since the workers are also in the mounted directory, there
+is no need to download them. The same goes for target files, so in this case
+you can skip the file server. The worker is still I<running> locally at the
+client, though:
+
+
+	       	       +--------+-----+-------+
+	       	       | Server | NFS | Samba |
+	       	       +--------+-----+-------+
+				      |             
+	 			      |            
+		       +--------------+-------------+
+		       | 	      |		    |		  
+		       | 	      |	            |		 
+		       | 	      |	            |
+		  +--------+ 	 +--------+    +--------+
+		  | Client | 	 | Client |    | Client |	
+		  +--------+ 	 +--------+    +--------+ 
+		  | Worker | 	 | Worker |    | Worker |	
+		  +--------+ 	 +--------+    +--------+
+		  | Worker |
+		  +--------+
+
+
+=head2 Connections and protocols
+
+Currently the HTTP protocol is used to exchange data between server/proxy and
+client. This was just for simplicity, any protocol could be used, even email.
+
+The connections from server to client/proxy and proxy to client are I<not>
+permanent/persistent, they are only established when transmitting information.
+
+Only the clients establishes a connection to the server (or proxy), and only
+the proxy establishes a connection to the server. The server (or proxy) never
+starts talking to any client or proxy.
+
+Each server/proxy/client handles only one connection from a client/proxy
+at a time. Each connection from a client to a server/proxy can carry more
+than one message (these messages are always called "request", even though they
+might "report" some data back), and the server/proxy will answer all requests
+right away, e.g. usually no answers are delayed to the next connection.
+
+(Proxies might delay an answer by answering first "Wait, no work for you."
+and then giving the "real" answer on the next connect attempt. However, the
+client does not need to handle this in any special way.)
+
+There is only one main server. To reduce the load on it there can be an
+unlimited number of proxies. The proxies cache certain requests and then
+bundle them into one big request to the server, this minimizes the time to
+handle each request. (Note: Proxies are not working yet)
+
+=head2 SSL Support
+
+Server, proxy and client now have the ability to support the SSL protocol via
+the C<proto = "ssl"> setting in the config file. Together with updated clients
+this allows all communication between server and client to be encrypted.
+
+However, at the moment the server can only be either C<ssl> or C<tcp>,
+as indicated by the C<proto = "foo"> setting in the config, e.g. you cannot
+mix SSL and non-SSL clients (this is a limitation of C<Net::Server>, and
+currently there is no way to overcome this without rewriting a lot of
+third-party code from scratch).
+
+This means that if you switch a server to SSL, B<all> clients connecting to
+that server must also support SSL.
+
+To overcome this limitation, use your server with C<proto = "tcp"> and then
+add a proxy to it. Run then a C<Dicop::Proxy> at the same machine (or another
+machine if desired), and switch that proxy to SSL and point it to your main
+server as it's upstream server.
+
+All clients that support SSL must then connect via that proxy, while all
+others must use the server directly. Here is a picture showing the setup:
+
+        +---------------|   TCP  +---------------+
+        | Server (tcp)  |<-------| Proxy (ssl)   |
+        +---------------|        +---------------+
+                ^                       ^
+                | TCP                   | SSL
+                |                       |
+        +---------------+        +---------------+
+        | Client (tcp)  |        | Client (ssl)  |
+        +---------------+        +---------------+
+
+Note that the connection to the file server is independend of the connection
+to the server/proxy. Clients that support SSL can either use C<http>, C<ftp>
+or C<https>, while clients without SSL support can only use C<http> or C<ftp>
+file server. In a mixed-client environment, it is best to use a non-ssl
+fileserver.
+
+
+        +---------------+   TCP  +--------------+
+        | Server (tcp)  |<-------| Proxy (ssl)  |
+        +---------------+        +--------------+
+                ^                       ^
+                | TCP                   | SSL
+                |                       |
+        +---------------+        +--------------+
+        | Client (tcp)  |        | Client (ssl) |
+        +---------------+        +--------------+
+                |                       |
+                |                       |
+                |                       v
+        	|	      +-------------------+
+		|------------>| Fileserver (http) |
+			      +-------------------+
+
+However, clients that go over the proxy can have an independend file server,
+so you could use a setup like:
+
+
+        +---------------+   TCP    +---------------+
+        | Server (tcp)  |<---------|  Proxy (ssl)  |
+        +---------------+          +---------------+
+                ^                         ^
+                | TCP                     | SSL
+                |                         |
+        +---------------+          +---------------+
+        | Client (tcp)  |          | Client (ssl)  |
+        +---------------+          +---------------+
+                |                         |
+                |                         |
+                |                         v
+        +-------------------+ +--------------------+
+	| Fileserver (http) | | Fileserver (https) |
+	+-------------------+ +--------------------+
+
+
+=head1 USING DIFFERENT PROTOCOLS
+
+It would be possible (and trivial) to write a simple proxy server, which f.i.
+accepts email as input, parses it, and then sends the request to the server.
+After receiving the answer, it emails back the answer to the original sender.
+This would allow off-line clients, that do not require a direct net connection
+to the server.
+
+
+=head1 CGI-BIN vs. DAEMON
+
+The main server runs as daemon C<dicopd>. The other way, running it as
+cgi-bin script, is no longer possible.
+
+C<dicopd> has the advantage that the script is already compiled in memory,
+and anly needs to parse the request. Only from time to time the modified data
+will be written back to the disk - this makes it much faster than the old way.
+
+
+=head1 LOAD BALANCING
+
+To minize the load, it is possible to setup more than one proxy:
+
+				+--------+
+				| Server |
+				+--------+
+				    |
+      +------------+------------+---+--------------------+
+      |		   |	        |		         |
+  +--------+  +--------+   +--------------+      +--------------+
+  | Client |  | Client |   | Dicop::Proxy |      | Dicop::Proxy |  
+  +--------+  +--------+   +--------------+      +--------------+
+				|			 |
+				|	     +-----------+------------+
+				|	     |           |            |
+ 				|	 +--------+  +--------+  +--------+ 
+				|	 | Client |  | Client |  | Client |
+				|	 +--------+  +--------+  +--------+
+				|
+		     +----------+------------+
+		     |          |            |
+ 		+--------+  +--------+  +--------+ 
+		| Client |  | Client |  | Client |
+		+--------+  +--------+  +--------+ 
+
+The clients are not required to use a specific proxy, in fact they can use
+the main server directly, or any proxy as long all the proxies belong to the
+same main server:
+
+				+--------+
+				| Server |
+				+--------+
+				  .  .  .
+                             ......  .  ......
+ 			     .       .       .
+                         +--------+  .  +--------+
+                         | Proxy  |  .  | Proxy  |  
+                         +--------+  .  +--------+
+ 			     .       .       .
+                             ......  .  ......
+				  .  .  .
+				+--------+
+				| Client |
+				+--------+
+
+Note that the connections above are not simultanously, but occur independendly
+from each other and one after one.
+
+It is possible to have the client support two or more independend main servers,
+f.i. if you want you client to compute on two different projects or balance
+the load on the main servers further.
+
+Note that jobs between the two servers can not be shared, but each server could
+run it's own set of jobs and clients would work on both projects.
+
+The client would need, of course, a way to specify how to distribute it's
+working power between the projects, currently it would give each main server
+the same amount of CPU time:
+
+	        +-----------+		           +----------+
+	        | Server 1  |		           | Server 2 |  
+                +-----------+ 		           +----------+
+                      |			                |
+	              |			                |
+                 +---------+                        +--------+
+                 | Proxy 1 |                        | Proxy2 |  
+                 +---------+                        +--------+
+		      |		 	              ^ |
+		      |		    ..................| |
+		      |		    .                   |
+     	 +------------+----------+  .            +-------------+
+      	 |            |          |  |            |             |
+   +----------+  +----------+  +----------+ +----------+  +----------+
+   | Client 1 |  | Client 2 |  | Client 3 | | Client 4 |  | Client 5 |
+   +----------+  +----------+  +----------+ +----------+  +----------+
+
+Here client 3 connects to two proxies.
+
+Note: This does currently not work since the client needs to remember from
+which proxy it got which chunk so that it can report the result back to the
+appropriate proxy. 
+
+This should be of course fault tolerant, so that if proxy 1 goes down,
+the client can try to get the result back to proxy 2, 3 and so on, until it
+find one proxy which accepts the result because it is on the same server
+than the original proxy 1.
+
+One could of course imagine that certain proxies know about the
+two main servers and automatically route the client's report to the
+right server.
+
+=head1 SERVER
+
+Upon a connect from a client, the (main) server does roughly the following:
+
+	check if the request format is ok
+	check if client/proxy is valid and authentication info ok
+	if anything is ok, look for status request
+
+        status request and other requests together? yes => error
+	status request and no other requests: deliver status page, be done
+
+	if info requests & client is NOT a proxy: error
+	check in all info requests 
+	try to check in any report-request and generate responses for them
+	try to generate responses for all work/test requests
+	send back all responses in one go
+ 
+See also: I<Client> and I<Proxy>.
+
+=head1 PROXY
+
+A C<Dicop::Proxy> is just a special server/client combo. It acts as a server
+to the clients that connect to it, and is completely transparent to them, e.g.
+the client does not care or know whether it connects to a proxy (or even
+a certain proxy) or the main server. 
+
+On the other side the proxy acts like a normal client to the server, except
+that all it's connects are on behalf of other clients.
+
+A C<Dicop::Proxy> does never do any work by itself, this is enforced by the
+server.
+
+The goal of a C<Dicop::Proxy> is to minimize the amount of connections done
+by clients to the server (server load), and yet to be able to have the same
+real-time stats on the server.
+
+Download the Dicop::Proxy package on our website to install a Dicop proxy.
+
+=head1 CLIENT
+
+A client requests work (and testcases) from the server, and then determines
+what worker it has to use to do the work.
+
+If necessary, the client will update the workers and needed files by
+downloading them from the fileserver. To discover the download location,
+the client will ask the L<SERVER>.
+
+The workers are seperate programs that are started by the client, process the
+chunk of work, and print out the result.
+
+The result is then send back by the client to the server.
+
+See also: L<WORKER> and L<SERVER>.
+
+=head2 Updating works and other files
+
+See also L<A CHUNK OF WORK|A CHUNK OF WORK> for details on what the server
+sends to the client on work or test requests.
+
+Basically, the files needed to work on a chunk fall into three categories:
+
+=over 2
+
+=item The worker itself
+
+The worker program to do the actual work. The server sends a hash as the
+C<hash> field in the answer to any work or test request. The client needs to
+make sure that each worker for each request has the same hash, and if not,
+update it.
+
+=item target files
+
+Some chunks only have a hash value as a target, meaning the worker checks
+the keyspace of the chunk against this hash value. If the worker needs more
+than a few bytes to check each key, then a target file is used instead. 
+
+See L<TARGET FILE VS. TARGET HASH> for more informtation.
+
+=item additional files
+
+These might be the charset description file C<charsets.def>, dictionary files,
+additional libraries needed by the worker, or any other arbitrary file that is
+needed to work on a chunk. These files will be hashed by the server and the
+hash along with the filename is sent to the client to force it to download
+these files.
+
+=back
+
+=head1 WORKER
+
+A worker is a stand-alone program that can process on chunk of the keyspace.
+The chunksize is variable, and the worker does not need to care about anything
+else than working the chunk.
+
+The worker receives the input on the commandline, and prints out it's findings.
+
+=head1 COMMUNICATION BETWEEN SERVER, PROXY AND CLIENT
+
+All communication runs currently over the HTTP protocoll. 
+
+Note that there is no such a thing as a "client" or "server" per se. A client
+can be another server or proxy. The client here is taken as the one initiating
+the connection and sending something to the other partner, which is said to be
+the server and answers. In praxis, client nodes only connect a server or proxy,
+and only proxies connect to another server.
+
+In the DiCoP environment, messages passed between the client, server and proxy
+are called I<Request>.
+
+The client sends request(s) to the server, and the server responds with it's
+answer(s). The requests are formed by sending parameters (in GET or POST
+style). The parameter names are B<req0001>, B<req0002> and their value is the
+actual request. This means each connect of a client can carry multiple
+requests, f.i. the client can report back a result and request more work
+at the same time.
+
+The servers answers are also I<requests>, even though the name is a bit
+misleading and you should think of them as I<answers>. But they follow the
+same format and are represented by the same code/objects internally.
+
+The request number must be in the range C<0001..9999>, e.g. the client should
+B<never send req0000> to the server. C<req0000> is reserved for general
+answers from the server to the client, e.g. global error messages. A
+C<req0000> always applies to the entire connect, while any other request
+number only applies to the same request send by the client. 
+
+Each request has a set of parameters and their value, which are separated by
+a "B<_>". "_" is used to distinguish it from "=" which is used in GET style
+requests. The parameters are separeted by using "B<;>".
+
+F.i. "blah_foo;name_boo,boh,bah;type_9" would be a set of 3 parameters 
+(blah, name and type) with their values (foo, [ boo, boh, bah] and 9).
+Special chars must be encoded (with the %XX style, where XX is the ASCII code
+of the character) to protect from special chars like ";" or "=" that confuse the
+parser.
+
+The POST method is prefered, since URLs have a maximum length limit, but GET
+style requests work as well. The client usually uses POST, while a browser
+would use GET.
+
+The parameter B<cmd> is required and specifies the type of the request as
+follows:
+
+	cmd	add		add a job/client/charset/jobtype/event/proxy
+				if given an ID => edit, otherwise form for add
+		auth		info about who is making the request(s)
+		change		change a job/chunk/charset/jobtype/event/proxy
+		confirm		ask for confirmation to delete an object
+		del		delete object
+		form		request a forms to fill in for editing/adding
+		help		serve a help overview or help page
+		info		same as auth, but from proxy for other clients
+		report		report back a chunk (work or test case)
+		request		type: 
+				  work - request more work
+				  test - request testcases (usually before work)
+				  file - request download URL for a file
+		status		request a status page with statistics
+		terminate	request termination of a client
+		reset		reset a client's error counters and status tables
+
+=head2 Output
+
+The output for C<status>, C<form>, C<change>, C<confirm>, C<del>, C<help>, C<add>,
+C<reset>, C<terminate> and C<add> are always in human-readable HTML, while the
+others are in plain text so that the client can parse them more easily. 
+
+The text answers look like:
+
+	<PRE>
+	req0001 201 Ok
+	req0002 401 Your are not owner
+
+Any line that does not follow the format B<req[0-9]+\s[0-9]+> (aka starts with
+request number and response code) is to be ignored by the client. This allows
+the server to send HTML or comments along with the text.
+
+The first part is the request number the client did sent, followed by the
+error/responce code and an additional clear text message (for logging/user
+output or the response for work/test requests).
+
+Another example of server output, this time from an actual request:
+
+	<PRE>
+	req0000 099 Helo 'test'
+	req0000 099 Server localtime Tue Mar 27 17:39:23 2001
+	req0000 099 debug 0.0292005406963689 0.9
+	req0012 200 job_2;set_2;worker_test-2.00;chunk_3;token_1234;start_616161;end_62616161;target_656565;
+
+As seen above, C<req0000> are general answers, while C<req0012> identifies the
+answer belonging to the C<req0012> the client sent.
+
+A list of ranges for the different codes (the number after the request, f.i.
+C<099>) can be found in L<CLIENT-HANDLING OF SERVER RESPONSES>, the complete
+list of messages and their numbers is in C<msg/messages.txt>.
+
+=head2 Complete parameter structure
+
+A complete list of all allowed requests and their parameters can be found
+in the file C<def/requests.def>. This file is read and parsed by the
+server and represents the actual configuration.
+
+Likewise, for the client the valid requests are stored in
+C<def/client_requests.def>. The client only knows a handfull of different
+requests like getting work, testcases and download locations of files,
+as well as submitting it's results to the server.
+
+=head2 Sending info to the server
+
+The C<auth> request or the C<info> request (think about a 'request to note
+this information about me':) is the way for the client to authentice itself
+to the server and send info about itself and it's (hardware) status to the
+server. B<Required> parameters are:
+
+	version		client version
+	id		the client ID this info relates to
+	arch		architecture, same string as used to start worker
+			examples: win32, linux, os2 etc
+
+For C<info> requests, this field is also mandatory:
+
+	for		The requests this info record belongs to. A Proxy
+			might send requests from more than one client, and
+			the for field let's the identify which requests belong
+			to which client.	
+
+Additional, B<optional> parameters are:
+
+	temp		the client's cpu/case temperature (only one value)
+	fan		speed of fan (only one value)
+	os		operating system and version
+	cached		from which jobs chunks are cached
+	chatter		Server may ignore the text of this parameter
+			(or even chatter back! >:+]
+	cpuinfo		names and Mhz of cpu's
+	ip		ip address of the client when coming via proxy
+
+Each list of requests (except for commands like C<status>, C<add> and
+C<change>) by the client (or proxy) to the server must contain
+an C<auth> request in it and this must contain at least the required
+parameters. Otherwise all the requests from the client will be denied!
+
+In case of a proxy, the proxy will authenticate itself with it's own C<auth>
+request, while all the clients C<auth> requests are send as C<info>.
+
+Thus if client 5 (running version 0.24, ip 1.2.3.4) sends as C<auth> to the
+proxy:
+
+	req0001=cmd_auth;id_5;version_0.24
+	req0002=cmd_request;type_test
+
+The proxy (id 7, version 0.25) will send to the server (including the IP
+of the client for verification):
+
+	req0001=cmd_auth;id_7;version_0.25
+	req0002=cmd_info;id_5;version_0.24;ip_1.2.3.4;for_req0003 
+	req0003=cmd_request;type_test
+
+Note that the request numbers send from the proxy to the server have nothing
+to do with the request numbers received from the client, they are generated
+on the fly, and the answer from the server will be translated back to the client
+space:
+
+Answer from server to proxy:
+
+	req0000 99 I like cheese.
+	req0003 200 ... test case here
+
+The proxy will answer back to the client:
+
+	req0002 200 ... test case here
+
+=head2 Further Examples
+
+	req0002=cmd_info;chatter_The+heaven+has+crashed+on+me
+
+No explanation necessary ;)
+
+=head2 Reporting back results
+
+C<cmd=report> has the following additional parameters:
+
+	chunk			the chunk ID for which the result is
+	crc			the crc of the chunk (from the worker)
+	job			which job the chunk belongs to (ID)
+	status			status of chunk-result
+	took			time in seconds it took to do the chunk
+	token			the secret token the server gave the client
+	result			optional result (if status = SOLVED)
+	reason			an optional error message (if status = FAILED)
+
+This is used both for test cases and real work.
+
+The parameter C<status> can have the following literal values:
+
+	SOLVED			found a result
+	DONE			found no result
+	FAILED			did not work at chunk (aborted or error)
+	TIMEOUT			did not complete work on chunk
+
+=head2 Requesting test cases
+
+Test cases are used by DiCoP to ensure that the client and workers
+work correctly. Each defined testcase on the server has a known result
+and the client is expected to return that result to the server.
+
+C<cmd=request>, type C<test> does not have any additional parameters.
+
+Example:
+
+	req0001=cmd_request;type_test
+
+=head2 Requesting more work
+
+C<cmd=request>, type C<work> has the following additional parameters:
+
+	size			the prefered chunk size (in minutes)
+	count			optional count of same-sized chunks the client
+				wants to have, default 1
+
+Example:
+
+	req0001=cmd_request;type_work;size_100;count_1
+
+=head2 Requesting files (auto-updating)
+
+When the client detects that a worker or target file has a wrong hash, it
+will automatically (see config on how to disable this) download the file.
+
+This is done by asking first the main server where to get the file, and the
+finally downloading the file. The downloaded file is then hashed to ensure
+its integrity.
+
+C<cmd=request>, type C<file> takes only one additional parameter:
+	
+	name			the relative path of the wanted file
+
+
+The name B<must> start with C<worker/> or C<target/>, anything else will
+result in an error. In addition, the filename cannot contain '..' or similiar
+constructs to avoid attacks on the server.
+
+Example:
+
+	req0001=cmd_request;type_file;name_worker/linux/test.pl
+
+The answer from the server will look like:
+
+	req0001 101 1234567890abcdef http://server.invalid:80/test.pl
+
+The first part is the hash (currently always MD5), and the second the URL
+where to get that particular file.
+
+The client ca send in more than one request for a file per connect:
+
+	req0001=cmd_request;type_file;name_worker/linux/this
+	req0002=cmd_request;type_file;name_worker/linux/that
+
+The server will answer them correctly.
+
+=head2 Requesting status pages
+
+This produces human/browsers readable output for statistics and control.
+
+Only one parameter, with additional sub-parameters depending on type:
+
+	type			the type of status page as detailed below
+
+The type can be (sub parameters are shown indended):
+
+	server			detailed status of the server/cluster
+	main			main status page (job listing)
+		filter		filter out jobs that have a status listed here
+				SOLVED, DONE, TOBEDONE, SUSPENDED
+	job			display a job in detail
+		id		the job ID to show
+	results			display all results
+	cases			display all cases
+	case			details for this case	
+		id		the id of the case to display
+	clients			display stats on clients
+		id		detailed stats for this client
+		count		'count' sourrounding clients (need also id)
+		top		'top' clients (top_10 => Top 10)
+		sort		sort clients, is one of the following strings:
+				'keys', 'id', 'name' or 'speed'
+	client			details for one of the clients
+		id		the id of the client
+	chunks			all open (issued to clients) chunks
+	proxies			list of all known proxies
+	charsets		list of all known charsets
+		id		highlight this charset
+	charset			details for one charset
+	jobtypes		list of all known job types
+		id		highlight this jobtype
+	groups			list of all known groups
+		id		highlight this group
+	testcases		list of all known test cases (test jobs)
+	users			list of all users (administrators)
+	clientmap		a shorter overview over all clients
+	search			show the search form page
+	del			show a form to delete one object
+		id		the id of the object to delete
+		type		the type of the object to delete
+
+Examples:
+
+All the current running (status = C<TOBEDONE>) jobs:
+
+	req0001=cmd_status;type_main;filter_SOLVED,DONE,SUSPENDED
+
+All the SOLVED jobs:
+	
+	req0001=cmd_status;type_main;filter_TOBEDONE,DONE,SUSPENDED
+
+Job #5 and it's gory details:
+
+	req0001=cmd_status;type_job;id_5
+
+Details for client #10:
+
+	req0001=cmd_status;type_clients;id_10
+
+Ranking for client #10 and 20 clients 'around' it:
+	
+	req0001=cmd_status;type_clients;id_20;count_20
+
+=head2 Requesting Help Pages
+
+To request a help page, you use the C<help> command with a C<type> of one of the
+following:
+
+	list
+	client
+	config
+	dicop
+	dicopd
+	objects
+	files
+	glossary
+	proxy
+	security
+	server
+	trouble
+	worker
+
+Some examples:
+
+Requesting the help overview page:
+
+	req0001=cmd_help;type_list
+
+Requesting the help about the config file:
+	
+	req0001=cmd_help;type_config
+
+=head2 Requesting Forms
+
+To request a form to add something or change something, you use the C<form>
+command.
+
+The parameter C<type> specifies which form you request. If you supply a
+parameter C<id>, you get a form to change the job/chunk/charset etc, otherwise
+you get a form for adding something.
+
+Possible types, which should be self-explanatory:
+
+	job
+	chunk
+	charset
+	client
+	jobtype
+	group
+	proxy
+	testcase
+	user
+
+Some examples:
+
+Requesting the form to add another job:
+
+	req0001=cmd_form;type_job
+
+Requesting the form to add another charset:
+
+	req0001=cmd_form;type_charset
+
+You can not add a chunk, so this results in an error:
+	
+	req0001=cmd_form;type_chunk
+
+=head2 Adding a job
+
+You use the C<add> command with parameter C<type> set to 'job' for this.
+
+For a list of the additional parameters see C<def/requests.def>.
+
+To get the form to fill in see L<REQUESTING FORMS>.
+
+=head2 Adding other objects
+
+For a list of the additional parameters see C<def/requests.def>.
+
+=head2 Deleting Objects
+
+You can find the object to delete by using the search form, or by viewing
+the status pages of single objects (like a single client).
+
+Then you use the C<confirm> command with parameter C<id>. C<type> must be
+one of the valid object types.
+
+This will give you a form to confirm the delete. To actually delete something,
+use C<del> with C<type> and C<id>. 
+
+Objects are only deletable if they are not currently used by other objects.
+For instance, a charset used by any job cannot be deleted - You would need to
+delete the job first. The server will automatically check this and warn you
+if deletion is not possible.
+
+=head2 Changig a job/chunk
+
+You use the C<change> command for this, typically by filling in a www-form.
+You request this form with C<form>, see L<REQUESTING FORMS>.
+
+Requesting the form to change job #5:
+
+	req0001=cmd_form;type_job;id_5
+
+Requesting the form to change chunk #3 of job #5:
+	
+	req0001=cmd_form;type_chunk;id_3;job_5
+
+Submitting the forms is done via submit button and uses the command C<change>.
+
+=head2 A chunk of work
+
+The server will send the following fields for each requested chunk of work. If
+the client requested more than one chunk at the same time, there might be
+multiple answers to his request, each of them containing the same fields with
+different contents.
+
+=over 2
+
+=item set
+
+The character set (ID) to use. Will be passed on to the worker. If the charset
+ID is not a number, then it will be interpreted as I<chunk description file>
+name and only this filename will be given to the worker. The server will
+automatically tell the client that this file must be present (so it will be
+downloaded if nec.).
+
+=item start
+
+Start password/key of chunk.
+
+=item end
+
+End password/key of the chunk.
+
+=item token
+
+A secret token the server expects back when the client reports the result.
+
+=item worker
+
+The name of the worker. This is not the full executable name (like test.pl or
+test.exe, merely just the basis name C<test>). It is the responsibility of the
+client to pick the right worker path (according to the architecture the client
+runs on) and extension (for operating systems that mark executables with an
+extension like C<.exe>).
+
+Sub-architectures are to be ignored, so that a client running on C<linux-i386>
+needs to request to download C<worker/linux/foo> and not
+C<worker/linux/i386/foo>. The server will automatically serve the right file
+for you.
+
+=item target
+
+The target data to be passed to the worker. Either a hash in hex (or some
+other hexified data) or the name of a target file.
+
+See also L<TARGET FILE VS. TARGET HASH>.
+
+=item targethash
+
+This field is no longer used. A message 101 will be sent along with the
+answers to tell the client the hash and name of the target file, in case
+the target really is a file.
+
+See also L<TARGET FILE VS. TARGET HASH>.
+
+=back
+
+The following additional fields may also be present for information purposes:
+
+=over 2
+
+=item job
+
+The ID of the job this chunk belongs to.
+
+=item size
+
+Number of passwords in this chunk.
+
+=item type
+
+The jobtype.
+
+=item chunk
+
+The ID of the chunk.
+
+=back
+
+In addition, one or more messages with the number 101 will be send. These
+contain names of additional files that must be present for each jobs the
+client works on; the files must therefore be present and checked to have the
+correct hash.
+
+Each of the code 101 messages contains a request ID. If this ID is B<req0000>,
+then the file must be present for all chunks. If it is some other request ID
+like B<req0002>, then the file in question must only be present for answer to
+the specific request. This allows the client to ignore work for requests it
+cannot get all files, and work on the others instead.
+
+Here is a complete example for an answer from the server:
+
+	req0000 101 abcdef0123456789 "charsets.def"
+	req0001 101 0123456789abcdef "10.set"
+	req0001 200 job_10;chunk_3;token_1234;set_15;worker_test;start_6565;end_656565;hash_1234;target_646561
+
+If the C<test> worker does have a different hash than 123456789, it should
+be downloaded and hashed to ensure that the right worker is present. To get
+the download location, the client must request it from the server via the
+C<request file> command, see
+L<REQUESTING FILES (AUTO-UPDATING)|REQUESTING FILES (AUTO-UPDATING)>.
+
+The same for the files C<charsets.def> and C<10.set>.
+
+=head2 A testcase
+
+The server response to requesting a testcase is more or less exactly the
+same than when requesting work.
+
+Usually the sever will respond to one request for tests with multiple answers.
+
+See L<A CHUNK OF WORK|A CHUNK OF WORK> for details.
+
+=head2 Client-handling of server responses
+
+The client has to handle all the server replies and depending on the server's
+response code, throw away or retry the request or start to work on it.
+
+Request answers relating to C<req0000> are not related to any specifiy
+request, but of general nature. Otherwise the request number relates to the
+request made by he client. The server may send more than one answer per
+request, f.i. when requesting testcases or more than one chunk of work, you
+might get back quite a list of responses, all relating to the same request.
+
+Here is a list of status numbers and the action to be taken:
+
+	status number	description		action
+	--------------------------------------------------------------
+	000..099	ok			ignore
+	100..199	ok			system/status message
+	200..299	ok			work on it, or ignore
+	300..399	not ok			retry this request later
+	400..449	single request not ok	don't retry this request
+	450..499	all request(s) not ok	don't retry this request-list 
+	500..		internal server error	retry all requests later on
+
+In case of error code 450 and up, the client should consider
+the entire connect to the server failed. 
+
+If the error code is between 450 and 500, the client does not need to bother
+to retry the session, it would fail again. On code 500 and up, the requests
+should be send to the server again after waiting a certain time, at least 5
+minutes.
+
+Quite important are messages with the code 101 and 102 - these are files
+that the client needs to download.
+
+Message 101 is a normal file, while message 102 constitutes a temporary file
+which should be deleted after the work on the chunk is done. 
+
+=head2 Example
+
+This is a longer example of two clients with different speed requesting
+work trough a proxy:
+
+This request is send from client 1 (id 1, 20 minutes chunk size) to the proxy:
+
+	req0001=cmd_request;type_work;size_20;count_1
+	req0005=cmd_auth;id_1;version_0.24;arch_win32 
+
+The proxy (id 5) thus asks the server:
+
+	req0001=cmd_auth;id_5;version_0.25;arch_linux 
+	req0002=cmd_request;type_work;size_20;count_1
+	req0003=cmd_info;version_0.24;arch_win32;for_req0002
+
+The server responds like this to the proxy:
+
+	req0002 203 job_10;chunk_3;token_1234567890j;set_15
+
+(start and end fields have been omitted for clarity, the tokens are made up
+and will be different in reality)
+
+and the proxy hands this to the client:
+
+	req0001 203 job_10;chunk_3;token_1234567890j;set_15
+
+Now client 2 (id 2, 10 minutes) comes and asks the proxy for work:
+
+	req0001=cmd_request;type_work;size_10;count_1
+	req0005=cmd_auth;id_2;version_0.26;arch_linux 
+
+The proxy (id 5) thus asks the server for work:
+	
+	req0001=cmd_request;type_work;size_10;count_1
+	req0002=cmd_auth;id_5;version_0.25;arch_linux 
+	req0003=cmd_info;id_2;version_0.26;arch_linux;for_req0002
+
+The server responds like this to the proxy:
+
+	req0001 203 job_11;chunk_5;token_1234567890k;set_15;worker_des
+
+(start and end fields have been omitted for clarity, the tokens are made up
+and will be different in reality)
+
+Proxy then hands out one to client 2:
+
+	req0001 203 job_11;chunk_5;token_1234567890k;set_15
+
+Then some time later client 1 reports back a result:
+
+	req0001=cmd_report;job_10;chunk_3;status_done;token_1234567890j
+	req0002=cmd_auth;id_1;version_0.24;arch_win32 
+
+The proxy hands this back to the server.
+
+Note: The proxy could remember what it gave to the client and only accepts
+this back. This is currently not implemented. XXX TODO
+
+=head1 TARGET FILE VS. TARGET HASH
+
+XXX TODO
+
+=head1 ENSURING DATA INTEGRITY
+
+The C<server> will write it's modified data back after each request. C<dicopd>
+will only write the data back after some specified time intervall.
+
+If C<dicopd> crashes, you might loose some hour(s) of computing time, but this
+happens so infrequently that writing back the data in shorter intervalls is not
+worth it.
+
+By making a nightly backup of the entire C<data/> directory, preferable to
+another machine, you can ensure that in critical events (like a hard disk
+crash) you can restore your server to the state it was the night before.
+
+In the event that the backup happened while the server was writing data back,
+you could restore the backup from the night before. Since the backup time is
+likely to be small, and the data flush happens infrequently, this backup should
+be good. 
+
+Some clients might then generate error messages, but these can (and will) be
+ignored and everything will be back to normal in a very short time. Most of the
+errors will come from clients that got chunks after the backup happened, and
+then are not able to report them back (because the chunks do not yet exist, or
+have the wrong token). The unique token for each chunk ensures that only the
+right client can report his work back.
+
+=head1 PERFROMANCE
+
+=head2 Old model (dicop v1.x and server v2.x)
+
+The (very) old implementation (v1.x) using Apache and running the client/server
+on the same computer (300 MHz PIII under Linux) takes nearly 1.3 seconds for
+each request. Ouch. This is because for every request the Perl script must be
+loaded from disk (or cache), compiled and executed, and then the script laods
+every data file.
+
+The new client/server combination (v2.x, using <server> and Apache) was even
+slower, since it is spread over more Perl files, consists of more Perl code,
+and reads in more files. Also, the new method of calculating with passwords
+(Math::String, Math::BigInt) takes much more time. This is the price for the
+features and the better code we had to pay.
+
+Note: The new server model (v2.x style) only required one connect from the
+client for multiple requests, typically halving the number of connects. This
+did combat the effect somewhat by halving the time spend with each client.
+
+=head2 New model (dicopd v2.x)
+
+To combat this situation, a dedicated deamon, called C<dicopd>, was developed.
+
+This deamon is started only once, and then holds all the data in memory all
+the time. The data is written back to disk only now and then. The only timeto
+handle a request is to parse the request, fetch the data for the client, and
+build the answer. This is much faster than the C<cgi-bin> script approach.
+It also eliminates the need for Apache, which you would need even if you made
+the server a mod-perl script. Thus memory consumption is also expected to be
+lower.
+
+There is still a place for an Apache server, namely as file server. But with
+C<dicopd>, the file server can be running on a different machine than the DiCoP
+server.
+
+The reason for a seperate file server is that C<dicopd> is (for easier coding)
+a single-threaded application, handling one request per time, e.g. never two
+requests simultanously.
+
+If C<dicopd> was used by the clients to download files, no more than one
+client could download a file at a time, all the while blocking C<dicopd> for
+all other clients. With using a second, extra server for
+serving the files, multiple downloads (limited by network bandwidth) are
+possible. Apache is suited to the task of serving big, static files and we
+don't want to re-invent the wheel.
+
+=head2 Speed of server vs. dicopd
+
+On a 300 Mhz PII a trip trough a server with very little data (11 jobs,
+9 clients, 4 testcases, 9 charsets, 5 jobtypes, 8 results) takes:
+
+	server	dicopd	action
+	------------------------------------
+	 3.1s	 0.2s	get main status page
+	 4.2s	 0.2s	get chunk (writes data back)
+
+As the amount of data increases (maybe you have 100, not nec. all running,
+jobs, with a lot of testcases, clients and open chunks) the C<server> will
+take quite a B<LOT> of time since it must re-read and re-write all data each
+time.
+
+C<dicopd> will remain largely uneffected, since the amount of data does not
+influence the turn-around time that much - great efforts have been made to
+optimize these cases and make C<dicopd> respond in basically O(1) time to
+nearly all requests.
+
+=head2 Maximum possible clients (2001)
+
+In our tests with 32 clients (with an average chunk time of about 40 minutes)
+the daemon process used slightly less than 2.5% of the CPU time of the main
+server machine (a 200 Mhz AMD K6 with 64Mb RAM).
+
+In one test, we did run the server for roughly 5 days and 21 hours. The
+C<dicopd> process used (according to C<ps ax>) 169 min and 15 sec CPU time
+while handling 19257 requests on 6481 client connects (version v2.18). 
+
+The average number requests per connect is 3 because each client reports a
+result, requests work and sends in his authentication request with each
+connect. The number is slightly less than 3.0 since normal administrator/user
+connects with a browser (for status pages etc) send in only one request per
+connect, but happen seldom enough to not skew the numbers too much.
+
+If you divide the 10155 seconds CPU time by the 6481 connects, you get an
+average of 1.57 seconds CPU time per connect. 
+
+Based on the 2.5% CPU time usage and if you allow a maximum load of 30%
+(to have some reserves for spikes and background jobs), you would be able to
+handle roughly 300 to 350 clients with such a machine, without it breaking
+into a sweat.
+
+Of course, increasing the chunk time or caching at the client (to make fewer
+requests) will increase the maximum possible number of clients. The same effect
+is achived by proxies. You can also buy faster hardware as a last resort, f.i.
+a 1.4 Ghz Athlon would probably be able to handle at least 8 times as much
+clients as the 200 Mhz AMD (e.g. 2400 .. 2800 clients).
+
+=head2 Performance status update (2002)
+
+Up to version v2.20, various optimizations have taken place (especially since
+v2.18) and the performance is now much better. A 200 Mhz AMD K6 would be able
+to handle at least 3000 clients (an improvement of a a factor of 10) without
+any problems, and benchmarks indicate that a 800 Mhz PIII will be able to handle
+about 20,000 clients with a CPU load of about 30% (allowing for spikes and
+other background activity).
+
+Using Math::BigInt::GMP v1.11 now makes the client status page about 8%
+faster (older versions were slightly slower than using Calc). Other operations
+are not much faster or slower when using GMP, so we now try to use it if
+possible.
+
+=head2 Performance status update (Summer 2003)
+
+In v2.22, the time to flush the data back to the disk was reduced quite a lot.
+The reason was that there was a bug, causing the server to write back a lot
+of unnecessary data to the disk.
+
+With 100 suspended testjobs, flushing the database back to disk every 2 hours
+took formerly around 11% of the CPU time of the C<dicopd> process, now it
+takes about 2.5%. Meaning the deamon takes roughly 8% less CPU time. These
+values depends largely on the number of non-runnning jobs you have, e.g. the
+more you have, the more time the new version will save you. 
+
+=head2 Performance status update (Fall 2003)
+
+In a long-term test we did run the server for 27 days, and 19 hours on the
+aforementioned AMD K6 200 Mhz with 128 MByte memory (Yes, it is an old
+machine - probably the oldest still running. The uptime is 451 days, if you
+must ask :)
+ 
+There were no crashes, or memory leaks. After that time the C<dicopd> process
+used 22496 KBytes of memory (as shown with C<top>) and 196 minutes and 38
+seconds of CPU time (according to C<ps ax>). All the flushes took 346
+seconds.
+
+There were 38426 client connects (and 115304 requests) after that time.
+
+This means that C<dicopd> used 11798 - 346 seconds = 11452 seconds handling
+client requests (CPU time spend minus flush time spend).
+
+Divided by the number of connects, the average time is 0.298 seconds, or 
+about 0.3 seconds per client connect.
+
+With one client connect per second the server load would be at roughly 30%,
+and using this as the maximum we can handle we arrive at the number of
+3600 client connects per hour. If each clients connects once per hour (a
+good practical value), the server would be able to handle roughly 3600
+clients. This is about 20% more than the previous version.
+
+We did not do long-term tests with more modern hardware yet, but one can
+expect a substantial increase in the amount of clients such a machine could
+handle.
+
+Especially since the readily available hardware has developed further since
+the last status updates, and AMD CPUs with 2 (real) Ghz or the equivalent
+Intel CPU are now becoming quite cheap.
+
+=head2 Network performance (2001)
+
+The network performance was not yet measured, and we do not know how much
+traffic 1000 clients would exactly generate. Some simple statistics show that
+each client connect takes only a couple hundred bytes.
+
+When each client connects every 30 minutes to the server, it should not
+generate more than 3 Kbytes traffic on average (YMMV).
+
+Since our test server (200 Mhz K6 AMD, 64 MByte RAM) could handle 300 clients,
+that would amuount to 600 connects per hour, with 600*3 KBytes traffic per
+hour, or 0.5 KByte per second.
+
+Having a faster network might help. A Proxy certainly will help, since it
+increases the amount of data traveling slightly, but makes fewer connections.
+
+Compressing the data might also help, but would need more CPU power at the
+server/proxy, not to mention that it is not implemented yet. Compressing the
+data might well not worth the effect.
+
+=head2 Network performance (update 2003)
+
+Since our test server (200 Mhz K6 AMD, 128 MByte RAM) could handle easily 3600
+clients, that would amuount to 3600 connects per hour, with roughly 3600*3
+KBytes traffic per hour, or roughly 3 KBytes per second. Note that exact
+measurements were not done.
+
+A faster server with more clients would of course generate more network
+traffic.
+
+=head1 TODO
+
+Please see also the TODO and BUGS files.
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

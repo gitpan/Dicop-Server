@@ -1,0 +1,35 @@
+#!/usr/bin/perl -w
+
+# Sample script to show how to extract target bytes from a file.
+# We assume a possible encrypted file (sample file format) starts with an ID
+# (0xDEADBEEF), then 12 bytes with arbitrary contents, and finally the 16 key
+# bytes.
+
+use strict;
+
+my $file = shift || "";
+my $bytes = "";
+
+print "Sample target information extracter v0.02\n\n";
+
+print "Reading: $file\n";
+open (FILE,$file) || die ("Cant read file '$file': $!");
+binmode FILE;
+while (<FILE>) { $bytes .= $_; last if length($bytes) > 32; }
+close(FILE);
+
+print 'Looking for id...';
+die('Error: ID not found') if $bytes !~ /^\xDE\xAD\xBE\xEF/;
+
+print "found, extracting key bytes\n";
+$bytes =~ /^.{16}([\x00-\xff]{16})/;
+$target = a2h($1);				# get the match
+
+print "Target: '$target'\n";			# caller expects this
+print "Done. All is well now...\n";
+  
+sub a2h
+  {
+  my $a = shift;
+  return unpack ("H". length($a)*2, $a);
+  }

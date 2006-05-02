@@ -1,0 +1,19 @@
+# These comments will be stripped.
+# Field X-Mailer will be automatically set. Modify the rest to suit your needs. 
+#
+Subject: [DiCoP-##name##] Client ###clientid## ('##clientname##') offline
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: "1: Oh no, ##clientid## is down!"
+
+Uh-oh!
+
+Seems that client ###clientid## ('##clientname##') is no longer reporting to the base.
+
+It returned it's last chunk on ##clientlast_chunk##.
+

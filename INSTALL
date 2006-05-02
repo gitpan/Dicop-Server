@@ -1,0 +1,395 @@
+
+=pod
+
+=head1 INSTALL
+
+If you haven't read the README yet, you are advised to do so now before
+continuing reading this document.
+
+You can read this document also via 'perldoc INSTALL', this gets rid of the
+funny =something lines ;)
+
+More help is available for example via C<perldoc doc/Dicop.pod>,
+C<perldoc doc/Server.pod> and C<perldoc doc/Client.pod>.
+
+=head2 Prerequisites
+
+You need the package Dicop-Base installed at your system before you can
+proceed. If you haven't already, update it to the last available version
+you can find at out pages at L<http://www.bsi.bund.de/>.
+
+=head2 First step: Take you pick
+
+First, there are two things to consider:
+
+=over 2
+
+=item What you want to install
+
+You can install the server, or the client, or both. Typically, you install
+the server on one computer, and the client on many others. We suggest you
+start by installing the server on one computer, and then test it with the
+client from the same computer. Once this works, install the client to
+different machines.
+
+=item How do you want to install it
+
+There are is only one way for the server, but two ways for the client to be
+installed.
+
+The server side uses the daemon C<dicopd>. The cgi-bin script called C<server>
+running under Apache is no longer available.
+
+The client can be installed so that it is mounted from the server or so that
+the client copy is locally. We recommend to have a local copy of the client
+instead of mounting a directory over NFS or Samba. 
+
+To achive that the local client copy is always update, you can use a wrapper
+script that downloads the client, unwraps it and runs it. An example is given
+below. To update the clients is simple a matter of preparing a new client
+C<.tar.gz> file and then requiring a higher client build number at the server.
+
+=back
+
+=head2 Unpacking
+
+When using 'dicopd', you can unpack the tarball to any directory you like and
+you do not need a running Apache (except as acting as a file server to serve
+workers and target files to the clients, but the file server can be located at
+a different machine).
+
+After downloading, unzip and untar with:
+
+	tar -xzf Dicop-Server-3.00_86.tar.gz
+
+Replace "3.00_86" with the actual version you got.
+
+The server part (e.g. the dicopd daemon) is supposed to run under some sort of
+Linux, Solaris, or Mac OS X. Windows or Cygwin are currently not supported.
+
+After untaring/unzipping it, you need first to verify the package, then to
+build a Makefile, then run "make" to create all the neccessary files and then
+run the testsuite to make sure it really works on your system.
+
+Actually "installing" is B<not> neccessary, you can run the C<dicopd>
+directly from the build directory.
+
+=head2 Verify the signature
+
+Use gpg to verify the signature, if you haven't already. Download our key from 
+our website http://www.bsi.bund.de/produkte/dicop/, import it and then do:
+	
+	gpg Dicop-Server-3.00_86.tar.gz.asc
+
+Replace 3.00_86 with the actual version you got.
+
+If the signature does not verify ok, please notify us immidiately. B<DO NOT>
+run perl Makefile.PL or anything else nor install the package when the
+signature cannot be verified ok. B<Your system might get compromised!>.
+
+If the signature was okay, proceed.
+
+
+=head2 Creating the Makefile
+
+Remember to install Dicop::Base before proceeding further!
+
+Change to the directory where you unpacked the tarfile and type 
+
+	perl Makefile.PL
+
+This will tell you about missing modules. Download and install them and then
+retry this step until it finished without warnings. See the next heading for
+how to find and download modules.
+
+The warnings you might encounter are:
+
+	Warning: prerequisite Bar::Baz failed to load
+	Warning: prerequisite Bar::Baz vx.yz not found
+
+or similiar things. The first tells you that the module was not found at all,
+the second tells you that you do have an older version only and need to install
+a sufficient new version.
+
+There are some problem with older versions of Math::BigInt (prior to v1.49),
+so make sure you get the latest.
+
+After this step, you can retry the
+
+	perl Makefile.PL
+
+in the dicop build directory and it should print out no more warnings.
+
+=head2 Where to find missing modules
+
+If some modules are missing in your Perl installation, then you need to get
+and install them. You can download modules from CPAN L<http://search.cpan.org>/
+or L<http://www.cpan.org/>.
+
+Install the modules via the same commands for each of them:
+
+	perl Makefile.PL
+	make test
+	make install
+
+Some modules depend on others, you must resolve these dependencies by
+installing in the right order.
+
+You can check whether a particulary module is installed and which version it
+has by doing (example for Digest::MD5):
+
+	perl -MDigest::MD5\ 99
+
+It either prints the currently installed version or failes with something
+like 'module not found'.
+
+Under Windows, ActiveState Perl (we tested with build 617, but newer versions
+should be fine) already contains most of the modules, it at least contains all
+modules the client will need. The server is not supported under Windows.
+
+The client needs fewer modules, and it should work fine under Windows.
+
+You will also need a C<make> program. Under Linux onboard, under a different
+OS you might need to install one along with a compiler.
+
+=head2 Running the testsuite
+
+When writing the makefile finally went okay, follow with:
+
+	make
+	make test
+
+If some tests fail, please email the output to us. 
+
+When all tests pass, you B<COULD> theoretical type (as root):
+
+	make install
+
+but we do B<NOT> recommend this. It is not neccessary to do make install
+to run C<dicopd>, nor C<client>! C<make install> would install some Perl
+modules into your Perl's site-perl tree. But it is much easier to have them
+all in one place together with the data files for upgrading etc.
+
+=head2 After build
+
+You need to renaming a couple of files and adjust some things to meet your
+needs before starting C<dicopd> for the first time:
+
+The best way to setup all the neccessary files and permissons is to run
+
+	./setup
+
+and follow the instructions.
+
+Here is a step-by-step overview on what you might need to do in addition
+(or instead of) to running C<./setup>:
+
+=over 2
+
+=item config
+
+Look into C<config> and copy the C<server.cfg.sample> file to
+C<server.cfg> and then edit it to match your configuration.
+
+Do this B<only> if you are installing the cluster for the first time.
+If you already have an older version installed, have a look into the sample
+configuration files to see if anything has changed, and then take over
+possible changes into your own config files.
+
+You very probably need to change port, hostname and mailserver and some other
+settings like user/group.
+
+=item Creating user/group
+
+When not using C<dicopd>, you must make sure that the user and group
+specified in C<server.cfg> actually exist. You can create them on most systems
+with a command similiar to this:
+
+	groupadd GROUP
+	useradd -g GROUP USER
+
+Replace I<GROUP> by the name of the group (f.i. 'dicop') and I<USER> with the
+user name (f.i. 'dicop', too).
+
+=item Mail templates
+
+Go to the C<tpl/mail/> directory and copy the files from
+C<filename.txt.sample> to C<filename.txt> and edit them. You also need to do
+this B<only> when you are installing a fresh server, not when you upgrade.
+
+=item Event templates
+
+Go to the C<tpl/event/> directory and copy the files from
+C<filename.txt.sample> to C<filename.txt> and edit them. You also need to do
+this B<only> when you are installing a fresh server, not when you upgrade.
+
+=item Permissions
+
+You also need to adjust the permissions of the directories/files to match the
+group and user. Create a new user and group that match the user and group name
+you specified in C<server.cfg> and then set the correct file ownership for
+all files including the parent directory. So make sure that the directory
+containing the server is B<also> read/writable for the user you want C<dicopd>
+to run under. For instance, if you untarred C<Dicop-Server-3.00> into
+C</home/dicop/>, then do (assuming your user and group are called 'dicop',
+otherwise replace C<dicop.dicop> with the user.group you want to use):
+
+	chown -R dicop.dicop /home/dicop/Dicop-Server-3.00/  
+
+=item Test data
+
+In the additional tar file name C<Dicop-Data.tar.gz> are some test-jobs and
+other usefull test data. Untar it into the C<data> directory so that
+C<data/jobs.lst> etc exist. Then go and play a bit with it. Most things except
+actually submitting a change form (e.g. adding, viewing and getting a change
+form) should work. If not, please let us now so that we can fix it.
+
+=item Adding an admin
+
+You need at least one administrator before you can start C<./dicopd>. If you
+haven't run ./setup nor defined any administrators before, run
+
+	./adduser.pl
+
+and follow the instructions.
+
+=back
+
+=head2 Administration and further testing
+
+You need to start C<dicopd> B<as root> from a console with one of the
+following two ways:
+
+	./dicopd
+	./dicopd 2>>stderr.log &
+
+The first variant enables you to see eventual error messages, the second one
+puts it into the background. If you experience troubles, check also the
+log files in logs/error.log for error messages.
+
+You should do this B<as root>, since the deamon needs to switch itself shortly
+after the start to the actual user/group specified in the config file!
+
+Beware that closing a SSH or telnet session from where you started it by
+simple killing the X-window might kill the background process, too! Logout
+before closing the session seems to work around this problem.
+
+Please note that the startup can take quite some time, especially if there is
+a lot of data and you have a slow server machine. You can use C<top> to check
+whether the process still is in the startup-phase, it will typically use 100%
+CPU power then. However, with the test-data a 200 Mhz K6 should not take more
+than a few seconds to startup. On a current machine (e.g. more than a one Ghz)
+the startup is more or less instant.
+
+You can then connect to the running daemon with your favourite broswer via:
+
+	http://host:port/
+
+for instance
+
+	http://127.0.0.1:8888/
+
+if your web browser runs on the same machine than the C<dicopd> deamon.
+
+If the connect fails, the server might not have finished it's startup yet.
+
+The server is writing out it's data from time to time to disk. To shut it down,
+just issue a kill command on the console:
+
+	killall dicopd
+
+If you want to kill it B<without> writing it's modified data back, try this:
+
+	killall -9 dicopd
+
+If you did run C<dicopd> in the foreground, pressing CTRL-C will stop it and
+let it write back the data to the disk.
+
+=head2 Getting some real work done
+
+Once you have browsed around the GUI a bit, you might want to get the cluster
+to do some real work.
+
+First you need to register any possible client at the server. For this you also
+need a group to put the client in (do not confuse this with the users/groups
+for your operating system). So follow these steps:
+
+=over 2
+
+=item Group
+
+Go to C<Add Group> and add one, or modify the already existing group.
+
+=item Client
+
+Go to C<Add Client> and add one client, or modify an already exisiting one.
+
+=item Jobtype
+
+Go to C<Add Jobtype> and then add one test jobtype (use the string "test" as
+the workername).
+
+=item Job
+
+Go to C<Add Job> and add one test job (use the freshly added job type).
+
+=back
+
+Now the server is ready to serve the work. You can view the different status
+pages, especially the one for the job (click onto the ID of the newly created
+job in the main status page to get there).
+
+However, you will notice that nothing happens. That is right, because you
+didn't run any client. Remember, the server does nothing except handing out
+work to any registered client who requests it. So you need to run at least one
+client to get the work done.
+
+=head2 Client
+
+The client can be started via the command line.
+
+You can either install the client on the server, and share this installation
+with all client machine (by network mount), or put a copy of the client
+onto each client machine and run it locally.
+
+Please see C</doc/client.pod> for instructions on how to set up the client
+for multiply machines, especially diskless cluster nodes.
+
+For testing purposes, you can run the client that is included in the server
+distribution, or untar/unzip the client distribution to a seperate directory.
+
+Edit C<config/client.cfg> to allow your client to connect to the right server.
+
+Then start the client with the following:
+
+	client --id=id_number -server=your-dicop-server:8888
+
+You need to replace id_number with the actual id, that is the one the client
+got after you added it. Usually that would be C<3>, since there are already two
+test clients. If there are any error messages, you can get more information
+by restarting the client with:
+	
+	client --id=id_number --debug=nr
+
+where nr is 1,2 or 3. See the extended client documentation in doc/Client.pod
+for more options.
+
+=head2 Documentation
+
+Please have a look into C</doc>, you will find there help files in pod format.
+
+If you have any more questions, please send us an email. We accept encrypted
+mail, please use the key attached as C<dicop.asc>.
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

@@ -1,0 +1,20 @@
+# These comments will be stripped.
+# Field and X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] Job ###jobid## ('##jobdescription##') finished - no result found
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: I am sorry, Dave
+
+Oops!
+
+On ##localtime## the job ##jobid## was finished, but no result was found.
+Please check the job's settings and restart it, maybe with a different
+character set.
+

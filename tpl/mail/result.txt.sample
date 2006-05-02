@@ -1,0 +1,23 @@
+# These comments will be stripped.
+# Field X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] Result for job ##jobid## ('##jobdescription##')
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: All your base are belong to us
+
+Yippeey!
+
+On ##localtime## client ##clientid## turned up with a result.
+It was in chunk ##chunkid## for job ##jobid## ('##jobdescription##').
+The key should be ##resulthex## (##resultascii##) and be between the values
+##chunkstart## and ##chunkend##.
+
+Please have the appropriate amount of fun.
+

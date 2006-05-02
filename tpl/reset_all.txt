@@ -1,0 +1,13 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main">DiCoP</a> - Reset of all clients successfull</h1>
+
+<div class="text">
+
+<p>
+All clients were successfully reset.
+<br>
+Go back to the <a href="##selfstatus_clientmap##">client map</a> or
+the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

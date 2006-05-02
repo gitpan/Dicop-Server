@@ -1,0 +1,108 @@
+
+=pod
+
+=head1 History revision for DiCoP
+
+This document details the complete changes from v3.01 onwards.
+
+See the other CHANGES files like C<CHANGES-2.20>, C<CHANGES-3.00> etc for the
+full version history up to version v3.00.
+
+=head2 2006-05-02 (Server/Client v3.02)
+
+=over 2
+
+=item fixed
+
+	use "/usr/bin/env perl" vs. "/usr/bin/perl"
+        fixups in Makefile.PL, use PREREQ_FATAL
+        fix (c) dates, contact address etc
+        make a non-beta version for release
+	fix t/data/clientpm.t to not use ok() wrongly
+        add a SIGNATURE again (for CPAN release)
+        wcr lib: Total: lines 11065, words 41785, chars 309646
+	4845 tests
+
+=back
+
+	
+=back
+
+=head2 2005-06-20 (Server/Client v3.01 build 5)
+
+=over 2
+
+=item fixed
+
+	encode() parameters to event URLs, not just the event text
+	Data.pm: fix warnings about non-existant objects (clients etc)
+	wcr lib: Total: lines 11065, words 41785, chars 309646
+	4845 tests (change jobtype)
+
+=back
+
+=head2 2005-05-10 (Server/Client v3.01 build 4)
+
+=over 2
+
+=item fixed
+
+	Job: normalize target paths (rem /./, and ^../target)
+	Adjust speeds for clients in case jobtype speed changed
+	include file name on hashing error
+	wcr lib: Total: lines 11086, words 41966, chars 311101
+	4845 tests (change jobtype)
+
+=back
+
+=head2 2005-04-20 (Server/Client v3.01 build 3)
+
+=over 2
+
+=item fixed
+
+	allow optional ID when addig jobtypes
+	require Dicop::Base 3.01 build 3
+	wcr lib: Total: lines 11060, words 41855, chars 310251
+	4839 tests (optional id on adding jobtype)
+
+=back
+
+=head2 2005-04-18 (Server/Client v3.01 build 2)
+
+=over 2
+
+=item fixed
+
+	require Dicop::Base 3.01
+	fix doc in Dicop::Client
+	wcr lib: Total: lines 11058, words 41850, chars 310226
+	4827 tests ()
+
+=back
+
+=head2 2005-02-16 (Server/Client v3.01 build 1)
+
+=over 2
+
+=item fixed
+
+	Makefile.PL generates META.YML with correct license field
+	amend README.linux
+	start version 3.01
+	wcr lib: Total: lines 11066, words 41900, chars 310683
+	4827 tests ()
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2005
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut

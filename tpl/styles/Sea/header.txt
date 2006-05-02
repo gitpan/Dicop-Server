@@ -1,0 +1,67 @@
+<html>
+<head>
+ <title>##title##</title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  body {
+    background: white;
+    }
+  h1, h2, h3, h4, h5, h6, h7, div.menu {
+    background: #a0a0ff;
+    }
+  div.text {
+    background: #e0e0ff;
+    }
+  td.DIR_RIGHT_ODD, td.DIR_ODD
+    {
+    background: #d8d8ff;
+    }
+  th.auth {
+    background: #4040ff;
+    color: #d0d0ff;
+    }
+  td {
+    background: #d8d8ff;
+    }
+  td.indend, td.editfieldname1, td.editfieldname2 {
+    background: #c0c0e8;
+    }
+  th {
+    background: #4040ff;
+    color: #d0d0ff;
+    border: black;
+    }
+  input.submit, input.browse, input.refresh, input.reset {
+    background: #4040ff;
+    color: white;
+    }
+  p {
+    color: black;
+    }
+  div.footer {
+    background: #a0a0ff;
+    border-color: black; 
+    color: black;
+    }
+  a:link { 
+    color: black;
+    }
+  a:visited { 
+    color: black;
+    }
+  a:hover.m { 
+    background-color: #303080;
+    color: #d0d0ff;
+    }
+  a:hover { 
+    background-color: #303080;
+    color: #d0d0ff;
+    }
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#e0e0e0 textcolor="#303030">
+

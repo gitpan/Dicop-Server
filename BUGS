@@ -1,0 +1,105 @@
+
+=pod
+
+=head1 BUGS - Only a dead Bug is a good Bug
+
+=head2 External modules
+
+=over 2
+
+=item Net::Server
+
+When using v0.85 of Net::Server, starting dicopd may emit a warning from
+Net::Server along the lines of:
+
+	Couldn't POSIX::setuid to \"$uid\" []
+
+This seems to be spurious and can be ignored.
+
+=head2 Server
+
+=over 2
+
+=item *
+
+When a job is still only a few hours old, all of it's chunks will be sized 5
+minutes. However, other jobs have a chunk size of 35, 55 or any other value,
+depending on what the clients are set to. The algorithmn to hand out chunks,
+however, does not take these sizes into account, it merely distributes
+chunk B<counts>. This means a job with 5 minute chunks will get 90% of all
+chunks, but not 90% of all CPU time.
+
+=item *
+
+Maybe the config should not be viewable by everyone who can see the
+cmd_status, since it details the allowed/disallowed status/stats/work/admin
+settings. OTOH, even when you can "see" the data, you still don't have admin
+rights because you don't know the right password... 
+
+=item *
+
+The server should deny any DONE/SUCCESS reports of the client with a 
+failure counter too high. (on the line of reasoning that they are probably
+wrong/bogus). This will only happen if a client has failures _and_ gets more
+than one chunk at a time from the server (otherwise the client can't report
+chunks to the server because it isn't getting them in the first place - it is
+denied work while having a high failure counter) - or if a client sends in
+bogus reports all the time.
+
+=item *
+
+Server leaves out testcases for workers it does not have. (f.i. a worker
+for architecture foo is missing, and a client working in foo requests tests)
+However, the actual work from a job may still be sent to the client, even
+though the client can not work on it. (Really? Check it!)
+
+=item *
+
+Config should accept comments at end of line, not only entire lines as comments
+
+=item *
+
+A client that sends a FAILED and a SUCCESS testcase for one jobtype might not
+get disabled (or accidentily re-enabled) when the FAILED testcase is handled
+first. (Server should handle failed testcases last)
+
+=item *
+
+Store what tests you send to which client. This fixes the bug that the server
+needs to rely on client sending back correct 'type' for report. (This falls
+under the "cache with the secret tokens as ID, and job/chunk as data" idea
+that would allow us to NOT send the client the job/chunk info at all)
+
+=back
+
+=head2 General
+
+=over 2
+
+=item *
+
+Adding character sets with multi-byte "characters" (think unicode, or "words"
+as "characters" like qw/hans wurst/) is not yet possible.
+One way to solve this is to have a text field for input and split the input
+at linefeeds into "characters".
+
+=item *
+
+The server should send only one email containing all offline clients, not one
+mail for each client. This could result in a large number of emails being
+generated when a lot of clients go offline simultanously (network/power
+outage etc). Also, sending the offline email should probably be supressed when
+the server starts up (on the reasoning that if the server was down, the
+clients will also be offline, but you know this already)
+
+=item *
+
+The target dir must be called "target", otherwise the client can't ask the
+server for a download location (hardcoded check on
+C</^(worker|target)$/>) and also the worker would not find the JOBID.set files
+(hardcoded check for file in C<../../target/>.
+
+=back
+
+=cut
+

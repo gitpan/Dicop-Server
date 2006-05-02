@@ -1,0 +1,17 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main page">DiCoP</a> - Help</h1>
+
+<div class="text">
+
+<p>
+Available help topics:
+</p>
+
+<ul>
+
+##include_helptopics.inc##
+
+</ul>
+
+</div>
+

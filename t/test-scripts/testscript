@@ -1,0 +1,34 @@
+#!/usr/bin/perl -w
+
+# Test script to test extraction of target bytes from a file.
+
+# always extract second 4 bytes bytes
+
+use strict;
+
+my $file = shift || "";
+my $bytes = "";
+
+print "Sample target information extracter v0.01\n\n";
+
+print "Reading: $file\n";
+open (FILE,$file) || die ("Cant read file '$file': $!");
+binmode FILE;
+while (<FILE>) { $bytes .= $_; last if length($bytes) > 32; }
+close(FILE);
+
+print 'Looking for id...';
+die('Error: ID not found') if $bytes !~ /^\xDE\xAD\xBE\xEF/;
+
+print "found, extracting key bytes (ignoring first 4 bytes)\n";
+$bytes =~ /^....(.{4})/;
+my $target = a2h($1);				# get the match
+
+print "Target: '$target'\n";			# caller expects this
+print "Done. All is well now...\n";
+  
+sub a2h
+  {
+  my $a = shift;
+  return unpack ("H". length($a)*2, $a);
+  }

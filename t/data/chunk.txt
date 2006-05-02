@@ -1,0 +1,53 @@
+# output of $chunk->as_string:
+Dicop::Data::Chunk {
+  checksum = 68bafc0b2c1e439ba63d7cafe933dc79
+  client = 1
+  created = 1037975515
+  dirty = 0
+  end = 616261,729
+  id = 2
+  issued = 1037975515
+  job = 1
+  modified = 1037975515
+  result = 1
+  size = 27
+  start = 616161,703
+  status = 1
+  token = 68bafc0b2c1e439ba63d7cafe933dc79
+  verified = 1_2__face_1037975515
+  }
+# second one
+Dicop::Data::Chunk {
+  checksum = 68bafc0b2c1e439ba63d7cafe933dc79
+  client = 1
+  created = 1037975515
+  dirty = 0
+  end = 616261,729
+  id = 2
+  issued = 1037975515
+  job = 1
+  modified = 1037975515
+  result = 1
+  size = 27
+  start = 616161,703
+  status = 1
+  token = 68bafc0b2c1e439ba63d7cafe933dc79
+  verified = 1_4_2bac_face_1037975515
+  }
+# third one
+Dicop::Data::Chunk {
+  checksum = 68bafc0b2c1e439ba63d7cafe933dc79
+  client = 1
+  created = 1037975515
+  dirty = 0
+  end = 616261,729
+  id = 2
+  issued = 1037975515
+  job = 1
+  modified = 1037975515
+  result = 1
+  size = 27
+  start = 616161,703
+  status = 1
+  token = 68bafc0b2c1e439ba63d7cafe933dc79
+  }

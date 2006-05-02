@@ -1,0 +1,1108 @@
+#############################################################################
+#
+# objects.def - define fields of the Dicop::Data objects.
+
+# This file is only read upon startup of the server - any changes here will
+# not be in effect until you shutdown and restart the server process!
+
+# See "perldoc Dicop::Item::Template" for more documentation and examples.
+
+{
+  class = "Dicop::Data::Testcase"
+  description = "Testcases are run by the clients prior to real work to ensure that everything is correct."
+  fields => {
+    description => {
+      def => 'description', 
+      editrank => 1,
+      maxlen => 256,
+      editable => 1,
+      help => 'A short description of the testcase',
+      type => 'string' 
+    },
+    charset => {
+      editrank => 2,
+      def => 0,
+      editable => 1,
+      type => 'charset_id',
+      help => 'The charset for this testcase.'
+    }, 
+    start => {
+      editrank => 3,
+      def => '',
+      editable => 1,
+      help => "The start key (in hex!). You can also enter <b>first:N</b> or <b>last:N</b> for the first, respective last string of length N. Example: 'first:5'",
+      type => 'Math::String',
+    },
+    end => {
+      editrank => 4,
+      def => '',
+      editable => 1,
+      help => "The end key (in hex!). You can also enter <b>first:N</b> or <b>last:N</b> for the first, respective last string of length N. Example: 'first:5'",
+      type => 'Math::String',
+    },
+    jobtype => {
+      editrank => 5,
+      def => 0,
+      editable => 1,
+      help => 'The jobtype this testcase belongs to. Press refresh after changing it to get optional extra input fields.',
+      type => 'jobtype_id',
+      refresh => 1,
+    },
+    target => {
+      editrank => 6,
+      maxlen => 512,
+      editlen => 64,
+      editable => 1,
+      help => 'The target hash or file',
+      type => 'file',
+    },
+    result => {
+      editrank => 7,
+      def => '',
+      editable => 1,
+      help => 'Either a result (in hex, for a positive test) or empty (negative test)',
+      type => 'Math::String',
+    },
+    prefix => {
+      editrank => 8,
+      def => '',
+      editable => 1,
+      help => "A fixed prefix for 'start', 'end' and 'result', in hex!",
+      type => 'string',
+    },
+    disabled => {
+      editrank => 9,
+      def => '',
+      editable => 1,
+      help => "Disable this testcase",
+      description => "If disabled, the clients will not receive this testcase until it is enabled again.",
+      type => 'bool',
+    },
+    extra0 => { changeable => 1, },
+    extra1 => { changeable => 1, },
+    extra2 => { changeable => 1, },
+    extra3 => { changeable => 1, },
+    extra4 => { changeable => 1, },
+    extra5 => { changeable => 1, },
+    extra6 => { changeable => 1, },
+    extra7 => { changeable => 1, },
+  }
+  fake_keys = "charset_description, jobtype_description, extras, startlen, endlen"
+}
+
+{
+  class = "Dicop::Data::Group"
+  description = "A group contains one or more clients for statistical purposes."
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 256,
+      editable => 1,
+      help => 'A short description of the group.',
+      type => 'string',
+    },
+    name => {
+      def => 'Group',
+      maxlen => 80,
+      editable => 1,
+      help => 'The name of the group.',
+      type => 'string',
+    },
+  } 
+}
+
+{
+  class = "Dicop::Data::Proxy"
+  fields => {
+    description => {
+      editrank => 2,
+      def => 'description',
+      maxlen => 256,
+      editable => 1,
+      help => 'A short description of the proxy.',
+      type => 'string',
+    },
+    group => {
+      editrank => 9,
+      def => '1',
+      editable => 1,
+      type => 'group_id',
+      help => 'The group this proxy belongs to.',
+    },
+    name => {
+      editrank => 1,
+      def => 'Proxy',
+      maxlen => 80,
+      editable => 1, help => 'The name of the proxy.',
+      type => 'string',
+    },
+    version => {
+      noadd => 1,
+      maxlen => 16,
+      help => "Proxy version.",
+      type => 'string',  
+    },
+    ip => {
+      editrank => 5,
+      name => 'IP',
+      def => '127.0.0.1',
+      editable => 1,
+      type => 'ip',
+      help => 'The IP adress of the proxy machine.',
+    },
+    mask => {
+      editrank => 6,
+      def => '255.255.255.255',
+      editable => 1,
+      type => 'ip',
+      help => 'The network mask for the IP of the proxy machine.',
+    },
+    id => {
+      editrank => 10,
+      name => "ID",
+      def => '',
+      type => 'string',
+      help => 'Optional ID number. If the entered ID is still free, you will get it, otherwise a free ID is automatically assigned. Letters (A-Z, a-z) and digits (0-9) only. ',
+    },
+    pwd => {
+      editrank => 3,
+      name => "Password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'A password used for authentication.',
+    },
+    pwdrepeat => {
+      editrank => 4,
+      name => "Repeat password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'Repeat the password here.',
+    },
+    pwdhash => {
+      noadd => 1,
+      def => '',
+      maxlen => 64,
+      type => 'pwdhash',
+    },
+    salt => {
+      noadd => 1,
+      def => '',
+      maxlen => 64,
+      type => 'salt',
+    },
+  }
+  fake_keys => "last_chunk"
+}
+
+{
+  class = "Dicop::Data::Job"
+  fields => {
+    jobtype => {
+      editrank => 50,
+      def => 0,
+      help => 'The type of this job.',
+      type => 'jobtype_id',
+      refresh => 1,
+    },
+    charset => {
+      editrank => 60,
+      def => 0,
+      help => 'The charset used for this job.',
+      type => 'charset_id',
+    },
+    case => {
+      def => 1,
+      editable => 1,
+      editrank => 1,
+      help => 'Select a case this job belongs to, or use the details entered below to create a new case on the fly.',
+      description => 'The case this job belongs to.',
+      addoption => { -1 => 'Add a new case:' },
+      sort => 'name',
+      type => 'case_id',
+    },
+    description => {
+      maxlen => 256,
+      editable => 1,
+      editrank => 20,
+      help => 'A short description of the job.',
+      type => 'string',
+    },
+
+    newjob => {
+      def => '',
+      editable => 1,
+      editrank => 80,
+      addrank => 160,
+      maxlen => 2,
+      help => 'Start a new job for each result:',
+      type => 'bool',
+    },
+    'newjob-description' => {
+      name => "Description",
+      addrank => 170,
+      editindend => 1,
+      def => '##description## pwd',
+      maxlen => 260,
+      help => 'A short description of the new job. The string ##description## will be replaced by the description of the original job.',
+      type => 'string',
+     },
+    'newjob-maxchunksize' => {
+      name => "Max. Chunksize",
+      addrank => 240,
+      editindend => 1,
+      def => 0,
+      maxlen => 2,
+      help => 'Maximum chunksize for the new job, in minutes. Zero means automatic (e.g. 5 min at the first few hours, afterwards whatever the client requested).',
+      type => 'int',
+      min => 0,
+      max => 60,
+     },
+    'newjob-charset' => {
+      name => "Charset",
+      addrank => 200,
+      editindend => 1,
+      def => 0,
+      help => 'The charset to be used for the newly started job.',
+      type => 'charset_id',
+    },
+    'newjob-jobtype' => {
+      name => "Jobtype",
+      addrank => 190,
+      editindend => 1,
+      def => 0,
+      help => 'The jobtype to be used for the newly started job.',
+      type => 'jobtype_id',
+    },
+    'newjob-start' => {
+      name => "Start",
+      addrank => 200,
+      editindend => 1,
+      editlen => 32,
+      def => '',
+      help => "The start key for the newly started job, in ASCII (f.i. 'aaaa') or in hex. You can also enter <b>first:N</b> or <b>last:N</b> for the first, respective last string of length N. Example: 'first:5'",
+      type => 'Math::String',
+    },
+    'newjob-end' => {
+      name => "End",
+      addrank => 210,
+      editindend => 1,
+      editlen => 32,
+      def => '',
+      help => "The end key for the newly started job, in ASCII (f.i. 'zzzz') or in hex. You can also enter <b>first:N</b> or <b>last:N</b> for the first, respective last string of length N. Example: 'last:6'",
+      type => 'Math::String',
+    },
+    'newjob-ascii' => {
+      name => "Ascii",
+      editindend => 1,
+      addrank => 220,
+      def => '',
+      help => "Check this box is <i>start</i> and <i>end</i> of the new job are in ASCII (e.g. not in hex).",
+      type => 'bool',
+    },
+    'newjob-rank' => {
+      name => "Rank",
+      editindend => 1,
+      addrank => 180,
+      def => '##rank##',
+      help => 'The rank for the newly started job. The string ##rank## will be replaced by the rank of the original job.',
+      type => 'string',
+    },
+    'newjob-prefix' => {
+      name => "Prefix",
+      editindend => 1,
+      def => '',
+      maxlen => 32,
+      help => 'An optional fixed prefix for each key of the new job, in hex.',
+      type => 'string',
+    },
+    'newjob-haltjob' => {
+      name => "Haltjob",
+      addrank => 220,
+      editindend => 1,
+      def => 'on',
+      maxlen => 2,
+      help => 'Halt the newly started job when a result is found for it.',
+      type => 'bool',
+    },
+
+    imagefile => {
+      name => "Image file",
+      editrank => 70,
+      editlen => 64,
+      maxlen => 256,
+      help => "Enter an <b>optional</b> path/file name at the server to point to an image file, which is then used to extract the passwords for testing. This is only neccessary when you select a character set of the <i>EXTRACT</i> type.",
+      type => 'file'
+    },
+    target => {
+      editrank => 80,
+      editlen => 64,
+      maxlen => 256,
+      help => 'Target file or a hash value.',
+      type => 'file',
+    },
+
+    'addcase-name' => {
+      addindend => 1,
+      name => 'Number',
+      def => '',
+      addrank => 3,
+      editlen => 32,
+      maxlen => 64,
+      help => 'A unique filing/ident number for the new case.',
+      type => 'string',
+      virtual => 1,
+    },
+    'addcase-description' => {
+      name => 'Description',
+      addindend => 1,
+      def => '',
+      addrank => 4,
+      editlen => 64,
+      maxlen => 512,
+      help => 'The new case description.',
+      type => 'string',
+      virtual => 1,
+    },
+
+    'addcase-referee' => {
+      name => 'Referee',
+      addindend => 1,
+      def => '',
+      addrank => 5,
+      editlen => 64,
+      maxlen => 64,
+      help => 'The name of the referee for the new case.',
+      type => 'string',
+      virtual => 1,
+    },
+
+    'addcase-url' => {
+      name => 'URL',
+      addindend => 1,
+      def => '',
+      addrank => 6,
+      editlen => 64,
+      maxlen => 256,
+      help => '<b>Optional</b> URL for an external page with more info for that case.',
+      type => 'string',
+      virtual => 1,
+    },
+
+    start => {
+      editrank => 90,
+      editlen => 32,
+      def => '',
+      help => "Start key in hex (f.i. '61616161') or ASCII (f.i. 'aaaa'), see the ASCII setting below. You can also type in <b>first:N</b> for the first key of length N, or <b>last:N</b> for the last key of length N. Example: 'first:5'",
+      type => 'Math::String',
+    },
+    end => {
+      editrank => 100,
+      editlen => 32,
+      def => '',
+      help => "End key in hex (f.i. '62626262') or ASCII (f.i. 'bbbb'), see the ASCII setting below. You can also type in <b>first:N</b> for the first key of length N, or <b>last:N</b> for the last key of length N. Example: 'last:5'",
+      type => 'Math::String',
+    },
+
+    maxchunksize => {
+      def => 0,
+      editable => 1,
+      editrank => 40,
+      name => "Max. Chunksize",
+      maxlen => 2,
+      help => 'Maximum chunk size for this job in minutes. A value of 0 means automatic, e.g. for the first four hours each chunk will be a maximum of 5 minutes, after that it will be as big as the client requests.',
+      type => 'int',
+      min => 0,
+      max => 60,
+    },
+    haltjob => {
+      def => 'on',
+      editable => 1,
+      addrank => 140,
+      editrank => 60,
+      maxlen => 2,
+      help => 'Halt job if a result is found',
+      type => 'bool',
+    },
+    checkothers => {
+      def => 'on',
+      editable => 1,
+      addrank => 150,
+      editrank => 70,
+      maxlen => 2,
+      help => 'Check jobs of same type for results, too',
+      type => 'bool',
+    },
+    prefix => {
+      editrank => 110,
+      def => '',
+      maxlen => 32,
+      help => 'An optional fixed prefix for each key, in ASCII or hex.',
+      type => 'string',
+    },
+    ascii => {
+      editrank => 120,
+      def => '',
+      help => "Check this box if <i>start</i> and <i>end</i> above are in ASCII (f.i. 'aaaa') and not in hex.",
+      type => 'bool',
+    },
+    prefixinascii => {
+      editrank => 130,
+      def => '',
+      help => "Check this box if the prefix given above is in ASCII (f.i. 'aaaa') and not in hex.",
+      type => 'bool',
+    },
+    status => {
+      def => 0,
+      noadd => 1,
+      editable => 1,
+      editrank => 10,
+      valid => { 3 => 'Running', 4 => 'Solved', 6 => 'Suspended' },
+      maxlen => 2,
+      help => 'Job status',
+      type => 'status',
+    },
+    rank => {
+      def => 100,
+      editable => 1,
+      editrank => 30,
+      maxlen => 5,
+      help => "The job (or jobs) with the lowest rank will get 90% of the cluster CPU time. All other jobs will share the remaining percent of CPU time equally.",
+      type => 'int',
+    },
+    last_chunk => {
+      def => 0,
+      noadd => 1,
+      help => "The time when the last chunk for this job was returned by one client.",
+      type => "time",
+    },
+    created => {
+      noadd => 1,
+      def => 0,
+      help => "The time when this job was created.",
+      type => "time",
+    },
+    modified => {
+      noadd => 1,
+      def => 0,
+      help => "The time when this job was last modified.",
+      type => "time",
+    },
+    extrafields => {
+      noadd => 1,
+      def => '',
+      help => "Extra config data neccessary for this job.",
+      type => "string",
+    },
+    extra0 => { changeable => 1, },
+    extra1 => { changeable => 1, },
+    extra2 => { changeable => 1, },
+    extra3 => { changeable => 1, },
+    extra4 => { changeable => 1, },
+    extra5 => { changeable => 1, },
+    extra6 => { changeable => 1, },
+    extra7 => { changeable => 1, },
+  }
+  fake_keys = "case_name, case_description, charset_description, jobtype_description, owner, runningsince, runningfor, priority, percent_done, percent_done_int, willtake, willtakesimple, finished, keyspersecond, keys_done, startlen, endlen"
+}
+
+{
+  class = "Dicop::Data::Jobtype"
+  fields => {
+    charset => {
+      def => 0,
+      editable => 1,
+      editrank => 3,
+      help => 'The typical charset used for this jobtype.',
+      type => 'charset_id',
+    },
+    description => {
+      maxlen => 512,
+      editrank => 2,
+      editable => 1,
+      def => 'description',
+      help => 'A short description of the jobtype.',
+      type => 'string',
+    },
+    speed => {
+      def => 100,
+      editable => 1,
+      maxlen => 10,
+      help => 'The average speed in keys/s for an average client.',
+      min => 10,
+      type => 'int',
+    },
+    fixed => {
+      def => 0,
+      editrank => 10,
+      maxlen => 2,
+      help => 'The number of fixed characters (usually 0) at each chunk-border.',
+      min => 0,
+      max => 250,
+      type => 'int',
+    },
+    minlen => {
+      def => 1,
+      editable => 1,
+      editrank => 4,
+      maxlen => 3,
+      help => 'The minimum length in characters of the <i>start</i> and <i>end</i> key.',
+      min => 1,
+      max => 250,
+      type => 'int',
+    },
+    name => {
+      def => 'Jobtype',
+      maxlen => 80,
+      editrank => 1,
+      editable => 1,
+      help => 'The name of the jobtype. This is also the name of the worker executable, without extension. Please use only <b>lower</b> case charcaters. Digits, minus and plus are ok, but not underscore nor semicolon.',
+      type => 'string',
+    },
+    script => {
+      maxlen => 48,
+      editable => 1,
+      editrank => 5,
+      help => 'Optional name of the script to extract target info from target files.',
+      type => 'string',
+    },
+    files => {
+      name => "Extra files",
+      maxlen => 1024,
+      editable => 1,
+      help => "List of additional files to sent to client, per architecture. Example: <b>'all: this.file; mswin32: some.dll, foo.dll, this.dat; linux: libsome.so, this.dat; linux-i386: this.dat'</b> If a file is specified in the base architecture ('linux') <b>and</b> the sub-architecture ('linux-i386') then the latter takes precedence. E.g. clients reporting in 'linux' will always get the version from 'linux/', while clients reporting in as 'linux-i386' will get only the version from 'linux/i386' (plus all the other files specified in 'linux'!). Only if the file does not exist under the sub architecture directory, then the client will get the generic version (like from 'linux/') as a fallback.",
+      type => 'string',
+    },
+    id => {
+      editrank => 10,
+      name => "ID",
+      def => '',
+      type => 'string',
+      help => 'Optional ID number. If the entered ID is still free, you will get it, otherwise a free ID is automatically assigned. <b>Digits (0-9) only</b>.',
+    },
+    extrafields => {
+      def => '',
+      maxlen => 256,
+      editable => 1,
+      editrank => 12,
+      name => "Extra input fields",
+      help => 'Names of extra config fields neccessary for jobs and testcases of this jobtype. Each name will generate a mandatory entry field when adding jobs or testcases. Example: "username, salt"',
+      type => "list",
+    },
+  }
+  fake_keys = "charset_description"
+}
+
+{
+  class = "Dicop::Data::Charset"
+  help = "A simple charset consist of a list of bytes/characters that form a linear set."
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 512,
+      editable => 1,
+      help => 'A short description of the charset, f.i. "lower letters plus number (a-z0-9)".',
+      type => 'string',
+    },
+    set => {
+      def => '',
+      maxlen => 512,
+      help => "The characters of the set in hex, f.i. \"303132333435\" or a Perl expression that evaluates to an array, f.i. \"'a'..'z',' ','0'..'9'\", or even \"\\x00 .. \\xff\"",
+      type => 'string',
+    },
+    type => {
+      noadd => 1,
+      def => 'simple',
+      help => 'The type of the charset.',
+      type => 'string',
+    },
+  } 
+  fake_keys = "stringlengths"
+}
+
+{
+  class = "Dicop::Data::Charset::Grouped"
+  include = "<table>##include_setform.inc:1##\n##include_setform.inc:2##\n##include_setform.inc:3##\n##include_setform.inc:4##\n##include_setform.inc:5##\n##include_setform.inc:6##\n##include_setform.inc:7##\n##include_setform.inc:8##\n##include_setform.inc:9##\n##include_setform.inc:10##\n##include_setform.inc:11##\n##include_setform.inc:12##\n##include_setform.inc:13##\n##include_setform.inc:14##\n##include_setform.inc:15##\n</table>"
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 512,
+      editable => 1,
+      editrank => 1,
+      help => 'A short description of the charset.',
+      type => 'string',
+    },
+    cset0 => {
+      type => 'charset_id',
+      filter => 'type_simple',
+      editrank => 2,
+      name => 'Default charset',
+      help => 'Select one as the default charset. This will be used for any unspecified position in the strings.',
+    },
+    cpos0 => {
+      def => '0',
+      type => 'hidden',
+    },
+    type => {
+      noadd => 1,
+      def => 'grouped',
+      help => 'The type of the charset.',
+      type => 'string',
+    },
+  } 
+}
+ 
+{
+  class = "Dicop::Data::Charset::Extract"
+  help = "An extract charset describes the options that will be used by the worker to extract strings from an image file. Together with the options supplied by the job (start and end length plus the image file), the worker will extract the strings, mutate them, weed out doubles, and then test the remaining keys one by one."
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 512,
+      editable => 1,
+      help => 'A short description of the charset.',
+      type => 'string',
+      addrank => 1,
+    },
+    type => {
+      noadd => 1,
+      def => 'extract',
+      help => 'The type of the charset.',
+      type => 'string',
+    },
+    set => {
+      def => '',
+      help => 'Select a charset from the list to define which characters should be extracted.',
+      type => 'charset_id',
+      filter => 'type_simple',
+    },
+    skip => {
+      name => "Skip invalid bytes/characters",
+      valid => { 0 => 'No, use them as boundary', 1 => 'Skip them', },
+      selector => 'radio',
+      help => 'What to do with invalid bytes while extracting. They can be either skipped (resulting in more strings being extracted) or used as a boundary, meaning strings which end prematurely on such a byte getting not extracted. If unsure, choose "skip them".',
+      type => 'int',
+      addrank => 3,
+    },
+    stages => {
+      def => 1,
+      editrank => 3,
+      valid => [
+        0, forward => 'forwards',
+        1, reverse => 'backwards',
+        ],
+      help => 'The stages that should be generated for each word. Each of these stages is then further mutated through the mutations listed below.',
+      type => 'int',
+    },
+    mutations => {
+      def => 1,
+      help => 'The mutations each staged word should go through.',
+      valid => [
+        0, lower => 'lowercase',
+        1, upper => 'UPPERCASE',
+        2, lowerfirst => 'lOWERFIRST',
+        3, upperfirst => 'Upperfirst',
+        4, lowerlast => 'LOWERLASt',
+        5, upperlast => 'upperlasT',
+        6, upperodd => 'uPpErOdD',
+        7, uppereven => 'UpPeReVeN',
+        8, uppervowels => 'UppErvOwEls',
+        9, upperconsonants => 'uPPeRCoNSoNaNTS',
+        ],
+      type => 'int',
+    },
+  }
+  fake_keys = "set"
+}
+
+{
+  class = "Dicop::Data::Charset::Dictionary"
+  help = "You need to check dictionary files with the 'target/dictionaries/gen_dict.pl' script first, before you can use them here."
+  include = "<table>##include_setappform.inc:1##\n##include_setappform.inc:2##\n##include_setappform.inc:3##\n##include_setappform.inc:4##\n##include_setappform.inc:5##\n##include_setappform.inc:6##\n##include_setappform.inc:7##\n##include_setappform.inc:8##\n##include_setappform.inc:9##\n##include_setappform.inc:10##\n##include_setappform.inc:11##\n##include_setappform.inc:12##\n##include_setappform.inc:13##\n##include_setappform.inc:14##\n##include_setappform.inc:15##\n</table>\n"
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 512,
+      editrank => 1,
+      editable => 1,
+      help => 'A short description of the charset.',
+      type => 'string',
+    },
+    type => {
+      noadd => 1,
+      def => 'dictionary',
+      help => 'The type of the charset.',
+      type => 'string',
+    },
+    file => {
+      editrank => 2,
+      def => '',
+      help => 'The dictionary file to be used.',
+      valid => 'read_dictionaries',
+	# in case the list is empty, do still create empty list
+      selector => 'select',
+      type => 'string',
+    },
+    stages => {
+      def => 1,
+      editrank => 3,
+      valid => [
+	0, forward => 'forwards',
+	1, reverse => 'backwards',
+        ],
+      help => 'The stages that should be generated for each word. Each of these stages is then further mutated through the mutations listed below.',
+      type => 'int',
+    },
+    mutations => {
+      def => 1,
+      help => 'The mutations each staged word should go through.',
+      valid => [ 
+	0, lower => 'lowercase',
+	1, upper => 'UPPERCASE',
+	2, lowerfirst => 'lOWERFIRST',
+	3, upperfirst => 'Upperfirst',
+	4, lowerlast => 'LOWERLASt',
+	5, upperlast => 'upperlasT',
+	6, upperodd => 'uPpErOdD',
+	7, uppereven => 'UpPeReVeN',
+	8, uppervowels => 'UppErvOwEls',
+	9, upperconsonants => 'uPPeRCoNSoNaNTS',
+	],
+      type => 'int',
+    },
+  }
+  fake_keys = "set"
+}
+ 
+ 
+{
+  class = "Dicop::Data::Chunk"
+  description = "All chunks together form the keyspace of the job. Do only edit this chunk's status of you know what you are doing!"
+  fields => {
+    status => {
+      def => 0,
+      editable => 1,
+      valid => { 'done' => 'Done', 'tobedone' => 'Tobedone', 'solved' => 'Solved', },
+      type => 'status',
+      help => 'The chunks status'
+    },
+    job => {
+      def => 0,
+      type => 'job_id',
+      help => 'The job this chunk belongs to',
+    },
+    client => {
+      def => 0,
+      type => 'client_id',
+      help => 'The client this chunk was issued to',
+    },
+    result => {
+      def => 0,
+      type => 'result_id',
+      help => 'The result we found in this chunk',
+    },
+  } 
+  fake_keys = "size, start, end, issued"
+}
+
+{
+  class = "Dicop::Data::Case"
+  description = "A case is a container for jobs, each job must belong to exactyl one case."
+  fields => {
+    description => {
+      def => 'Description',
+      maxlen => 512,
+      editable => 1,
+      help => 'A short description of the case.',
+      type => 'string',
+    },
+    name => {
+      name => 'Number',
+      def => '1234',
+      maxlen => 64,
+      editable => 1,
+      help => 'A unique filing or ident number for the case.',
+      type => 'string',
+    },
+    referee => {
+      def => 'someone',
+      maxlen => 64,
+      editable => 1,
+      help => 'The person responsible for this case.',
+      type => 'string',
+    },
+    url => {
+      def => '',
+      maxlen => 256,
+      editable => 1,
+      help => 'Link to external resources. When left empty, will be automatically filled in.',
+      type => 'url',
+    },
+  }
+  fake_keys = "jobs"
+}
+
+{
+  class = "Dicop::Data::Client"
+  description = "A client represents one node in the cluster."
+  fields => {
+    speed => {
+      noadd => 1,
+      def => 100,
+      type => 'float',
+      min => 0,
+      help => 'Average speed of the client in keys/s',
+    },
+    group => {
+      editrank => 9,
+      def => '1',
+      editable => 1,
+      type => 'group_id',
+      help => 'The group this client belongs to.',
+    },
+    name => {
+      editrank => 2,
+      def => 'client',
+      maxlen => 64,
+      editable => 1,
+      help => 'The name of the client',
+      type => 'string', 
+    },
+    description => {
+      editrank => 5,
+      def => 'client',
+      maxlen => 512,
+      editable => 1,
+      help => 'A short description of the client',
+      type => 'string',
+    },
+    count => {
+      editrank => 1,
+      def => '1',
+      maxlen => 4,
+      min => 1,
+      max => 1024,
+      type => 'int',
+      help => 'Enter the count of clients to add, from 1 to 1024. If you enter a value greater than 1, the IP, ID, and name of the client will be incremented before each add, creating unique settings for each added client.',
+    },
+    pwd => {
+      editrank => 3,
+      name => "Password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'A password used for authentication.',
+    },
+    pwdrepeat => {
+      editrank => 4,
+      name => "Repeat password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'Repeat the password here.',
+    },
+    pwdhash => {
+       noadd => 1,
+       def => '',
+       maxlen => 64,
+       type => 'pwdhash',
+    },
+    salt => {
+       noadd => 1,
+       def => '',
+       maxlen => 64,
+       type => 'salt',
+    },
+    version => {
+       noadd => 1,
+       maxlen => 16,
+       help => "Version of Dicop::Client.",
+       type => 'string',
+    },
+    os => {
+      noadd => 1,
+      maxlen => 32,
+      help => "Client's operating system.",
+      type => 'string',
+    },
+    arch => {
+      noadd => 1,
+      maxlen => 24,
+      help => "Client's architecture name.",
+      type => 'string',
+    },
+    temp => {
+      noadd => 1,
+      def => 0,
+      help => "Client's temperature in Celsius.",
+      type => 'float',
+    },
+    fan => {
+      noadd => 1,
+      def => 0,
+      help => "Client's fan speed in rpm/s.",
+      min => 0,
+      type => 'int',
+    },
+    went_offline => {
+      noadd => 1,
+      def => 0,
+      help => "Client went offline.",
+      type => 'bool',
+    },
+    trusted => {
+      editrank => 6,
+      editable => 1,
+      def => 0,
+      type => 'bool',
+      help => 'Trusted client (Check when client is fully under your control).',
+    },
+    ip => {
+      editrank => 7,
+      name => "IP",
+      def => '127.0.0.1',
+      editable => 1,
+      type => 'ip',
+      help => 'The IP adress of the client.',
+    },
+    mask => {
+      editrank => 8,
+      def => '255.255.255.255',
+      editable => 1,
+      type => 'ip',
+      help => 'The network mask for the IP of the client.',
+    },
+    id => {
+      editrank => 10,
+      name => "ID",
+      def => '',
+      type => 'string',
+      help => 'Optional ID number. If the entered ID is still free, you will get it, otherwise a free ID is automatically assigned. <b>Digits (0-9) only</b>.',
+    },
+    last_error => {
+      noadd => 1, 
+      def => '',
+      type => 'time',
+      help => 'Time when the client sent the last error message for its failure. ',
+    },
+    last_error_msg => {
+      noadd => 1, 
+      def => '',
+      type => 'string',
+      help => 'The last error message sent by this client.',
+    },
+  }
+  fake_keys = "cpuinfo, chunk_time, last_connect, last_chunk"
+}
+
+{
+  class = "Dicop::Data::Result"
+  fields => {
+    job => {
+      def => '0',
+      maxlen => 16,
+      type => 'string',
+      help => 'The job this result belongs to',
+    },
+    type => {
+      def => '0',
+      maxlen => 16,
+      type => 'string',
+      help => 'The jobytype this result belongs to',
+    },
+    job_description => {
+      def => '',
+      maxlen => 512,
+      type => 'string',
+    },
+    type_description => {
+      def => '',
+      maxlen => 512,
+      type => 'string',
+      },
+    client => {
+      def => '0',
+      maxlen => 16,
+      type => 'string',
+      help => 'The client that generated this result',
+    },
+    result_hex => {
+      def => '0',
+      maxlen => 256,
+      type => 'string',
+      help => 'The actual result in hex', },
+    time => {
+      def => 0,
+      type => 'time',
+      help => 'The time when the result was found',
+    },
+  }
+  fake_keys = "result_ascii, result" 
+}
+
+{
+  class = "Dicop::Data::User"
+  help = "Each user is an administrator of the server and can edit/add/delete objects as well as see some special status pages."
+  fields => {
+    description => {
+      def => 'description',
+      maxlen => 512,
+      editable => 1,
+      help => 'A short description of the admin.',
+      type => 'string',
+    },
+    name => {
+      def => 'admin',
+      maxlen => 64,
+      editable => 1,
+      help => 'The username of the administrator.',
+      type => 'string',
+    },
+    pwd => {
+      name => "Password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'A password used for authenticating this administrator.',
+      },
+    pwdrepeat => {
+      name => "Repeat password",
+      def => '',
+      maxlen => 64,
+      editable => 1,
+      type => 'pwd',
+      help => 'Repeat the password here.',
+    },
+    pwdhash => {
+      noadd => 1,
+      def => '',
+      maxlen => 64,
+      type => 'pwdhash',
+    },
+    salt => {
+      noadd => 1,
+      def => '',
+      maxlen => 64,
+      help => 'A random value to make the pwdhash unique.',
+      type => 'salt',
+    },
+  } 
+}
+
+# AUTHOR
+#
+# (c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+#
+# DiCoP is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License version 2 as published by the Free
+# Software Foundation.
+#
+# See L<http://www.bsi.de/> for more information.
+#
+

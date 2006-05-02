@@ -1,0 +1,301 @@
+
+=pod
+
+=head1 Todo (laundry list)
+
+You can read this file better with C<perldoc TODO>.
+
+Shortterm:
+
+TODO:
+
+* sort cases by number of jobs is borken
+
+* sorted_job_list() could be a generic routine in Dicop::Base, since it is
+  replicated by Dicop::Scanner
+
+* generalize h1 name in templates
+
+* event notifications (_send_event()) should be done outside the
+  client handling loop to avoid stalls
+
+* server should not send the same message 101 to the client twice
+  (e.g. gather all files first, send then only unique names)
+  (While the client ignores the dupes, it creates quite a lot of
+   rendundand output for debug sessions) 
+
+* cache inlined JDFs/CDFs (sending them only once would already
+  reduce the resource footprint)
+
+* find out why the server is so "slow" handing out work
+
+* sub-arch specific overrides must be listed in extra-files: this should
+  be automatic so that you can just place "worker/linux/i386/test" and it
+  will automatically override "worker/linux/test"
+  Thus it is not yet possible to override "all:" with sub-archs, e.g.
+  "all/foo" is always delivered, instead of "all/i386/foo"
+
+* BUG: it is no longer possible to select files with "_" in the name after
+  you have hit "Reload" on the file selector page.
+
+* generalize "charset_description" (aka fake keys) support in Item/Template
+
+* add tests for testcases with msg 112/111
+
+* SSL support currently has bugs/problems
+
+* dirs without proper permission cause an unknown error instead of
+  "permission denied" when selecting files
+
+* disallow entering ##.*## into entry fields - these would be expanded as
+  templates in the HTML output which leaves wierd effects (and potential
+  security concerns). Allow only ##rank## and ##description## for
+  compatibility reasons?
+
+* Testcase CDFs (but not JDFs) are stored under the same name than job files
+  when a testcase has the same ID as a job.
+  That will be only a problem if a client get's tests and real work at the
+  same time, however.
+
+* fix all XXX TODO occurances (duh!)
+
+* encode()/decode() get really slow for large amounts of data
+  (inline files are 4.5 times faster for 8 bytes with one special char than
+   disk files, but 10 times slower for 800 bytes with 100 special chars.
+   Real life example is 10 special chars in a 200 byte file...)
+
+* better honour log levels when printing debug output
+
+* Server can remove CDF files after the chunk is finished
+  Also, the JDF should at least be deleted when a job is
+  closed/deleted/finished.
+  (small CDF/JDF should not be created as files, but if they are, they will
+  linger needless around)
+
+* insert more help on adding character sets
+
+* dictionary file selector in adding a dictionary charset
+  does look funky when no dictionaries are available
+  dito for adding a client when no group is defined. Add error
+  cases for these special occurances.
+
+* add a "browse" setting to Templates so that we can specify the
+  start path for the browse button
+
+* add a flag target_extracted to Job, and set it to true if
+  the target extraction script did run successfully. Then do
+  not run the script again - prevent double extraction in
+  case the script returns a filename (instead of a hash).
+  Remove the "dont run script if filename ends in .tgt"
+
+* when editing a chunk, the wrong status is pre-selected (mismatch been valid
+  and current status value?)
+
+* extra fields are not mandatory (e.g. ne '') when they appear
+  on the edit form (because they must be optional when not needed)
+
+* when changing the extraparams for a jobtype (like removing one), the field
+  in the jobs/testcases will still be set. Likewise when adding some, older
+  jobs/testcase do not automatically get the extra params.
+
+* make a more convient way to enter extra files in jobtype:
+  extra boxes for each arch? how many? or an edittext field, which
+  gets "\n" stripped afterwards?
+
+* implement construct_field() in Template.pm for objects like Math::String etc
+
+* add cmd_list;type_foo - get listing of objects in a text format (xml?)
+  (for File::Scanner)
+
+* add tasklist to jobs
+
+* add a list of all results for a job on the job status page
+  (redesign job status page):
+
+        tasklist        -> chunklist
+        checklist
+
+* make it possible to support "##name##" etc in the HTML title in def/requests.def
+
+* add a way to reset all chunks of one job (plus verify list) in one go
+
+MAYBE:
+
+* add cmd_file;name_foo - get file from ./web subdir (icons, css etc for web access)
+
+
+=head2 Client
+
+=over 2
+
+=item *
+
+Client should remember from which server it got work, and then send the result
+back to only this server, to allow it to connect to multiply main servers.
+
+=back
+
+
+
+=head2 Server (internal)
+
+=over 2
+  
+=item *
+
+Make "make install" run "./setup"
+
+=item *
+
+delete a job: data files are not removed (document it?)
+
+=item *
+
+if client has too many failures, print debug msg to client and resend tests earlier
+
+=item *
+
+bigger dictionaries (lazy load in wordlist?)
+
+=item *
+
+html links in generated help pages are wrong sometimes (=item vs. =head, can a
+better pod2html fix this?)
+
+=item *
+
+when backgrounding the server, it prints the "shutdown" message wrongly
+(it thinks it is shutting down) (probably printing the msg twice)
+
+=item *
+
+Server machine uptime and load don't work under chroot(). 
+(ln -s /proc/uptime to chroot/proc/uptime?)
+
+=item *
+
+Do not check whether a given chunk is reported by the 'right' client when the
+request comes via proxy, because proxy 1 might request it for client 2, give
+it to client 3, which reports it back via proxy 2. (Or should send proxy 1 send
+to server whom he gave the chunk?)
+
+=item *
+
+Fix Client->report() for TIMEOUT/SUCCESS.
+
+=item *
+
+When no worker for a certain architecure is found, a desperate attempt to
+find it in ./worker could be made - that would allow us to share the test
+workers, since they are the same for all architectures.
+
+=item *
+
+Make chunk-list in job status page an option, so that it can be turned on/off.
+
+=item *
+
+Server/Client time/date changes (summertime etc) (seems to work, but needs
+tests) (at least the client side (actually just the workerframe) didn't do
+too well with clock going backwards, now it should cope with that).
+
+=item *
+
+If Client fails tests or fails to often or is too fast, notify admin.
+
+=item *
+
+Add job: Make trial run so that errors can be seen and corrected.
+Also make field for suspending the newly added job right-away.
+
+The reason is that editing jobs only lets you edit "unimportant" fields
+like the description etc, but not the charset (e.g. everthing that
+defines the target or the keypsace).
+
+Or another idea would be to suspend the job for the first 5 minutes
+and then allow editing while no client has yet got a chunk from the job.
+
+=item *
+
+When reading a chunk back in, the checksum does change (it shouldn't). If
+it wouldn't change, we could remove the 'token = ...', and simple use the
+checksum as token (they are the same as long as you don't modify a chunk,
+which only happens when you invalidate the token anyway).
+
+This would save roughly 10% of the chunks.txt file and probably quite some
+memory.
+
+=item *
+
+Use Compress::Zlib to write compressed files out and read them back in =>
+smaller disk footprint.
+
+=item *
+
+Implement tasklist (sub-jobs) - each job has a list of at least one task, one
+of these is active and hands out chunks until it is done.
+
+=item *
+
+Implement hard time limit on jobs. (job/task runs for X hours/days/months)
+
+=item *
+
+Each client can have a different linger time, make it possible to actually
+set this time to a different value.
+
+=back
+
+
+
+=head2 Config
+
+=over 2
+
+=item *
+
+write/flush? (necc. for edit via webform)
+
+=item *
+
+Editable via webform
+
+=back
+
+
+=head2 Internal
+
+=over 2
+
+=item *
+
+Use the stages/mutations and multiply them into jobspeed to correctly create
+the right size of a chunk in case of dictionary charsets.
+
+=item *
+
+Look at Data::Dumper, Freeze/Thaw etc to simplify code?
+
+=item *
+
+Testsuite coverage needs to be increased. Especially the tpl files could be
+automatically tested for well-formed and valid HTML code.
+
+=item *
+
+Doc coverage needs to be increased
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2005
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de> for more information.
+
+=cut
+

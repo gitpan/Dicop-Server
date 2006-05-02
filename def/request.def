@@ -1,0 +1,750 @@
+#############################################################################
+#
+# request.def  definition file for requests (aka messages between client
+# and server).
+
+# This file is only read upon startup of the server - any changes here will
+# not be in effect until you shutdown and restart the server process!
+
+# See "perldoc Dicop::Request::Pattern" for documentation and examples.
+
+#############################################################################
+# adding things
+
+{
+  match = "cmd_add;type_job"
+  title = "Added a job"
+  req = "start,end,charset,jobtype,description,rank,target,case"
+  opt = "ascii,checkothers,prefix,prefixinascii,maxchunksize,imagefile,haltjob,newjob,newjob-prefix,newjob-ascii,newjob-jobtype,newjob-description,newjob-charset,newjob-start,newjob-end,newjob-rank,newjob-maxchunksize,newjob-haltjob,style,extra0,extra1,extra2,extra3,extra4,extra5,extra6,extra7,addcase-name,addcase-description,addcase-referee,addcase-url"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_group"
+  req = "description,name"
+  title = "Added a group"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+#cmd_add;name_justin+case;pwd_s3cr3t;pwdrepeat_s3cr3t;type_user
+
+{
+  match = "cmd_add;type_user"
+  req = "name,pwd,pwdrepeat"
+  title = "Added a user"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_testcase"
+  req = "description,start,end,jobtype,charset,target"
+  opt = "result,style,prefix,disabled,extra0,extra1,extra2,extra3,extra4,extra5,extra6,extra7"
+  title = "Added a testcase"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_groupedcharset"
+  req = "description,cset0,cpos0"
+  opt = "cset1,cset2,cset3,cset4,cset5,cset6,cset7,cset8,cset9,cset10,cset11,cset12,cset13,cset14,cset15,cset16,cset17,cset18,cset19,cpos1,cpos2,cpos3,cpos4,cpos5,cpos6,cpos7,cpos8,cpos9,cpos10,cpos11,cpos12,cpos13,cpos14,cpos15,cpos16,cpos17,cpos18,cpos19,style"
+  title = "Added a grouped charset"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_dictionarycharset"
+  req = "description,file"
+  opt = "lower,upper,lowerfirst,upperfirst,lowerlast,upperlast,upperodd,uppereven,uppervowels,upperconsonants,forward,reverse,cset0,cset1,cset2,cset3,cset4,cset5,cset6,cset7,cset8,cset9,cset10,cset11,cset12,cset13,cset14,cset15,cpos0,cpos1,cpos2,cpos3,cpos4,cpos5,cpos6,cpos7,cpos8,cpos9,cpos10,cpos11,cpos12,cpos13,cpos14,cpos15,cstart0,cstart1,cstart2,cstart3,cstart4,cstart5,cstart6,cstart7,cstart8,cstart9,cstart10,cstart11,cstart12,cstart13,cstart14,cstart15,cend0,cend1,cend2,cend3,cend4,cend5,cend6,cend7,cend8,cend9,cend10,cend11,cend12,cend13,cend14,cend15,style"
+  title = "Added a grouped charset"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_extractcharset"
+  req = "description,set,skip"
+  opt = "lower,upper,lowerfirst,upperfirst,lowerlast,upperlast,upperodd,uppereven,uppervowels,upperconsonants,forward,reverse,style"
+  title = "Added an extract charset"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_simplecharset"
+  req = "description,set"
+  title = "Added a simple charset"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_jobtype"
+  req = "name,speed,description,minlen"
+  opt = "charset,files,fixed,extrafields,id,script,style"
+  title = "Added a jobtype"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_proxy"
+  req = "name,description,pwd,pwdrepeat,group,ip,mask"
+  opt = "id,style"
+  title = "Added a proxy"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_client"
+  req = "name,group,description,pwd,pwdrepeat"
+  opt = "count,id,ip,mask,email,trusted,style"
+  title = "Added a client"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+{
+  match = "cmd_add;type_case"
+  req = "name,description,referee"
+  opt = "style,url"
+  title = "Added a case"
+  tpl = "added.txt"
+  class = "admin"
+  auth = 1
+}
+
+#############################################################################
+# forms for adding things (id = undef) or changing things (id != 0)
+
+# change a chunk
+{
+  match = "cmd_form;type_chunk"
+  req = "id,job"
+  opt = "style"
+  title = "Change a chunk"
+  carry = "job_id"
+  tpl = "change_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# chunk with id=undef is not possible (no adding of chunks!)
+{
+  match = "cmd_form;type_chunk"
+  opt = "job,style"
+  throw = "Adding a chunk is not possible"
+  class = "stats"
+  auth = 0
+}
+
+# the pattern with 'req = "id"' will match cmd_form;type_X;id_1 while the one
+# below will catch all cases without ID 
+# these requests use the new change_object.tpl file
+{
+  match = "cmd_form;type_/(^case|charset|client|group|job|jobtype|proxy|user)\z"
+  req = "id"
+  opt = "style,params"
+  title = "Change a ##request-type##"
+  tpl = "change_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# these requests use the new add_object.tpl file
+{
+  match = "cmd_form;type_/^(case|client|group|jobtype|proxy|user)\z"
+  opt = "style"
+  title = "Add a ##request-type##"
+  tpl = "add_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# this request includes a browse button (hence targetname,targetvalue and
+# params) and uses the new add_object.tpl file
+{
+  match = "cmd_form;type_/^(testcase|job)\z"
+  opt = "params,targetname,targetvalue,style"
+  title = "Add a ##request-type##"
+  tpl = "add_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# this request includes a browse button (hence targetname,targetvalue and
+# params) and uses the new add_object.tpl file
+{
+  match = "cmd_form;type_testcase"
+  req = "id"
+  opt = "params,targetname,targetvalue,style"
+  title = "Change a ##request-type##"
+  tpl = "change_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# a form that lets the user select the type of charset to add
+{
+  match = "cmd_form;type_charset"
+  opt = "style"
+  title = "Select charset type to add##"
+  tpl = "add_charset.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# form to add a simple charset
+# and these requests still use the old style templates
+#  match = "cmd_form;type_/(^charset|job)\z"
+{
+  match = "cmd_form;type_/^(simple|grouped|extract|dictionary)charset\z"
+  opt = "style"
+  title = "Add a ##request-type##"
+  tpl = "add_object.tpl"
+  class = "admin"
+  auth = 0
+}
+
+#############################################################################
+# delete and confirm delete
+
+# req0001=cmd_del;id_1;type_job
+{
+  match = "cmd_del;type_/^(case|client|charset|group|job|jobtype|proxy|result|user|testcase)\z"
+  req = "id"
+  title = "Deleted ##request-type## ##request-id##"
+  tpl = "deleted.txt"
+  class = "admin"
+  auth = 1
+}
+
+# req0001=cmd_confirm;id_1;type_job
+{
+  match = "cmd_confirm;type_/^(case|client|charset|group|job|jobtype|proxy|result|user|testcase)\z"
+  req = "id"
+  title = "Delete ##request-type## ##request-id##"
+  tpl = "confirm_delete.txt"
+  class = "admin"
+  auth = 0
+}
+
+# req0001=cmd_confirmreset;id_1;type_client
+{
+  match = "cmd_confirmreset;type_client"
+  req = "id"
+  title = "Confirm reset of client ##request-id##"
+  tpl = "reset_client.tpl"
+  class = "admin"
+  auth = 0
+}
+
+# req0001=cmd_confirmterminate;id_1;type_client
+{
+  match = "cmd_confirmterminate;type_client"
+  req = "id"
+  title = "Confirm termination of client ##request-id##"
+  tpl = "terminate_client.tpl"
+  class = "admin"
+  auth = 0
+}
+
+#############################################################################
+# change something
+
+{
+  match = "cmd_change;type_chunk;status_/^(done|tobedone|solved)\z"
+  req = "id,job,status"
+  title = "Chunk successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_job"
+  req = "id,rank,status,description,case"
+  opt = "style,newjob,haltjob,checkothers,maxchunksize,extra0,extra1,extra2,extra3,extra4,extra5,extra6,extra7"
+  title = "Job successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_testcase"
+  req = "id,jobtype,charset,end,start,target,description"
+  opt = "result,style,prefix,disabled,extra0,extra1,extra2,extra3,extra4,extra5,extra6,extra7"
+  title = "Testcase successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_jobtype"
+  req = "id,name,speed,charset,description"
+  opt = "script,style,files,extrafields,minlen"
+  title = "Jobtype successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_group"
+  req = "id,name,description"
+  title = "Group successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_client"
+  req = "id,name,description,pwd,pwdrepeat,mask,ip,group"
+  opt = "trusted,style"
+  title = "Client successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_proxy"
+  req = "id,name,description,pwd,pwdrepeat,mask,ip,group"
+  title = "Proxy successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_case"
+  req = "id,name,description,referee"
+  opt = "style,url"
+  title = "Case successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+{
+  match = "cmd_change;type_user"
+  req = "id,name,pwd,pwdrepeat"
+  title = "User successfully edited"
+  tpl = "changed.txt"
+  class = "admin"
+  auth = 1
+  type = "status"
+}
+
+#############################################################################
+# dir selector page
+
+{
+  match = "cmd_status;type_file"
+  output = "html"
+  # params and form will be automatically generated from the submit button's
+  # name supplied by the browser, targetfield comes from the field we are
+  # editing
+  req = "params,form,targetfield"
+  opt = "browse,path,style"
+  title = "Select file"
+  class = "status"
+  auth = 0
+}
+
+#############################################################################
+# status pages
+
+{
+  match = "cmd_status;type_main"
+  output = "html"
+  opt = "filter,style"
+  title = "Main Status"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_job"
+  req = "id"
+  opt = "style,sort,sortby"
+  title = "Job status"
+  tpl = "job.txt"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_jobtypes"
+  opt = "id,style,sort,sortby"
+  title = "Jobtypes list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_chunks"
+  opt = "id,style"
+  title = "All open chunks"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_style"
+  title = "Select style"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_charset"
+  req = "id"
+  opt = "samples,style"
+  title = "Charset ##request-id##"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_users"
+  opt = "id,style"
+  title = "User list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_charsets"
+  opt = "id,style"
+  title = "Charset list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_dir"
+  req = "path"
+  title = "Select file or directory"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_config"
+  title = "Configuration"
+  output = "html-table"
+  class = "admin"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_server"
+  title = "Server status"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_debug"
+  title = "Debug status"
+  class = "admin"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_search"
+  title = "Search"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_clients"
+  opt = "top,count,sort,style"
+  title = "Client list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_groups"
+  opt = "id,style"
+  title = "Group list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_proxies"
+  opt = "id,style"
+  title = "Proxy list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_testcases"
+  title = "Testcase list"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_results"
+  opt = "id,style,sort,sortby"
+  title = "Results list"
+  output = "html"
+  class = "status"
+  sort = "down"
+  sort_by = "id"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_jobresults"
+  req = "id"
+  title = "Job Results"
+  output = "html"
+  class = "status"
+  sort = "down"
+  sort_by = "id"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_clientmap"
+  opt = "width,style"
+  title = "Clientmap"
+  output = "html-table"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_case"
+  req = "id"
+  opt = "filter,style,sort,sortby"
+  title = "Case ##request-id##"
+  class = "status"
+  auth = 0
+}
+
+# find case by name instead of internal ID (easier backlinking to us)
+{
+  match = "cmd_status;type_casebyname"
+  req = "name"
+  opt = "filter,style"
+  title = "Case ##request-id##"
+  tpl = "case.tpl"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_cases"
+  opt = "filter,style,sort,sortby"
+  title = "Case list"
+  output = "html-table"
+  class = "status"
+  sort = "downstr"
+  sort_by = "name"
+  auth = 0
+}
+
+{
+  match = "cmd_status;type_client"
+  req = "id"
+  title = "Client ##request-id##"
+  class = "stats"
+  auth = 0
+}
+
+{
+  match = "cmd_help;type_list"
+  title = "Help Overview"
+  tpl = "help.txt"
+  class = "status"
+  auth = 0
+}
+
+{
+  match = "cmd_help;type_/^(client|config|dicop|dicopd|files|glossary|new|objects|proxy|security|server|trouble|worker)\z"
+  title = "Help"
+  tpl = "help/##request-type##.tpl"
+  class = "status"
+  auth = 0
+}
+
+#############################################################################
+# search
+
+# search result as a table:
+{
+  match = "cmd_search;type_/^(cases|clients|charsets|groups|jobs|jobtypes|proxies|results|testcases|users)\z"
+  req = "id,name,description,ip,case"
+  output = "html-table"
+  tpl = "searched.tpl"
+  title = "Search Results"
+  class = "admin"
+  auth = 1
+}
+
+#############################################################################
+# request something
+     
+{
+  match = "cmd_request;type_file"
+  type = "request"
+  req = "name"
+  output = "text"
+  class = "work"
+  auth = 0
+}
+
+{
+  match = "cmd_request;type_test"
+  type = "request"
+  req = "name"
+  req = ""
+  output = "text"
+  class = "work"
+  auth = 0
+}
+
+{
+  match = "cmd_request;type_work"
+  type = "request"
+  req = "name"
+  req = "size"
+  opt = "count"
+  output = "text"
+  class = "work"
+  auth = 0
+}
+
+#############################################################################
+# report back results
+
+# TODO: don't send chunk to client, so don't expect it back. This needs a
+# hash with the tokens (token => chunknumber) per job, each entry is made
+# when a chunk is issued, and deleted when the chunk comes back.
+
+{
+  match = "cmd_report"
+  req = "job,status,took,token,crc,chunk"
+  opt = "result,reason"
+  type = "other"
+  output = "text"
+  class = "work"
+  auth = 0
+}
+
+#############################################################################
+# various commands
+
+{
+  match = "cmd_terminate;type_clients"
+  class = "admin"
+  auth = 1
+  title = "Clients successfully scheduled for termination"
+  tpl = "terminated_all.txt"
+}
+
+{
+  match = "cmd_terminate;type_client"
+  req = "id"
+  class = "admin"
+  auth = 1
+  title = "Client successfully scheduled for termination"
+  tpl = "terminated_client.txt"
+}
+
+{
+  match = "cmd_reset;type_client"
+  req = "id"
+  class = "admin"
+  auth = 1
+  title = "Client successfull reset"
+  tpl = "reset_client.txt"
+}
+
+{
+  match = "cmd_reset;type_clients"
+  class = "admin"
+  auth = 1
+  title = "Clients successfull reset"
+  tpl = "reset_all.txt"
+}
+     
+#############################################################################
+# auth requests, example:
+#   arch_win32;cmd_auth;fan_5360;id_5;temp_43.2;version_0.24
+{
+  match = "cmd_auth"
+  req = "arch,id,version"
+  opt = "chatter,cached,fan,temp,os,cpuinfo,user,pass,pid"
+  type = "auth"
+}
+
+#############################################################################
+# info requests, example:
+#   arch_win32;cmd_info;fan_0;id_5;temp_43.2;version_0.24;ip_1.2.3.4;for_req0001,req0002
+{
+  match = "cmd_info"
+  req = "arch,id,version,ip,for"
+  opt = "chatter,cached,fan,temp,os,cpuinfo,pid"
+  type = "info"
+}
+
+#############################################################################
+# All requests that don't match any of the patterns above are automatically
+# invalid and rejected.
+
+# AUTHOR
+#
+# (c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+#
+# DiCoP is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License version 2 as published by the Free
+# Software Foundation.
+#
+# See L<http://www.bsi.de/> for more information.
+#
+

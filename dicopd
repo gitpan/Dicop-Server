@@ -1,0 +1,37 @@
+#!/usr/bin/env perl -w -T
+
+# DiCoP - Distributed Computing in Perl - HTTP Daemon
+
+package DICOPD;
+
+use strict;
+
+BEGIN 
+  {
+  unshift @INC, 'lib';
+  $| = 1; 				# buffer off
+  }
+
+use vars qw/$data $cfg/;
+use Math::BigInt lib => 'GMP';		# use GMP if possible
+use Dicop::Data;
+
+require "basics"; require "daemon";	# include basic routines
+
+BEGIN 
+  {
+  print STDERR scalar localtime() . 
+   " DiCoP daemon v$Dicop::VERSION (build $Dicop::BUILD)" .
+   " using Dicop::Base $Dicop::Base::VERSION (build $Dicop::Base::BUILD) started\n";
+  }
+
+$data = Dicop::Data->new( cfg => shift );
+die ("Couldn't initialize request handler") if ref($data) ne 'Dicop::Data'; 
+$cfg = $data->{config};
+
+main::check_user_and_group($cfg);
+
+my $c = main::make_config($cfg);
+DICOPD->run( %$c );
+
+1; # EOF

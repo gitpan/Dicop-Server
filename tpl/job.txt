@@ -1,0 +1,52 @@
+<!-- template for details on a certain job -->
+
+##include_menu_job.inc##
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main page">DiCoP</a> - Status of job ###id##</h1>
+
+<div class="text">
+
+<p>
+This is job <b>##id##</b> (<b>'##description##'</b>,
+belonging to case <b><a href="##selfstatus_case;id_##case####" title="##case_description##">##case_name##</a></b>,
+with rank <b>##rank##</b>), owned by <b>'##owner##'</b>, using charset
+<b><a href="##selfstatus_charsets;id_##charset####" title="##charset_description##">##charset##</a></b>
+and jobtype
+<b><a href="##selfstatus_jobtypes;id_##jobtype####" title="##jobtype_description##">##jobtype##</a></b>.
+We are looking for the target:
+</p>
+
+<pre>##target##
+</pre>
+
+</p>
+
+<p>
+The job was created at <b>##created##</b>, the last modification was at
+<b>##modified##</b> (last chunk returned on <b>##last_chunk##</b>). The job is
+now in the cluster for <b>##runningsince##</b>.
+<p>
+This job is <b>##status##</b>. The total CPU time is <b>##runningfor##</b> and
+we have covered about <font color=#a02020><b>##percent_done##%</b></font>
+(<b>##keys_done## keys</b>) of the key space. 
+</p>
+
+<p>
+The cluster makes currently approximately <b>##keyspersecond##</b> (that is
+<b>##priority##%</b> of the total cluster speed) on this job. If nothing
+changes we will have checked all remaining keys in approximately
+<b>##willtake##</b> (that would be at <b>##finished##</b>).
+</p>
+
+</div>
+
+<h2>Results for this job</h2>
+
+<div class="text">
+##result_list##
+</div>
+
+##chunk_list##
+
+##check_list##
+

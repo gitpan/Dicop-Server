@@ -1,0 +1,54 @@
+
+=pod
+
+=head1 README FOR DARWIN (MAC OS X)
+
+You can use perldoc to read this document: C<perldoc README.darwin>.
+
+=head1 GENERAL NOTES
+
+Both the DiCoP daemon (dicopd) and the client should run under MAC OS X. See
+the file L<README|README> for general instructions.
+
+=head2 REQUIREMENTS FOR SERVER OR CLIENT
+
+You need to install a couple of Perl modules from http://search.cpan.org -
+namely:
+
+    Digest::MD5
+    HTML::Tagset
+    HTML::Parser
+    HTTP::Request
+    Linux::Cpuinfo
+    Mail::Sendmail
+    Math::BigInt
+    Math::String
+    Tie::File
+    Net::Server
+    URI
+
+Some of them will fail some tests, but these should not be critical.
+
+Linux/Cpuinfo will not pass it's testsuite and fail in general since there is
+no /proc file system. However, it is currently neccessary for the client to
+and must be present (even if it is non-working).
+
+You also will probably need to install the BSD SDK supplied as part of the
+Apple Developer Package CD.
+ 
+=head2 KNOWN PROBLEMS
+
+Linux/Cpuinfo.pm does not work and there is not yet a method to get the CPU
+info. This is uncritical, however.
+
+=head1 AUTHOR
+
+(C) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006.
+
+For licensing information please refer to the LICENSE file.
+
+=head2 Contact
+
+Please see the C<README>.
+
+=cut

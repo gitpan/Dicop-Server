@@ -1,0 +1,22 @@
+Dicop::Data::Testcase {
+  charset = 1
+  description = "test for test job"
+  dirty = 0
+  end = "4141414141,475255"
+  id = 1
+  jobtype = 1
+  result = "41424344,19010"
+  start = "41414141,18279"
+  target = 41424344
+  }
+Dicop::Data::Testcase {
+  charset = 1
+  description = "another simple test"
+  dirty = 0
+  end = "41505050,28824"
+  id = 2
+  jobtype = 2
+  result = ",0"
+  start = "41414141,18279"
+  target = 414141414141
+  }

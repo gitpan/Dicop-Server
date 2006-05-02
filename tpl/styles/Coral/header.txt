@@ -1,0 +1,87 @@
+<html>
+<head>
+ <title>##title##</title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  body {
+    background: white;
+    }
+  h1, h2, h3, h4, h5, h6, h7 {
+    background: #4682B4;
+    border-color: black;
+    color: white;
+    }
+  div.menu {
+    background: #4682B4;
+    border-color: black;
+    color: white;
+    }
+  div.text {
+    background: #e0ffff;
+    }
+  td.DIR_RIGHT_ODD, td.DIR_ODD
+    {
+    background: #e0f0f0;
+    }
+  th.auth {
+    background: #4682B4;
+    color: white;
+    }
+  td {
+    background: #f0ffff;
+    }
+  td.editfieldname, td.editfield {
+    background: #e0f0f0;
+    }
+  td.indend, td.editfieldname1, td.editfieldname2 {
+    background: #c8e0e0;
+    }
+  th {
+    background: #4682B4;
+    color: #f0f0ff;
+    border-color: black;
+    }
+  p {
+    color: black;
+    }
+  div.footerhead { background: #4682b4; }
+  div.footer {
+    background: #e0ffff;
+    border-color: black; 
+    color: black;
+    }
+  input.submit, input.browse, input.reset, input.refresh {
+    background: #3070a0;
+    border-color: black;
+    color: white;
+    }
+  a:link { 
+    color: black;
+    }
+  a:link.h { 
+    color: white;
+    background: #4682B4;
+    }
+  a:visited.h { 
+    color: white;
+    background: #4682B4;
+    }
+  a:visited { 
+    color: black;
+    }
+  a:hover.m, a:hover { 
+    background-color: 104060;
+    color: #ffffff;
+    }
+  a:hover.h { 
+    background: #001030;
+    color: #ffffff;
+    }
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#e0e0e0 textcolor="#303030">
+

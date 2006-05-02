@@ -1,0 +1,15 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main page">DiCoP</a> - Deleted</h1>
+
+<div class="text">
+
+<p>
+The ##type## (id ##id##) was successfully deleted.
+</p>
+
+<p>
+You can add <a href="##selfform_##type####">another</a> ##type##.
+Or go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

@@ -1,0 +1,12 @@
+Dicop::Data::Group {
+  description = "anonymous cowards"
+  dirty = 0
+  id = 1
+  name = "herd of"
+  }
+Dicop::Data::Group {
+  description = cowards
+  dirty = 0
+  id = 2
+  name = blah
+  }

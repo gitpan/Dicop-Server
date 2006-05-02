@@ -1,0 +1,201 @@
+
+=pod
+
+=head1 UPGRADING TO v3.00
+
+This document details the steps you should take to upgrade to the new version
+of DiCoP.
+
+=head2 50 easy steps to update your server
+
+=over 2
+
+=item 1
+
+First, make a backup of your old server installation including the data! Make
+a backup. Since this is so important, we repeat it here: B<Make a backup>.
+
+=item 2
+
+Now, since you have done a backup (You did one, right? If not, this is your
+last chance), you can proceed with installing the new server.
+
+=item 3
+
+After making your backup, create a new directory and ungzip/untar the new
+server version into it. Do B<NOT> overwrite or patch the old installation!
+
+=item 4
+
+=head2 Verify the package
+
+Before you do anything with the downloaded package, verify the signature.
+
+Download our GnuPG key from http://www.bsi.bund.de/produkte/dicop/download.htm
+then do:
+
+        gpg --verify Dicop-Server-3.00_50.tar.gz.asc
+
+(replace 3.00_50 with the actual version you got)
+
+If the signature does not verify ok, please notify us immidiately. B<DO NOT>
+run perl Makefile.PL or anythign else nor install the package when the
+signature cannot be verified ok. B<Your system might get compromised!>.
+
+=item 5
+
+If the signature was okay, create a C<Makefile> and run the testsuite:
+
+	perl Makefile.PL
+	make
+	make test
+
+You might need to update some Perl modules before you can run C<make> or
+C<make test>.
+
+Proceed if all tests pass, otherwise contact us with the output of the failing
+tests.
+
+=item 6
+
+Copy over your configuration files (C<config/>) and mail templates
+(C<tpl/mail/>) to the new installation directory. Also, copy over the data
+files from your old server to the new one (C<data/>) and don't forget to
+copy over the workers in C<worker/>!
+
+=item 7
+
+If you have version v2.18 or older, edit the configuration file and add the
+security settings (look at C<config/server.cfg.sample> for an example).
+
+If you have a version prior to v3.00 build 49, remove the obsolete C<is_proxy>
+setting from your config file.
+
+=item 8
+
+If you have version v2.18 or older, run the script adduser.pl:
+
+	perl adduser.pl
+
+and follow the instructions to add an administrator to the server.
+
+If you have version v2.19 and added more than one user, you need to delete
+the extra users (or just delete data/user.lst and run adduser.pl again). You
+must later re-add these users via the HTTP interface. If you don't, the other
+users still won't be able to use the HTTP interface with password checks.
+
+=item 9
+
+Change the permissions of any file inside C<data/> and C<logs/>:
+
+	chown dicop.dicop data/*
+	chown dicop.dicop logs/*
+
+Change the permissions of the other files, too. Replace dicop.dicop with
+the user and group of what your dicopd is really using.
+
+=item 10
+
+If you have version v2.18 or older:
+
+Locate the file C<data/jobtypes.lst> (if you defined it's name to something
+else in the configuration file server.cfg, use the appripriate name) and
+in it any jobtype that has the worker names "test" and "prime". Change these
+to "test.pl" and "prime.pl" if they aren't already named like this. 
+
+=item 11
+
+Temporarily change the port in C<config/server.cfg> to a different number,
+like 9999.
+
+=item 12
+
+Gp the server config and compare it to the sample config:
+
+	chdir config
+	diff -u server.cfg server.cfg.sample
+
+Note the new options like bind, host, and chroot, and add these to your own
+configuration file.
+
+Also note that the entry
+
+	mailtxt_dir = tpl/mail
+
+might be wrong and must be:
+
+	mailtxt_dir = mail
+
+=item 13
+
+Start the new dicopd (it can run in parellel to the old one):
+
+	./dicopd
+
+When it is running, use your browser to connect to the new server and check
+that it is working properly. Be carefull to use the right port number!
+Also check the console for messages appearing there, and don't forget to take
+a look into the C<error.log>.
+
+=item 14
+
+Stop the new server, change it's port setting back to the normal port (8888 is
+the default one).
+
+=item 15
+
+Stop the old server (killall dicopd or similiar)
+
+=item 16
+
+Copy the data from the old server to the new server. (It might have been
+modified in the meantime!)
+
+=item 17
+
+Upgrade all your clients to the newest version (the new server will not accept
+requests from old clients). Now you know why it was a good idea to have an
+auto-update feature for the clients :)
+
+If your cluster nodes are running an endless loop script downloading the newest
+client and then start it, you can simple start the new server version - it will
+tell all the clients that they are outdated and the new version will
+automatically be used. Otherwise you might need to restart or reboot your
+clients.
+
+See the documentation in C<doc/Dicop.pod> for an example of an endless-loop
+script.
+ 
+=item 18
+
+Start the new server and then restart all the clients. They should now use the
+new version.
+
+=item 19
+
+You should delete the files in tpl/styles/Default/ unless you modified them.
+These files (footer.txt and header.txt) are no longer necc., and will only
+overwrite the two files in tpl/ itself.
+
+=item 20
+
+Skip step 21 to 49, they aren't that important anyway.
+
+=item 50
+
+Lean back satisfied and enjoy the new version. ;)
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2004
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.de/> for more information.
+
+=cut
+

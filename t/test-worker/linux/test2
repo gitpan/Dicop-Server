@@ -1,0 +1,217 @@
+#!/usr/bin/perl -w
+
+=pod
+
+=head1 NAME
+
+PRIME - Worker for DiCoP to test a number for it's prime factors
+
+=head1 DESCRIPTION
+
+This is only for toying around and showing it is possible, but not for serious
+cases. Since it basically tests every number up to sqrt(N), it is dead slow,
+especially since it uses Perl. You can make it a bit faster by installing
+Math::Pari, or Math::GMP or Bit::Vector, but this is nothing compared to a
+better algorithmn like sieving or eliptic curves. Nevertheless, it is fun ;)
+
+=head1 EXAMPLES
+
+Here are the prime numbers between 1 and 1000 to give you some test cases:
+
+  2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89
+  97 101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179
+  181 191 193 197 199 211 223 227 229 233 239 241 251 257 263 269 271
+  277 281 283 293 307 311 313 317 331 337 347 349 353 359 367 373 379
+  383 389 397 401 409 419 421 431 433 439 443 449 457 461 463 467 479
+  487 491 499 503 509 521 523 541 547 557 563 569 571 577 587 593 599
+  601 607 613 617 619 631 641 643 647 653 659 661 673 677 683 691 701
+  709 719 727 733 739 743 751 757 761 769 773 787 797 809 811 821 823
+  827 829 839 853 857 859 863 877 881 883 887 907 911 919 929 937 941
+  947 953 967 971 977 983 991 997
+
+=head1 VERSIONS
+
+	1.00 2002-02-05 original written in Perl
+	1.01 2002-06-02 read charsets from file
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 2002
+See L<http://www.bsi.de/> for more information.
+
+=cut
+
+$| = 1;			# buffer off
+use strict;
+use lib '../../lib';	# we are inside ./worker/arch, so step up
+use lib 'lib';		# but if started from client we are somewhere different
+
+use Math::BigInt lib => 'Pari,GMP,BitVect';	# in that order try to use them
+use Math::String;
+use Math::String::Charset;
+
+use Dicop qw/h2a a2h/;	# for h2a etc
+
+my @reason = (
+ "Last password checked",
+ "Found solution",
+ "Timeout",
+);
+
+# get commandline parameters
+my ($start,$end,$target,$set,$timeout) = @ARGV;
+
+print "DiCoP Prime worker 1.01 (pure-Perl) ";
+print "(C) by BSI 2002. All Rights Reserved.\n\n";
+
+die "Parameter format: start end target set [timeout] [trace]" 
+  if (@ARGV < 4) || (@ARGV > 6);
+
+# read in the charsets
+my $sets = read_charsets('charsets.def');
+
+my $cs = $sets->{$set};
+die ("$set is not a valid charset $cs") unless defined $cs;
+
+my $trace = $ARGV[5] || 0;
+
+my $s = Math::String->new(h2a($start),$cs);
+die ("'$start' is not a valid password for set $set") if $s->is_nan();
+my $e = Math::String->new(h2a($end),$cs);
+die ("'$end' is not a valid password for set $set") if $e->is_nan();
+my $t = Math::String->new(h2a($target),$cs);
+die ("'$target' is not a valid password for set $set") if $t->is_nan();
+
+# check input (no longer necc.)
+#my $c = $cs->char(0); my $c3 = a2h("$c$c$c");	# first character
+#
+#die "start ('$start') must end in $c3" unless $s =~ /$c$c$c$/;
+#die "end ('$end') must end in $c3" unless $e =~ /$c$c$c$/;
+
+die "end ('$e') must greater than start ('$s')" unless $e > $s;
+
+$timeout = 0 if !defined $timeout || $timeout < 0;
+$timeout = 24*3600 if $timeout > 24*3600;
+
+my $starttime = time;				# now
+my $took;
+
+my $size = $e-$s; $size = $size->as_number();
+print "Using Math::BigInt v$Math::BigInt::VERSION lib => ";
+print Math::BigInt::_core_lib(),"\n";
+print "Going from '$s' to '$e' (size $size) looking for '$target'\n";
+print scalar localtime, " Start (timeout in $timeout seconds)\n\n";
+
+my $pwd = $s->copy(); my $cnt = 0;
+my $found = -1;					# found nothing
+# we care only for the number representation
+$t = $t->as_number();	
+$pwd = $pwd->as_number();
+$pwd++ if $pwd->is_even();			# don't need to test even ones
+$pwd++ if $pwd->is_one();			# don't need to test 1
+my $two = Math::BigInt->new(2);
+
+# Numbers with a '5' on the last digit need not to be tested (can not be prime,
+# since divisable by 5). So we have a peek at the start number to see what it
+# has as enddigit and predict when we will hit the '5' to skip it. Reason is
+# that converting every number to dec just to look at last digit is very costly
+
+my $last = $pwd->digit(0);
+
+print "Last digit from $pwd is: $last\n";
+
+#            1  3  5  7  9 
+my @skip = ( 0, 0, 1, 0, 0 );
+my $skip_ptr = int($last / 2);			# 1,3,5,7,9 => 0,1,2,3,4
+$skip_ptr --; $skip_ptr = 4 if $skip_ptr == -1;	# rewind by one
+while ($found < 0)
+  {
+  $cnt += 2;
+  if ($cnt > 5000)				# not so often
+    {
+    $cnt = 0;
+    $found = 0 if $pwd > $e;
+    $took = time - $starttime;
+    $found = 2 if $timeout > 0 && $took > $timeout;
+    if (($trace) && ($found < 0))
+      {
+      # prediction
+      my $done = $pwd - $s; 
+      my $ps = $done->as_number()->bdiv( $took||0 );
+      print "\r ",$ps," pwds/s => ";
+      $done = ($e-$pwd)->as_number()/$ps;
+      print "will take $done more seconds (after $took seconds at '$pwd')  ";
+      }
+    }
+  $skip_ptr++; $skip_ptr = 0 if $skip_ptr > 4;	# increment skip pointer
+#  print "skip $pwd\n" if $skip[$skip_ptr];
+  $pwd += $two, next if $skip[$skip_ptr];
+
+  # now check whether the target number is dividable without remainder by the
+  # current number. If yes, found an result. Only one result per chunk is
+  # found, though.
+#  my $rem = $t->copy()->bmod($pwd);
+#  print "$t / $pwd = remainder $rem \n";
+#  if ($rem->is_zero())
+  if ($t->copy()->bmod($pwd)->is_zero())
+    {
+    $pwd = Math::String->from_number($pwd,$cs);		# reconv to string	
+    print "\nFound solution '$pwd' (",$pwd->as_number(),")\n";
+    $found = 1;
+    }
+  #$pwd += $two;
+  $pwd++; $pwd++;
+  }
+$took = time-$starttime;
+my $result = a2h($pwd);
+
+print "Last tested password in hex was '$result'\n";
+print "Stopcode is '$found'\n";
+
+print "Reason: $reason[$found]\n";
+my $pwds = $pwd-$s; $pwds = $pwds->as_number()/$took;
+print "Took $took seconds ($pwds pwds per seconds)\n\n";
+print "\n",scalar localtime, " Done.\n";
+
+###############################################################################
+# read the charsets from a file
+
+sub read_charsets
+  {
+  my ($file) = @_;
+
+  my $sets = {};
+  $file = "../$file" unless -f $file;                   # try one up (unport.)
+  open FILE, $file or die "Cannot read $file: $!\n";
+  my @set = [];
+  while (my $line = <FILE>)
+    {
+    chomp($line);
+    next if $line =~ /^[^01]/;          # ignore all lines except set def's
+    $line =~ s/^([01]):([0-9]+)://;     # remove type and id
+    my $id = $2;
+    if ($1 eq '0')
+      {
+      # simple set
+      @set = map ( h2a($_), split(/:/, $line));                 # 41:42 => a,b
+      $sets->{$id} =  Math::String::Charset->new( \@set );
+      }
+    else
+      {
+      # grouped set
+      @set = split(/:/, $line);                 # 1=2:3=2
+      my $cs = {};
+      foreach (@set)
+        {
+        my ($i,$s) = split(/=/, $_);            # 1=2
+        die ("Simple set $s not defined, but used in grouped set $id")
+         if !defined $sets->{$s};
+        $cs->{$i} = $sets->{$s};
+        }
+      $sets->{$id} =  Math::String::Charset->new( { sets => $cs } );
+      }
+    }
+  close FILE;
+  print "Loaded ",scalar keys %$sets, " charsets.\n";
+  $sets;
+  }

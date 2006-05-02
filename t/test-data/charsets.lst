@@ -1,0 +1,72 @@
+Dicop::Data::Charset {
+  description = "upper ASCII characters"
+  dirty = 0
+  id = 1
+  set = 4142434445464748494a4b4c4d4e4f505152535455565758595a
+  }
+Dicop::Data::Charset {
+  type = simple
+  description = "Digits (0-9)"
+  dirty = 0
+  id = 2
+  set = 30313233343536373839
+  }
+Dicop::Data::Charset {
+  description = "lower ASCII characters"
+  dirty = 0
+  id = 3
+  set = 6162636465666768696a6b6c6d6e6f707172737475767778797a
+  }
+Dicop::Data::Charset {
+  type = grouped
+  description = "lowercase with two trailing digits"
+  dirty = 0
+  id = 4
+  sets = "0,3,-1,2,-2,2"
+  }
+Dicop::Data::Charset {
+  type = grouped
+  description = "upper first, lowercase default, with one trailing digit"
+  dirty = 0
+  id = 5
+  sets = "0,3,1,1,-1,2"
+  }
+Dicop::Data::Charset::Dictionary {
+  type = dictionary
+  description = "test dictionary"
+  dirty = 0
+  stages = 3
+  scale = 20
+  mutations = 1023
+  id = 6
+  file = testlist.lst
+  }
+Dicop::Data::Charset::Dictionary {
+  type = dictionary
+  description = "test dictionary w/ append/prepend"
+  dirty = 0
+  stages = 3
+  scale = 2220
+  sets = "0_2_1_2"
+  mutations = 1023
+  id = 7
+  file = testlist.lst
+  }
+Dicop::Data::Charset::Dictionary {
+  type = dictionary
+  description = "test dictionary w/ append/prepend"
+  dirty = 0
+  stages = 3
+  scale = 24720
+  sets = "0_2_1_2,1_2_2_3,0_3_1_1"
+  mutations = 1023
+  id = 8
+  file = testlist.lst
+  }
+Dicop::Data::Charset::Extract {
+  type = extract
+  description = "test extract set"
+  dirty = 0
+  set = 2
+  id = 222
+  }

@@ -1,0 +1,7 @@
+
+Use the gen_dict.pl script to check a dictionary and to create a .md5 checksum
+file for a dictionary. Without this, the server will not accept your
+dictionary files!
+
+The dictionary should have linux/unix style line endings (a single 0x0a) and
+be sorted with "sort -u".

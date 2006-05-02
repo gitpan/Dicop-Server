@@ -1,0 +1,239 @@
+#!/usr/bin/env perl -w
+
+#############################################################################
+# This script sets up certain files and things that are necessary before
+# running dicopd for the first time.
+#
+# (c) Bundesamt fuer Sicherheit in der Informationstechnik 2004
+#
+# DiCoP is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License version 2 as published by the Free
+# Software Foundation.
+#
+# See the file LICENSE or L<http://www.bsi.de/> for more information.
+#############################################################################
+
+#############################################################################
+# VERSION history:
+# 2004-11-22 0.01
+#   * from touch_files
+#   * copy mail templates, config template
+#   * touch users.lst and lock files, too
+#   * read out settings from config file
+#   * ask for admin unless on exists
+# 2004-11-23 0.02
+#   * salt in ASCII
+#   * don't print name, and print beforehand what Password to enter
+#   * chown parent directory for lock files
+# 2006-04-24 0.03
+#   * use /usr/bin/env perl -w vs /usr/bin/perl -w
+
+use strict;
+use File::Spec;
+use lib 'lib';
+use Dicop::Config;		# to find user/group settings
+use Dicop::Base qw/read_file random a2h/;
+use Digest::MD5;
+
+BEGIN
+  {
+  $|++;	# output buffer off
+  }
+
+print "\nDiCoP Setup v0.03\n";
+print " (c) Bundesamt fuer Sicherheit in der Informationstechnik 2004-2006\n\n";
+
+print " Usage:  ./setup [config_file]\n\n";
+
+my $cfg_file = shift || 'config/server.cfg'; 
+
+print "Reading config $cfg_file file to find out your settings...\n";
+
+print "Copying config file...\n";
+  copy_file (File::Spec->catfile('config', 'server.cfg.sample'));
+print "Done.\n\n";
+
+my $cfg = Dicop::Config->new($cfg_file);
+if (!ref($cfg) eq 'Dicop::Config')
+  {
+  die ("Couldn't read config file $cfg_file: $!");
+  }
+
+my $data_dir = $cfg->get('data_dir') || 'data';
+my $log_dir = $cfg->get('log_dir') || 'logs';
+my $tpl_dir = $cfg->get('tpl_dir') || 'tpl';
+my $mail_dir = $cfg->get('mailtxt_dir') || 'mail';
+my $user_file = $cfg->get('users_lst') || 'users.lst';
+my $user = $cfg->get('user');
+my $group = $cfg->get('group');
+
+
+print "Creating directories...";
+for my $dir ( $log_dir, $data_dir, $tpl_dir)
+  {
+  if (!-d $dir)
+    {
+    print " Creating $dir...\n";
+    mkdir $dir; 
+    }
+  }
+print "Done.\n\n";
+
+print "Touching files in $data_dir/...";
+
+for my $file (qw#
+ charsets.lst
+ jobs.lst
+ results.lst
+ cases.lst
+ users.lst
+ testcases.lst
+ clients.lst
+ proxies.lst
+ jobtypes.lst
+ groups.lst
+#)
+  {
+  `touch $data_dir/$file`;	# create unless it exists
+  }
+
+print "Done.\n\n";
+
+print "Touching files in $log_dir/...";
+`touch $log_dir/error.log`;
+`touch $log_dir/server.log`;
+print "Done.\n\n";
+
+# This is actually not neccessary, since the server will create/delete them
+# automatically as long as it has permissions on its directory:
+
+print "Touching lock files...";
+`touch dicop_lockfile`;
+`touch dicop_log_lock`;
+`touch dicop_request_lock`;
+print "Done.\n\n";
+
+print "Copying mail templates...\n";
+
+  copy_dir( File::Spec->catdir($tpl_dir, $mail_dir));
+
+print "Done.\nCopying event templates...\n";
+  
+  copy_dir( File::Spec->catdir($tpl_dir, 'event'));
+
+# only add a user if we don't already have one
+my $users = File::Spec->catfile($data_dir, $user_file);
+add_admin ( $users ) if -s $users == 0;
+
+print "Done\n\nLooks like your dicopd will use '$user' and '$group' as user and group.\n";
+print "Now trying to create the user and group...\n";
+
+print ' '; print `groupadd $group`;
+print ' '; print `useradd $user`;
+
+print "Done.\n\nNow setting permissions for $user/$group...";
+
+my $chown = $user . '.' . $group;
+
+print `chown $user.$group * -R`;
+# own our "parent" directory, so that dicopd can create/delete lock files
+print `chown $user.$group .`;	
+
+print "Done.\n\nSetup complete.\n";
+
+1;
+
+#############################################################################
+# helper sub routines
+
+sub copy_file
+  {
+  my $src = shift;
+
+  return unless -f $src;
+  return unless $src =~ /\.sample$/;
+  
+  my $des = $src; $des =~ s/\.sample$//;
+
+  if (-f $des)
+    {
+    print " '$des' already exists, skipping it.\n";
+    return;
+    }
+
+  print " copy $src => $des\n";
+  `cp $src $des`;
+  }
+
+sub copy_dir
+  {
+  my $dir = shift;
+
+  my @files = read_dir($dir);
+  for my $file (@files)
+    {
+    my $src = File::Spec->catfile($dir, $file);
+ 
+    copy_file($src);
+    }
+  }
+
+sub read_dir
+  {
+  my $dir = shift;
+
+  opendir DIR, $dir or die ("Can't read dir '$dir': $!");
+  my @files = readdir DIR;
+  closedir DIR;
+
+  @files;
+  }
+
+sub add_admin
+  {
+  my ($file) = @_;
+
+  print "\nThere is not yet an administrator account defined. Will add one now:\n";
+  my ($name,$pwd);
+
+  my $users = read_file($file);
+  die ("Error: Can't read $file: $!") if !ref $users;
+
+  print "\n Enter name [A-Z,a-z,0-9-_]: ";
+  $name = <STDIN>; chomp($name); $name = $name || '';
+  die ("User name must not be empty") if $name eq '';
+  die ("User name should contain only A-Z, a-z, 0-9 and _-")
+    if $name !~ /^[A-Za-z0-9_-]/;
+
+  print "\n The password MUST contain upper- and lowercase, and be longer than 7 characters:\n";
+  print "\n Enter password [A-Za-z0-0.:!()<>@ -]: ";
+  $pwd = <STDIN>; chomp($pwd); $pwd = $pwd || '';
+  die ("Error: Password must be longer than 7 characters") if length($pwd) < 8;
+  die ("Error: Password contains illegal characters")
+    if $pwd !~ /[A-Za-z0-9.:!()<>@ -]/;
+  die ("Erorr: Password must contain upper and lower case letters")
+    if ($pwd !~ /[A-Z]/ || $pwd !~ /[a-z]/);
+
+  my $salt = a2h(random(256));
+  # In case we ever get less than  256 bits, add some more (the random generator
+  # from perl might only have 48 bits if state, though).
+  warn ("Warning: random generator did not return 256 bits. Adding some.")
+    if length($salt) < 32;
+  while (length($salt) < 32)
+    {
+    $salt .= int(rand(65537));
+    }
+
+  my $md5 = Digest::MD5->new(); $md5->add("$salt$pwd\n");
+
+  open FILE,
+   ">$file" or die "Cannot append to $file: $!";
+  print FILE "Dicop::Data::User {\n";
+  print FILE "  id = 1\n";
+  print FILE "  name = \"$name\"\n";
+  print FILE "  salt = \"$salt\"\n";
+  print FILE '  pwdhash = "' .  $md5->hexdigest() . "\"\n";
+  print FILE "  }\n";
+  close FILE;
+  }
+

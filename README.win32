@@ -1,0 +1,33 @@
+
+=pod
+
+=head1 README FOR WIN32 (AKA MS WINDOWS)
+
+You can use perldoc to read this document: C<perldoc README.win32>.
+
+=head1 GENERAL NOTES
+
+Only the client is supposed to run under Windows. Please see the file
+L<README|README> for general instructions.
+
+=head2 KNOWN PROBLEMS
+
+The Win32 module is only able to get the name of the CPU, but not the
+speed of it. Thus the client will only transmit the CPU name, but not MHz
+infoermation to the server. This is uncritical, however.
+ 
+=head2 Requirements
+
+See README.client for how to setup, configure and run the client.
+
+=head1 AUTHOR
+
+(C) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006.
+
+For licensing information please refer to the LICENSE file.
+
+=head2 Contact
+
+Please see the C<README>.
+
+=cut

@@ -1,0 +1,317 @@
+BUGS
+CHANGES
+CHANGES-2.20
+CHANGES-2.22
+CHANGES-2.23
+CHANGES-3.00
+INSTALL
+LICENSE
+MANIFEST
+NEW
+README
+README.linux
+README.win32
+README.darwin
+README.client
+TODO
+SIGNATURE
+TROUBLE
+UPGRADE
+doc/Config.pod
+doc/Client.pod
+doc/Dicop.pod
+doc/Dicopd.pod
+doc/Files.pod
+doc/Glossary.pod
+doc/Objects.pod
+doc/Security.pod
+doc/Server.pod
+doc/Worker.pod
+Makefile.PL
+client				the client
+dicopd				server deamon, to act as dicop/http server
+dicop.asc			GnuPG public key
+adduser.pl
+setup				setup a server and check files/permissions etc
+logs/dummy.txt			to create logs/
+data/dummy.txt			to create data/
+cache/dummy.txt			to create cache/ for the client
+build/MANIFEST			MANIFEST for the client package
+build/BUNDLE_CLIENT		bundle definition for just the client package
+build/bundle.pl			bundle client together
+build/fix_help.pl		fix output of pod2html for one topic
+build/gen_help.pl		generate all online help topics
+build/make_cover		create coverage statistics via Devel::Cover
+build/wcr			recursive wc
+build/README
+target/dictionaries/README
+target/dictionaries/gen_dict.pl
+target/test/dummy.txt		to create target/test   - for testcase targets
+target/dummy.txt
+t/common.pl
+t/checkreq.pl
+t/client.cfg
+t/client2.cfg
+t/clientpm.t			test Dicop::Client
+t/config.t
+t/data/casepm.t			the testsuite is in t/ and t/data
+t/data/charsetpm.t
+t/data/clientpm.t
+t/data/jobpm.t
+t/data/jobtypepm.t
+t/data/grouppm.t
+t/data/rand_req.t
+t/data/resultpm.t
+t/data/requestpm.t
+t/data/proxypm.t
+t/data/testcasepm.t
+t/data/chunk.txt		test chunk strings
+t/data/chunk.inc		included by chunkpm.t and chunkcl.t
+t/data/chunkpm.t		test Dicop::Data::Chunk
+t/data/chunkcl.t		test Dicop::Data::Chunk::Checklist
+t/data/dictpm.t			test Dicop::Data::Charset::Dictionary
+t/data/extract.t		test Dicop::Data::Charset::Extract
+t/data/userpm.t
+t/dicoppm.t			test routines shared between server/client
+t/datapm.t			test Dicop::Data
+t/datapm2.t			test Dicop::Data dies if no users are defined
+t/data_add.t			test adding stuff to the server
+t/data_chg.t			test Dicop::Data::change() function
+t/data_del.t			test Dicop::Data del() function
+t/data_mail.t			check the check for the mail templates
+t/event.t			check generation of event_urls
+t/filespm.t			test Dicop/Files.pm
+t/security.t
+t/srvrcfg.t			Dicop::Server::Config
+t/test.cfg
+t/test2.cfg
+t/testworker.t
+t/testfile.txt
+t/def/request.def
+def/client_request.def		request patterns for the Client
+t/target/dictionaries/testlist.lst	test dictionary
+t/target/dictionaries/testlist.md5	and it's checksum
+t/target/test.dat			for testing scripts
+t/target/images/testimage.img		for testing extract sets
+t/test-scripts/testscript		for testing scripts
+t/test-tpl/mail/verify_error.txt
+t/test-tpl/mail/stopped.txt
+t/test-tpl/mail/offline.txt
+t/test-tpl/mail/result.txt
+t/test-tpl/mail/newjob.txt
+t/test-tpl/mail/closed.txt
+t/test-tpl/mail/bad_result.txt
+t/test-tpl/event/new_job.txt
+t/test-tpl/event/found_result.txt
+t/test-tpl/event/job_failed.txt
+t/test-config/server.cfg	test config for Data.pm object as server
+t/test-config/event.cfg		test config for even sending
+t/test-config/no_templates.cfg	no mail templates
+t/test-config/work_allow.cfg
+t/test-config/stats_allow.cfg
+t/test-config/status_allow.cfg
+t/test-config/admin_allow.cfg
+t/test-config/work_deny.cfg
+t/test-config/stats_deny.cfg
+t/test-config/status_deny.cfg
+t/test-config/admin_deny.cfg
+t/test-config/no_templates.cfg
+t/test-config2/work_allow.cfg
+t/test-config2/stats_allow.cfg
+t/test-config2/status_allow.cfg
+t/test-config2/admin_allow.cfg
+t/test-config2/work_deny.cfg
+t/test-config2/stats_deny.cfg
+t/test-config2/status_deny.cfg
+t/test-config2/admin_deny.cfg
+t/test-data/jobs.lst		test data to test Data.pm object
+t/test-data/cases.lst
+t/test-data/1/chunks.lst
+t/test-data/2/chunks.lst
+t/test-data/3/chunks.lst
+t/test-data/4/chunks.lst
+t/test-data/4/check.lst
+t/test-data/5/chunks.lst
+t/test-data/jobtypes.lst
+t/test-data/proxies.lst
+t/test-data/charsets.lst
+t/test-data/testcases.lst
+t/test-data/results.lst
+t/test-data/clients.lst
+t/test-data/groups.lst
+t/test-data/users.lst
+t/test-data2/jobs.lst		# empty data set to test Data.pm startup check
+t/test-data2/jobtypes.lst
+t/test-data2/cases.lst
+t/test-data2/proxies.lst
+t/test-data2/charsets.lst
+t/test-data2/testcases.lst
+t/test-data2/results.lst
+t/test-data2/clients.lst
+t/test-data2/groups.lst
+t/test-data2/users.lst
+t/test-worker/linux/test
+t/test-worker/linux/i386/test
+t/test-worker/linux/test2
+t/charsets.def
+t/worker/test
+t/worker/test+			# for testing '+' in filename
+lib/Dicop.pm
+lib/Dicop/Server/Config.pm
+lib/Dicop/Data.pm
+lib/Dicop/Client.pm
+lib/Dicop/Files.pm
+lib/Dicop/Data/Job.pm
+lib/Dicop/Data/Case.pm
+lib/Dicop/Data/Chunk.pm
+lib/Dicop/Data/Chunk/Checklist.pm
+lib/Dicop/Data/Client.pm
+lib/Dicop/Data/Charset.pm
+lib/Dicop/Data/Charset/Dictionary.pm
+lib/Dicop/Data/Charset/Extract.pm
+lib/Dicop/Data/Proxy.pm
+lib/Dicop/Data/Result.pm
+lib/Dicop/Data/Testcase.pm
+lib/Dicop/Data/Jobtype.pm
+lib/Dicop/Data/Group.pm
+lib/Dicop/Data/User.pm
+msg/messages.txt		default messages
+def/request.def			request patterns for the Server
+def/client_request.def		request patterns for the Client
+def/objects.def			Dicop::Data object definitions
+msg/en/messages.txt		ditto
+msg/de/messages.txt		translated
+config/server.cfg.sample	main config, rename to server.cfg
+config/client.cfg.sample	client config, rename to client.cfg
+tpl/authform.inc		form w/ user/pwd entry fields
+tpl/authform_float.inc		same as authform, but floating left
+tpl/add_failed.txt		template files for HTML output
+tpl/add_object.tpl
+tpl/massadd_failed.txt
+tpl/add_charset.tpl
+tpl/added.txt
+tpl/added_clients.txt
+tpl/case.tpl
+tpl/cases.tpl
+tpl/change_object.tpl
+tpl/changed.txt
+tpl/charsets.tpl
+tpl/charset.tpl
+tpl/chunk.tpl
+tpl/check.tpl
+tpl/chunks.tpl
+tpl/clients.tpl
+tpl/clientmap.tpl
+tpl/client.tpl
+tpl/config.tpl
+tpl/confirm_delete.txt
+tpl/deleted.txt
+tpl/dir.txt			dir/file list
+tpl/dir.tpl			dir listing
+tpl/groups.tpl
+tpl/edit_indend.inc		for indending edit fields
+tpl/editfield_check.inc		multiple checkboxes
+tpl/editfield_bool.inc		one checkbox
+tpl/editfield_file.inc		a file entry box with Browse button
+tpl/editfield_hidden.inc	hidden default params
+tpl/editfield_pwd.inc		a pwd entry box
+tpl/editfield_select.inc	select entry from listbox
+tpl/editfield_select_refresh.inc	select entry from listbox, with Refresh button
+tpl/editfield_string.inc	string entry box
+tpl/editfield_radio.inc		multiple radiobuttons
+tpl/file.tpl			file listing
+tpl/help.txt			help overview
+tpl/helptopics.inc		all help topics as list
+tpl/help/client.tpl		HTML versions of pod files
+tpl/help/config.tpl
+tpl/help/dicop.tpl
+tpl/help/dicopd.tpl
+tpl/help/files.tpl
+tpl/help/glossary.tpl
+tpl/help/objects.tpl
+tpl/help/proxy.tpl
+tpl/help/security.tpl
+tpl/help/server.tpl
+tpl/help/trouble.tpl
+tpl/help/worker.tpl
+tpl/help/new.tpl
+tpl/job.tpl
+tpl/jobresults.tpl
+tpl/job.txt
+tpl/jobspeed.tpl
+tpl/failures.tpl
+tpl/jobtypes.tpl
+tpl/jobtypehelp.inc
+tpl/no_results.inc
+tpl/no_jobs.inc
+tpl/main.tpl
+tpl/proxies.tpl
+tpl/reset_client.txt
+tpl/reset_client.tpl
+tpl/reset_all.txt
+tpl/results.tpl
+tpl/result.tpl
+tpl/debug.tpl
+tpl/server.tpl
+tpl/style.tpl
+tpl/terminated_all.txt
+tpl/terminated_client.txt
+tpl/terminate_client.tpl
+tpl/testcases.tpl
+tpl/users.tpl
+tpl/mail/result.txt.sample		mail template files
+tpl/mail/newjob.txt.sample
+tpl/mail/stopped.txt.sample
+tpl/mail/closed.txt.sample
+tpl/mail/offline.txt.sample
+tpl/mail/bad_result.txt.sample		client reported some bad result
+tpl/mail/verify_error.txt.sample	client can't be a verifier
+tpl/event/new_job.txt.sample
+tpl/event/found_result.txt.sample
+tpl/event/job_failed.txt.sample
+tpl/styles/readme.txt
+tpl/styles/Bare/header.txt
+tpl/styles/Black-and-White/header.txt
+tpl/styles/Coral/header.txt
+tpl/styles/Dust/header.txt
+tpl/styles/Grass/header.txt
+tpl/styles/Honey/header.txt
+tpl/styles/Ice/header.txt
+tpl/styles/Salmon/header.txt
+tpl/styles/Sea/header.txt
+tpl/styles/arms.inc
+tpl/styles/default.inc
+tpl/styles/round.inc
+tpl/styles/square.inc
+tpl/header.txt
+tpl/basecss.inc
+tpl/footer.txt
+tpl/search.tpl				search page
+tpl/searchform.inc			search form
+tpl/searched.tpl			search results and new search form
+tpl/setform.inc				one entry for grouped charsets
+tpl/setappform.inc			one entry for dictionary charsets
+tpl/menu_added.inc
+tpl/menu_add.inc			Help | Add
+tpl/menu_case_joblist.inc
+tpl/menu_charsets.inc
+tpl/menu_client.inc
+tpl/menu_clientmap.inc
+tpl/menu_edit.inc			Delete | Add
+tpl/menu_help.inc			Help
+tpl/menu_job.inc
+tpl/menu_joblist.inc
+tpl/menu_jobtypes.inc
+tpl/menu_main.inc
+tpl/menu_object.inc
+tpl/menu_proxies.inc
+tpl/menu_testcases.inc
+worker/charsets.def
+worker/armv4l/test.pl
+worker/linux/test.pl
+worker/mswin32/test.pl
+worker/os2/test.pl
+worker/darwin/test.pl
+worker/dummy.txt
+scripts/sample
+META.yml                                 Module meta-data (added by MakeMaker)

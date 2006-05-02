@@ -1,0 +1,15 @@
+
+<h1><a class="h" href="##selfstatus_main##" title="Back to main">DiCoP</a> - Termination of all clients scheduled successfull</h1>
+
+<div class="text">
+
+<p>
+The termination of all clients was scheduled successfully. Once each of the clients has
+connected to the server, it will be sent a signal to terminate (and possible
+update/restart) itself.
+<br>
+Go back to the <a href="##selfstatus_clientmap##">client map</a> or
+the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

@@ -1,0 +1,26 @@
+# These comments will be stripped.
+# Field X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] Bad result from client ##clientid##
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: Spoiled Basket
+
+Uh-oh!
+
+On ##localtime## client ##clientid## [##peeraddress##] turned up with a bad
+result of type ##chunkstatus## for chunk ##chunkid## (start: ##chunkstart##, end ##chunkend##) in job ##jobid##.
+
+The client ##clientid## could not be added to the list of verifiers, due to the following error:
+
+ ##errorcode##
+
+Current list of verifiers and their results:
+
+ ##verifierlist##

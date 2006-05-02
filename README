@@ -1,0 +1,151 @@
+
+=pod
+
+=head1 README
+
+You can use perldoc to read this document: C<perldoc README>.
+
+=head1 INSTALLATION
+
+Prior to running the server/client you must install it. This document gives you
+a very broad overview of the necessary steps, for detailed instructions refer
+please to the L<INSTALL> file (f.i. via perldoc INSTALL).
+
+=head2 Verify the package
+
+Before you do anything with the downloaded package, verify the signature.
+
+Download our GnuPG key from http://www.bsi.bund.de/produkte/dicop/download.htm
+and then check the detachd signature with:
+
+	gpg --verify Dicop-Server-3.00_87.tar.gz.asc
+
+(replace 3.00_87 with the actual version you got)
+
+If the signature does not verify ok, please notify us immidiately. B<DO NOT>
+run perl Makefile.PL or anythign else nor install the package when the
+signature cannot be verified ok. B<Your system might get compromised!>.
+
+=head2 Steps for the first time install
+
+0: Relax. Take a deep breath. Steady yourself. Take a sip of your favourite.
+1: Decide what you want to install where. We recommend that you install the
+   server onto one computer first and get it running there. Than install one
+   client at the same machine to test it in conjunction with the server, than
+   follow with clients on different machines.
+2: Check that the server/client machines meet the requirements outlined below.
+   If not, upgrade the software/OS (notably Perl) first.
+3: Untar/ungzip the server package to an extra directory.
+4: Make sure you are able to run the testsuite for the server successfully.
+   You may need to install additional Perl modules to complete this step.
+5: Configure the server by running ./setup - it will copy config and template
+   files, create a user/group for it, setup an admin account etc. for you
+6: If you got additional worker files, add them to the server under worker/.
+6: Run the server and administer it trough a browser to get familiar with it.
+7: Untar/ungzip the client package to a separate directory and run it from
+   there.
+8: Copy the client to another machine and run it from there. Alternatively,
+   mount the client directory on the server (via NFS/Samba whatever) and run
+   the client from there.
+9: Enjoy ;)
+
+For further information, please see C<INSTALL>.
+
+=head2 Requirements
+
+You will need Perl v5.8.3 or better, preferable Perl v5.8.6, to run the server.
+
+The client needs only Perl v5.6.x (for Windows use ActiveState Perl from
+http://www.activestate.com).
+
+The cgi-bin version C<server> exists no longer, you need to use the daemon
+version C<dicopd> to run a server.
+
+You also need an HTTP or FTP server to serve the clients with files.
+
+The actual file server can run on a different machine. However, it is easier
+to run the file server on the same machine than the DiCoP server, since it can
+then access and serve the worker files from the DiCoP worker and target
+directories directly, which saves you from syncing these directories.
+
+=over 2
+
+=item daemon
+
+When the daemon is running, you can connect to it via a web browser by using
+http://127.0.0.1:8888/ and it should return the main page.
+
+=back
+
+If the daemon is running at another machine, simple connect to it
+like you would connect to any other web browser, by using the correct IP and
+port.
+
+You can use the perl documentation utility perldoc to get more information. The
+documentation is located in the subdirectory C<doc/>. Use C<perldoc pod/dicop>,
+C<perldoc pod/client> or C<perldoc pod/server> to read more.
+
+
+=head2 Hardware
+
+The machine to run the server should have at least 64 MB (no X-Windows) or
+128 MB (with X-Windows), so that no swapping occurs. A 200 Mhz x86 CPU does just
+fine for a couple hundred clients, although having one or more Ghz and a
+GigaByte or two RAM never hurt ;)
+
+
+=head2 Supported platforms
+
+The server was tested successfully under the following platforms:
+
+Windows (testsuite only, we do not recommend running the server under Windows):
+-------------------------------------------------------------------------------
+ Activestate Perl 5.6.0 build 617
+ nmake from VC++ v6.0
+
+Linux SuSE
+----------
+ Perl v5.005_3		no longer tested nor supported
+ Perl v5.6.x		no longer tested nor supported
+ Perl v5.7.2		(former) development machine, no longer tested nor supported
+ Perl v5.8.3		development
+ Perl v5.8.5, v5.8.6	testing
+
+Linux RedHat
+------------
+ Perl v5.6.0		09/2001 - no longer tested nor supported
+ Perl v5.6.1		10/2001 - no longer tested nor supported
+
+Debian
+------
+ Perl v5.6.1		02/2003
+ iPAQ 3870: Perl v5.004 kernel 2.4.18-hh6 on ARM SA1100
+ iPAQ 3870: Perl v5.005 kernel 2.4.18-hh6 on ARM SA1100
+
+Mac OS X
+--------
+ Unknown details, but it worked fine.
+
+However, we can not guaranty that it will work. If you experience any
+problems, please contact us (see below).
+
+=head1 AUTHOR
+
+(C) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006.
+
+For licensing information please refer to the LICENSE file.
+
+=head2 Contact
+
+	Address: BSI
+		 Referat 123
+		 Godesberger Alle 185-189
+		 Bonn
+		 53175
+		 Germany
+	email:	 dicop @ bsi.bund.de		(for public key see dicop.asc)
+	www:	 http://www.bsi.bund.de/
+
+Please file bugreports to L<http://rt.cpan.org>.
+
+=cut

@@ -1,0 +1,27 @@
+# These comments will be stripped.
+# Field X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] Bad result from client ##clientid##
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: Rotten apple
+
+Uh-oh!
+
+On ##localtime## client ##clientid## [##peeraddress##] turned up with a bad
+result of type ##chunkstatus## for chunk ##chunkid## (start: ##chunkstart##, end ##chunkend##).
+
+The result for the chunk in job ##jobid## ('##jobdescription##')
+differs from the already reported results for that chunk. The chunk will be
+re-issued to different clients for re-checking later on.
+
+List of verifiers and their results:
+
+ ##verifierlist##
+

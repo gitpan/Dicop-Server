@@ -1,0 +1,26 @@
+Dicop::Data::Result {
+  client = 2
+  client_name = "testclient2"
+  dirty = 0
+  id = 1
+  job = 1
+  job_description = "test for chaining jobs"
+  result = ""
+  result_hex = 4142434445
+  time = 994862849
+  type = 1
+  type_description = "Test job"
+  }
+Dicop::Data::Result {
+  client = 4711
+  client_name = "testclient2"
+  dirty = 0
+  id = 2
+  job = 1
+  job_description = "second result"
+  result = ""
+  result_hex = 4142434445
+  time = 994862850
+  type = 1
+  type_description = "Test job"
+  }

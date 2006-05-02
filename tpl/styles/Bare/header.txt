@@ -1,0 +1,57 @@
+<html>
+<head>
+ <title>
+ ##title##
+ </title>
+ <style type="text/css">
+  <!--
+  ##include_basecss.inc##
+  ##include___LAYOUT__.inc##
+  body {
+    background: white;
+    color: black;
+    }
+  h1, h2, h3, h4, h5, h6, h7, div.menu, div.text, p {
+    background: white;
+    color: black;
+    border: none;
+    }
+  th.auth {
+    background: black;
+    color: white;
+    }
+  td, td.indend, td.editfieldname, td.editfieldname1, td.editfieldname2 {
+    background: white;
+    }
+  th {
+    background: white;
+    color: black;
+    border-color: black;
+    }
+  input.submit, input.browse, input.refresh, input.reset {
+    background: white;
+    color: black;
+    font-weight: bold;
+    }
+  div.footer {
+    background: white;
+    border: none;
+    color: black;
+    }
+  div.footerhead { border: none; }
+  a:link, a:visited { 
+    color: black;
+    background: white;
+    }
+  a:hover.m, a:hover
+    { 
+    background-color: black;
+    border: none;
+    color: white;
+    }
+  -->
+  </style>
+</head>
+<!-- for old browser not supporting CSS -->
+<body bgcolor=#ffffff textcolor="#000000">
+

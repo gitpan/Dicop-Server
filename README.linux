@@ -1,0 +1,54 @@
+
+=pod
+
+=head1 README
+
+You can use perldoc to read this document: C<perldoc README.linux>.
+
+=head1 INSTALLATION OF THE SERVER
+
+=head2 Requirements
+
+You will need Perl v5.8.3 or better.
+
+The cgi-bin version C<server> is no longer supported, you need to use the
+daemon version C<dicopd>.
+
+You will only need an Apache (or any other http server) to act as a file
+server, and the actual file server can run on a different machine. However,
+it is easier to run the file server on the same machine than the DiCoP
+server, since it can then access and serve the worker files from the DiCoP
+worker and target directories directly, which saves you from syncing these
+directories.
+
+=head2 Hardware
+
+The maschine to run the server should have at least 32 MB (no X-Windows) or
+64 MB (with X-Windows) so that no swapping occurs. A 200 Mhz x86 CPU does just
+fine for a couple hundred clients, although having one or more GHz does not
+hurt your performance ;)
+
+=head2 Supported platforms
+
+The server was tested successfully under a lot of different platforms,
+please see L<README> for a complete list.
+
+However, we can not guaranty that it will work. If you experience any
+problems, please contact us (see below).
+
+=head2 Installation
+
+Please read the release notes in C<NEW> and the documentation about
+installation in C<INSTALL>.
+
+=head1 AUTHOR
+
+(C) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006.
+
+For licensing information please refer to the LICENSE file.
+
+=head2 Contact
+
+Please see the C<README>.
+
+=cut

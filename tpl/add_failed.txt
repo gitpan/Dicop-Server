@@ -1,0 +1,16 @@
+
+<h1>DiCoP - Add failed</h1>
+
+<div class="text">
+
+<p>
+The ##type## could not be added: <b>##error##</b>
+</p>
+
+<p>
+Use the back button of your browser and try again, or
+go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>
+

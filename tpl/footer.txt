@@ -1,0 +1,48 @@
+
+<div class="footerhead"></div><div class="footer">
+
+<span class="footer">
+[ Add
+<a class="m" href="##selfform_job##">job</a> |
+<a class="m" href="##selfform_case##">case</a> |
+<a class="m" href="##selfform_client##">client</a> |
+<a class="m" href="##selfform_group##">group</a> |
+<a class="m" href="##selfform_proxy##">proxy</a> |
+<a class="m" href="##selfform_jobtype##">jobtype</a> |
+<a class="m" href="##selfform_charset##">charset</a> |
+<a class="m" href="##selfform_testcase##">testcase</a> |
+<a class="m" href="##selfform_user##">admin</a> ]
+<br> 
+</span>
+
+<span class="footer">
+[ View
+<a class="m" href="##selfhelp_list##" title="Go to help overview">Help</a> | 
+<a class="m" href="##selfstatus_main##" title="View only running jobs">main</a> | 
+<a class="m" href="##selfstatus_cases##" title="View all cases">cases</a> | 
+<a class="m" href="##selfstatus_clientmap##" title="Compact client overview">client map</a> | 
+<a class="m" href="##selfstatus_main##;filter_" title="View all jobs">jobs</a> | 
+<a class="m" href="##selfstatus_server##" title="Detailed server status">status</a> | 
+<a class="m" href="##selfstatus_search##" title="Search for objects">search</a> | 
+<a class="m" href="##selfstatus_chunks##" title="View all open chunks">chunks</a> | 
+<a class="m" href="##selfstatus_results##" title="View all results">results</a> | 
+<a class="m" href="##selfstatus_clients##" title="View all clients">clients</a> | 
+<a class="m" href="##selfstatus_groups##" title="View all groups">groups</a> | 
+<a class="m" href="##selfstatus_proxies##" title="View all proxies">proxies</a> | 
+<a class="m" href="##selfstatus_jobtypes##" title="View all jobtypes">jobtypes</a> | 
+<a class="m" href="##selfstatus_charsets##" title="View all charsets">charsets</a> | 
+<a class="m" href="##selfstatus_testcases##" title="View all testcases">testcases</a> | 
+<a class="m" href="##selfstatus_users##" title="View admin list">admins</a> | 
+<a class="m" href="##selfstatus_config##" title="View server config">config</a> | 
+<a class="m" href="##selfstatus_style##" title="Select your style">styles</a> ] 
+<br> 
+</span>
+
+<span class="generated">
+ Generated at <b>##localtime##</b> by <b>DiCoP v##version##</b>,
+ took <b>##handletime##s</b>.
+</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,912 @@
+
+=pod
+
+=head1 History revision for DiCoP
+
+This document details the complete changes from v2.21 onwards.
+
+See the CHANGES-2.20 file for the full version history up to version v2.20.
+
+=head2 2003-09-22 (Server/Client v2.22 build 31)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	build/bundle.pl: copy over Client's SIGNATURE file
+	prepared for release (this time signed with right key)
+	wcr lib: Total: lines 15803, words 58072, chars 422425
+	4778 tests ()
+
+=back
+
+=head2 2003-09-15 (Server/Client v2.22 build 30)
+
+=over 2
+
+=item added
+
+	build/wcr - recursive wc
+
+=item fixed
+
+	Client.pm: avoid undef warning in line 221
+	typo in tpl/client.txt
+	fixed pod in CHANGES
+	amended NEW and doc/Files.pod
+	Cache.pm: limit($X) did not set $X as new limit
+	add (c) and fix speling erors in gen_dict.pl
+	wcr lib: Total: lines 15803, words 58068, chars 422395
+	4778 tests (tests for Cache::limit(), client msg 450-499 handler)
+
+=back
+
+=head2 2003-09-10 (Server/Client v2.22 build 29)
+
+=over 2
+
+=item fixed
+
+	removed debug print in Job.pm
+	wcr lib: Total: lines 15805, words 58034, chars 422263
+	3990 tests ()
+
+=back
+
+=head2 2003-09-09 (Server/Client v2.22 build 28)
+
+=over 2
+
+=item fixed
+
+	detailed status did not properly display chroot status
+	add the chunk-size vs. chunk-counts bug to BUGS	
+	changing a job cleared it's chunk list accidentily
+	changing a job produced errors in it's data (due to already
+	 set newjob-start and newjob-end)
+	wcr lib: Total: lines 15805, words 58034, chars 422263
+	3990 tests (change job)
+
+=back
+
+=head2 2003-09-03 (Server/Client v2.22 build 27)
+
+=over 2
+
+=item fixed
+
+	adding a job via "internal newjob add" did not set the job's owner
+	 (and the test tested the wrong job's owner field and thus succedded)
+	wcr lib: Total: lines 15798, words 58005, chars 422001
+	3985 tests (job owner of new jobs)
+
+=back
+
+=head2 2003-08-29 (Server/Client v2.22 build 26)
+
+=over 2
+
+=item added
+
+	config entry: scripts_dir to remove hardcoded 'scripts'
+	Config.pm: get($field)
+
+=item fixed
+
+	length test in Job.pm did not work with Wordlist.pm
+	running a job with a script failed due to bad exit value check
+	Data: add() check req->error and refuse to work (should not happen)
+	option_list: correct doc and comment
+	option_list: take optional $item and insert an ONSELECT for browser
+	wcr lib: Total: lines 15785, words 57920, chars 421356
+	3984 tests (tests for adding job with scripts, scripts_dir)
+
+=back
+
+=head2 2003-08-26 (Server/Client v2.22 build 25)
+
+=over 2
+
+=item fixed
+
+	adding a job honours minlen from jobtype
+	wcr lib: Total: lines 15742, words 57745, chars 420219
+	3979 tests (add job in data_add.t)
+
+=back
+
+=head2 2003-08-22 (Server/Client v2.22 build 24)
+
+=over 2
+
+=item added
+
+	Data.pm: _clear_email_queue()
+	new config setting: mail_errors
+	Client: send over pid (if possible) to server
+
+=item fixed
+
+	eliminated class "running", use "tobedone" instead
+	status colors (chunk, client etc) are no longer hardcoded, but return
+	 instead a string usable as CSS class name
+	fix templates to use CSS classes instead of bgcolor
+	added CSS clases for BAD, VERIFY, ISSUED and DONE
+	mail_from, mail_errors and mail_to from config are used in mail templates
+	wcr lib: Total: lines 15729, words 57699, chars 419859
+	3966 tests (new tests for mail templates, requests with pid)
+
+=back
+
+=head2 2003-08-21 (Server/Client v2.22 build 23)
+
+=over 2
+
+=item added
+
+	t/data/rand_req.t - test random requests to see if code copes w/ it
+
+=item fixed
+
+	finalized CSS for all styles
+	added missing my's in Client.pm
+	msg 450 is now more verbose, listing the reason for the error
+	Checking a request is now faster if the request was already seen
+	 (aka cached), twice as fast for 'bad' and 12% faster for 'good' ones
+	more strict error checking in Request.pm (bugs found by rand_req.t)
+	 (no more multiple '_', no more empty var name etc)
+	wcr lib: Total: lines 15707, words 57603, chars 419299
+	3922 tests (rand_req.t)
+
+=back
+
+=head2 2003-08-20 (Server/Client v2.22 build 22)
+
+=over 2
+
+=item added
+
+	added tests for cmd-help;type in datapm.t
+	document new config values in doc/Config.pod
+
+=item fixed
+
+	setting group and user did not work in client
+	adding a new item marks it as modified (necc. so that new jobs
+	 write out their chunklist even if the job never get's modified later)
+	let Charset.pm acceppt '0x12 .. 0x34', '\x12 . \x56' and '"a" .. "z"'
+	 as input and construct the proper sequence
+	Request.pm: ignore multiple ';' silently
+	fix the problem that a testcase couldn't be added
+	forgot to add tpl/help/new.tpl to MANIFEST
+	wcr lib: Total: lines 15657, words 57383, chars 417972
+	3665 tests (cmd_help;type_foo for HTML, charset, modify on add)
+
+=back
+
+=head2 2003-08-19 (Server/Client v2.22 build 21)
+
+=over 2
+
+=item added
+
+	added mail_from and mail_to to the config file
+
+=item fixed
+
+	changes some types for config values (URL, email)	
+	wcr lib: Total: lines 15418, words 56622, chars 412537
+	3633 tests (new config values)
+
+=back
+
+=head2 2003-08-18 (Server/Client v2.22 build 20)
+
+=over 2
+
+=item added
+
+	config value: initial_sleep in seconds to delay loading (for CD boot)
+
+=item fixed
+
+	updated the 'Dust' style to the new CSS scheme
+	Testcase.pm: don#t grab charset from parent if charset is already done
+	removed eval $try from "enter simple charset" code path
+	wcr lib: Total: lines 15418, words 56622, chars 412537
+	3628 tests (initial_sleep)
+
+=back
+
+=head2 2003-08-15 (Server/Client v2.22 build 19)
+
+=over 2
+
+=item fixed
+
+	Makefile.PL: require Math::BigInt v1.65 and Math::String v1.23
+	Makefile.PL: use lib 'lib' to find eventually bundles modules first
+	 (necc. for live demo cd release)
+	some more doc fixes (Glossary)
+	small tpl/header fixes for non-CSS browsers (like dillo)
+	make Black-and-White header.txt inherit from basecss.inc
+	small nits and doc in lib/Dicop.pm
+	updated the 'Bare' style to the new CSS scheme
+	forgot to add tpl/jobtypehelp.inc to MANIFEST
+	minlen is required for adding a jobtype
+	make sure the links to helptopics are lowercase (for NEW etc)
+	wcr lib: Total: lines 15403, words 56536, chars 411987
+	3627 tests (add jobtype requests)
+
+=back
+
+=head2 2003-08-13 (Server/Client v2.22 build 18)
+
+=over 2
+
+=item added
+
+	added NEW to the list of generated help files
+
+=item fixed
+
+	moved generic parts from header.txt into basecss.inc 
+	wcr lib: Total: lines 15393, words 56486, chars 411634
+	3627 tests (help requests)
+
+=back
+
+=head2 2003-08-12 (Server/Client v2.22 build 17)
+
+=over 2
+
+=item added
+
+	Link to delete object from "added.txt"
+
+=item fixed
+
+	Links in added.txt did not work for dictionary|grouped charset
+	writing charsets.def in case of grouped/dictionary was not working
+	fixed tpl/changecharset.txt 
+	spelling error in tpl/addcharset.txt wich inhibited adding
+	 a dictionary charset
+	wcr lib: Total: lines 15388, words 56444, chars 411358
+	3606 tests
+
+=back
+
+=head2 2003-08-11 (Server/Client v2.22 build 16)
+
+=over 2
+
+=item added
+
+	Chunk: set reason() on verify()
+	Data: give client's reason for a fail to Chunk::verify()
+	clientmap: form to terminate all clients
+	template for termination of all clients
+	Data: terminate_clients()
+	Request: cmd_terminate;type_clients
+
+=item fixed
+
+	The style list now includes the default style
+	pod2html seems to generate wrong href's for items with spaces
+	 in their name, so fix_html.pl fixes this in postprocessing
+	changing minlen of jobtype was borken
+	wcr lib: Total: lines 15388, words 56444, chars 411358	
+	3606 tests (failure reason on a chunk, terminate clients)
+
+=back
+
+=head2 2003-08-07 (Server/Client v2.22 build 15)
+
+=over 2
+
+=item added
+	
+	gen_help.pl - call fix_help.pl for all topics
+	gen_help.pl also generates helptopics.inc automatically
+	minlen setting to jobtype
+
+=item fixed
+
+	ammended UPGRADE, TODO, NEW
+	renamed Glossar.pod to Glossary.pod
+	a few pod nits that came up while doing pod2html
+	wcr lib: Total: lines 15309, words 56174, chars 409351	
+	3591 tests (cmd_help, jobtype's minlen)
+
+=back
+
+=head2 2003-08-06 (Server/Client v2.22 build 14)
+
+=over 2
+
+=item added
+
+	fix_help.pl - helper script to generate *.tpl from pod2html output
+	cmd_help;type_list - show list of available help topics
+	cmd_help;type_foo - show help for topic foo (converted w/ pod2html)
+	revamped HTML templates completely:
+	  * now smaller footprint of tpl/ dir (78 vs. 79 Kb)
+	  * cleaner HTML plus cleaner CSS (conforms much more to w3c)
+	  * large pages (like client list, job page w/ lotsa chunks)
+	    produce now smaller output
+	  * looks much better (now we can show screenshots w/o shame :o)
+
+=item fixed
+
+	"checklist is empty" text replaces checklist table in HTML output
+	wcr lib: Total: lines 15298, words 56126, chars 409068	
+	3589 tests (cmd_help)
+
+=back
+
+=head2 2003-08-04 (Server/Client v2.22 build 13)
+
+=over 2
+
+=item added
+	
+	make changing a user (name) work
+
+=item fixed
+
+	a couple of undef warnings when checking requests	
+	wcr lib: Total: lines 15240, words 55949, chars 407742	
+	3579 tests (change user)
+
+=back
+
+=head2 2003-07-29 (Server/Client v2.22 build 12)
+
+=over 2
+
+=item added
+
+	make changing a group and a jobtype work
+
+=item fixed
+
+	wcr lib: Total: lines 15233, words 55924, chars 407551	
+	3575 tests (change group/jobtype)
+
+=back
+
+=head2 2003-07-25 (Server/Client v2.22 build 11)
+
+=over 2
+
+=item fixed
+
+	changed msg 470 and 471 to 434 and 335, respectively
+	changed msg 463 to 436
+	added msg 437: cannot change item
+	added msg 463: You will be terminated
+	Client.pm: bump VERSION to 2.22
+	Client.pm: send a FAILED back to server if we can't download a
+		   necc. target file for one request
+	Speed factor was output as integer (but internally float)
+	3556 tests
+
+=back
+
+=head2 2003-07-24 (Server/Client v2.22 build 10)
+
+=over 2
+
+=item added
+
+	It is now possible to change the description of a job
+	Link from Change forms to delete form
+	client: read in 'via' as parameter from config, too
+
+=item fixed
+
+	Job.pm: speedup, flush chunklist only if it was really modified
+	better doc for clientstart in Client.pod	
+	Item.pm: document put() and that it does not call modified()
+	Data.pm: call $item->modified(1) after cmd_change
+	Data.pm: we need a decode() on data that does come in on cmd_change
+	3547 tests (job, testcase changes, modified on change)
+
+=back
+
+=head2 2003-07-18 (Server/Client v2.22 build 9)
+
+=over 2
+
+=item added
+
+	allow changing maxchunksize of a job via HTTP interface
+
+=item fixed
+
+	Job.pm: max_chunk_size renamed to maxchunksize
+	calculation of job finish time was bogus
+	wcr lib: Total: lines 15155, words 55550, chars 404917
+	3540 tests (maxchunksize changes)
+
+=back
+
+=head2 2003-07-17 (Server/Client v2.22 build 8)
+
+=over 2
+
+=item added
+	
+	allow changing of chunks
+
+=item fixed
+
+	removed needless internal field _fixed from Chunk
+	disallow changing anything except job/testcase/chunk
+	wcr lib: Total: lines 15155, words 55550, chars 404917
+	3534 tests (test changing chunk)
+
+=back
+
+=head2 2003-07-14 (Server/Client v2.22 build 7)
+
+=over 2
+
+=item fixed
+
+	make changing a testcase work
+	copy() of a request with empty parameter (like ;id_;) failed
+	deep recursion in copy() of an object with a _parent ref
+	when changing an object, make a trial change first, so that
+	 the object is unaltered if the change fails due to some error
+	wcr lib: Total: lines 15123, words 55453, chars 404117
+	3529 tests (test changing testcase)
+
+=back
+
+=head2 2003-07-11 (Server/Client v2.22 build 6)
+
+=over 2
+
+=item added
+
+	msg 470 and 471 (changed r/o key and illegal change to key)
+	link from job page to delete job
+
+=item fixed
+
+	t/security and t/data/request.t: failind due to cmd_change changes
+	Request: limit the values of cmd_change;type_job;status_
+	change an object is now implemented (tested only for jobs)
+	deleting a running job did not adjust the priorities on remaining job
+	wcr lib: Total: lines 15080, words 55325, chars 403098
+	3502 tests ()
+
+=back
+
+=head2 2003-07-10 (Server/Client v2.22 build 5)
+
+=over 2
+
+=item fixed
+
+	config: default chroot to ''
+		default minimum_rank_percent to 90
+	make a chroot of '' work (as opposed to undef chroot)
+	Data: status_config(): use Dicop::Server::Config::type() for ##type##
+	fixed config.tpl to not contain superflous quoting characters
+	die if errors in config file are encountered
+	fixed job.txt to contain link to change form
+	fixed job change form
+	wcr lib: Total: lines 15002, words 55090, chars 401195
+	3466 tests ()
+
+=back
+
+=head2 2003-07-04 (Server/Client v2.22 build 4)
+
+=over 2
+
+=item added
+
+	Dicop::Server::Config
+
+=item fixed
+
+	amended NEW
+	server start up errors and warnings are proper msg() now
+	Dicop::Config - fix up doc, make write()/read() internal and implement
+	 flush() (since _write() does not yet work, so doesn't flush())
+	wcr lib: Total: lines 14981, words 54944, chars 400281
+	3466 tests ()
+
+=back
+
+=head2 2003-07-03 (Server/Client v2.22 build 3)
+
+=over 2
+
+=item added
+
+	each job has a max_chunk_size setting (defaulting to 0). When set
+	 to 0, it will reduce the max. chunksize to 5 min in the first
+	 two hours of the job. After that the size will be what the
+	 client requested. Setting it to positive values > 0 will provide
+	 a max. cap for the chunksize, regardless of what the client
+	 requests. However, the global limits of the server still apply.
+
+=item fixed
+
+	Adding a job now prints the script output inside the HTML body
+	Check for and print $! and $? (error msg & code) when running a
+	 script (failed formerly silently inside chroot environment)
+	Job.pm: factored out script run into _convert_target()
+	Job.pm: removed needless $secret arg to find_in_checklist()
+	Data.pm: enforce the global min_chunk_size and max_chunk_size
+		 limits from the config file.
+	config: Changed maximum_chunk_size to max_chunk_size
+	config: Changed minimum_chunk_size to min_chunk_size
+	Data.pm: more default cfg settings to be on the safe side
+	cmd_status;type_config: show array refs (multiple values)
+				show type of settings
+	wcr lib: Total: lines 14726, words 54221, chars 394257
+	3460 tests ()
+
+=back
+
+=head2 2003-07-01 (Server/Client v2.22 build 2)
+
+=over 2
+
+=item fixed
+
+	some comments in Job.pm and one small BigInt vs. Scalar fix
+	3438 tests ()
+
+=back
+
+=head2 2003-06-23 (Server/Client v2.22 build 1)
+
+=over 2
+
+=item fixed
+
+	when adding jobtypes, the script name was tainted, so untaint it
+	protection against "Algorithmn Complexity Attack against Perl Hashes"
+	wcr lib: Total: lines 14632, words 53858, chars 391549
+	3438 tests ()
+
+=back
+
+=head2 2003-05-19 (Server/Client v2.21 build 16)
+
+=over 2
+
+=item fixed
+	
+	Fixed PREREQ in Makefile.PL
+	wcr lib: Total: lines 14620, words 53825, chars 391323
+	3438 tests ()
+
+=back
+
+=head2 2003-04-25 (Server/Client v2.21 build 15)
+
+=over 2
+
+=item fixed
+
+	fixed sorting by online, determine the online status better
+	retract DICOP_HANDLE => $DICOP_HANDLE change, old Perl's don't like it
+	check in read_dictionaries() that a dictionary file is still intact
+	wcr lib: Total: lines 14620, words 53825, chars 391323
+	3438 tests ()
+
+=back
+
+=head2 2003-04-24 (Server/Client v2.21 build 14)
+
+=over 2
+
+=item added
+
+	target/dictionaries/gen_dict.pl - generate dictionary checksum files
+	Data: read_dictionaries()
+
+=item fixed
+
+	when adding a dictionary charset, only use dictionaries with a .md5
+	 checksum file (to make sure the dictionaries are well-formed)	
+	lib/daemon: removed needless "use Carp::Heavy;"
+	lib/Dicop/Data/Request.pm: line 554, removed doubled my
+	Data: target_hash() => hash()
+	wcr lib: Total: lines 14532, words 53483, chars 389113
+	3438 tests ()
+
+=back
+
+=head2 2003-04-23 (Server/Client v2.21 build 13)
+
+=over 2
+
+=item added
+
+	error msg 505: internal error, cannot write file
+
+=item fixed
+
+	daemon: use max_request_time, not maximum_request_time
+	charsets.def was not written upon adding a dictionary charset
+	write new charsets.def after deleting a charset
+	Fixed cmd_status;type_charset;id_X a bit more (esp. for dictionaries)	
+	Testcase.pm: len|first|last as input for start/end/result works now
+	Files: issue error 505 instead of 500 to aid debugging
+	wcr lib: Total: lines 14528, words 53463, chars 388956
+	3438 tests (lib/daemon, cmd_status;type_charset)
+
+=back
+
+=head2 2003-04-22 (Server/Client v2.21 build 12)
+
+=over 2
+
+=item added
+
+	cmd_status;type_charset;id_X
+
+=item fixed
+
+	Data.pm: added missing doc for all subs (about 50% were missing)
+	lib/daemon: two warnings about undef
+	lib/daemon: errors.log vs. error.log
+	dicopd and dicopp: use $cfg, not $c for check_user_and_group()
+	Event.pm: log() remove \n from output
+	mailtxt_dir in config/server.config.sample
+	Client.pm: limit len of data sent to worker (prevent buffer overflows)
+	ammended NEW, TODO, Security.pod a bit
+	forgot to include no_templates.cfg into distr, data_mail.t failed thus
+	Dictionary.pm: dictionary file was not displayed in 'view charsets'
+	Testcase.pm: accept len|first|last as input for start/end/result
+	Dicop.pm: encode() did not encode \n
+	Various small fixes in CSS templates
+	wcr lib: Total: lines 14407, words 53015, chars 385371
+	3438 tests (lib/daemon, cmd_status;type_charset)
+
+=back
+
+=head2 2003-04-17 (Server/Client v2.21 build 11)
+
+=over 2
+
+=item fixed
+
+	instead of hardcoded string 'mail' use mailtxt_dir from config
+	TROUBLE: document that default config 'mailtxt_dir' was slightly wrong
+	on startup check that mail templates exists
+	mail template loading uses File::Spec
+	_construct() charsets in order of: simple, grouped and then dictionary
+	Files.pm: write out append/prepend sets for dictionary sets
+	do log_level composing earlier in _init()
+	lib/daemon: use main:: for (set|get)_uid
+		    check_chroot() was not properly used
+	Dictionary.pm: print out the append/prepend sets for display
+	wcr lib: Total: lines 14160, words 51899, chars 377582
+	3414 tests (mail template check)
+
+=back
+
+=head2 2003-04-16 (Server/Client v2.21 build 10)
+
+=over 2
+
+=item added
+
+	client: chroot, user and group settings (chroot doesn't work yet)
+	Client.pm: if no server port given, use 8888
+	Dictionary.pm: appends() to get count of append/prepend sets
+		       convert csetX, cposX, startX and cendX into set list
+
+=item fixed
+
+	wget.pm: added message() for --debug=2 mode in client
+	removed uptime and load display (doesn't work under chroot())
+	moved shared stuff between dicopd and dicopp to lib/daemon
+	dicopX: warn if chroot() is not enabled
+	dicopX: warn if not running as root, but chroot() is enabled
+	dicopp: use lib/daemon and updated to have the same features as dicopd
+	client: use lib/daemon for chroot() and user/group checks
+	lib/daemon: use File::Spec->catfile()
+	Request.pm: allow csetX, cposX, cstartX and cendX in adddictionaryset
+	wcr lib: Total: lines 14058, words 51570, chars 374970
+	3400 tests (add dictionary set with additional params, appends())
+
+=back
+
+=head2 2003-04-15 (Server/Client v2.21 build 9)
+
+=over 2
+
+=item added
+
+	more bits in Security.pod about perl, taint, user/group and chroot()
+	AUTOLOAD: allow users() and get_users()
+	error message 433: cannot delete last user
+	del_charset(): check whether we can safely delete a charset
+	del_user(): don't allow delete of last user
+	del_group(): clients/proxies might still need that group, so check it
+	setform.inc, setappform.inc
+	allow entry of append/prepend charsets for dictionary sets
+
+=item fixed
+
+	forgot to include profileform.inc into distr.
+	addcharset.txt: include positional set entry lines (shortening it)
+	msg number was doubled doubled when when logging logging it it
+	on error in get_foo(), crumble and call log_msg(430,...) to set error
+	error message 432: param's were wrong
+	del_client(): check whether we can del client, before cleaning chunks
+	del_client(): can always delete client
+	wcr lib: Total: lines 13690, words 50252, chars 365523
+	3379 tests (del_item() in data_del.t)
+
+=back
+
+=head2 2003-04-14 (Server/Client v2.21 build 8)
+
+=over 2
+
+=item added
+
+=item fixed
+	
+	re-corrected _adjust_size() to inc after as_number (reason is that in
+	dictionary chunks the first key isn't actually done, so the nr of done
+	  pwd's is 'one word * scale' less)
+	Data.pm: factored out actual search into _search()
+	Fixed search to work correctly
+	On search with 0 results, display text instead of empty table
+	status page: display user/group and chroot status
+	wcr lib: Total: Total: lines 13607, words 50004, chars 363450
+	3354 tests (test searching w/ diff. criterias)
+
+=back
+
+=head2 2003-04-10 (Server/Client v2.21 build 7)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	corrected _adjust_size() to inc before as_number (important for scale)
+	dicopd: set user/group before chroot() to avoid autoload of POSIX
+	3320 tests (dictionary scale)
+
+=back
+
+=head2 2003-04-09 (Server/Client v2.21 build 6)
+
+=over 2
+
+=item fixed
+
+	limit type in cmd_search to proxies|jobs|jobtypes|groups etc
+	limit case in cmd_search to (0|1)
+	fixed searchform.inc to have right type field
+	removed deltype and delid, search is sufficient
+	cmd and type were swapped in some error messages of type 458
+	title for search form and search result pages
+	wcr lib: Total: lines 13554, words 49790, chars 361800
+	3294 tests (cmd_search)
+
+=back
+
+=head2 2003-04-08 (Server/Client v2.21 build 5)
+
+=over 2
+
+=item added
+
+	support for cmd_search
+	chroot() capability from Net::Server (via option in config file)
+	host and background options in config file (via Net::Server)
+	##include_filename.inc## in templates is parsed and includes a file
+	status_table() uses generic _gen_table(), which is re-used by search()
+	show th esearch result (currently doesn't search properly, but shows
+	  simple all objects of the selected type) including links to view
+	  and delete for each object
+
+=item fixed
+
+	replaced <form ...> by ##include_authform.inc## in templates
+	replaced profile section ##include_profileform.inc## in templates
+	display some more fields when asking for delete confirmation
+	display search page
+	use a scalar as file handle
+	wcr lib: Total: lines 13531, words 49717, chars 361163
+	3236 tests (cmd: search, delid, deltype, status search)
+
+=back
+
+=head2 2003-04-07 (Server/Client v2.21 build 4)
+
+=over 2
+
+=item added
+
+	search page
+	"select type of object to delete" page
+	"select id of object to delete" page
+	added link to search and deltype pages in footer
+
+=item fixed
+
+	read_template() uses File::Spec
+	ammended NEW	
+	when asking for delete confirmation, display only limited information
+  	 like description, type etc
+	dicopd: print last error message in case generated content is empty
+		print die() message to client when process suddenly died
+	3199 tests
+
+=back
+
+=head2 2003-04-04 (Server/Client v2.21 build 3)
+
+=over 2
+
+=item fixed
+
+	added link to delete page from footer
+	removed needless tpl/style/default/* files
+	Total: lines 13352, words 49182, chars 356762
+	3203 tests
+
+=back
+
+=head2 2003-04-02 (Server/Client v2.21 build 2)
+
+=over 2
+
+=item fixed
+
+	small fixes regarding hashing and its error messages (mostly win32)
+	Client.pm: bumped $VERSION to 2.21
+	contrarily to popular belief, the results were not sorted properly,
+	  just like since build 35, because the intended sort routine (from
+	  build 43) never got used. Oups. Should have added a testcase...
+	sorting the clients by online status was not linked in clients.tpl and
+	 it didn't work, anyway
+	3203 tests (test for order of results page)
+
+=back
+
+=head2 2003-03-24 (Server/Client v2.21 build 1)
+
+=over 2
+
+=item added
+
+	Started v2.21
+
+=item fixed
+
+	len:0 or first:0 or end:0 cause problems, so deny them as input
+	3200 tests
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2003
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.de/> for more information.
+
+=cut

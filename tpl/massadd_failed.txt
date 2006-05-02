@@ -1,0 +1,18 @@
+
+<h1>DiCoP - Add ##type## failed</h1>
+
+<div class="text">
+
+<p>
+Only ##count## ##type## could be added. The errpr was:
+<br>
+<b>##error##</b>
+</p>
+
+<p>
+Use the back button of your browser and try again, or
+go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>
+

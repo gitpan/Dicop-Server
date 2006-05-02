@@ -1,0 +1,14 @@
+
+<h1><a class="h" href="##selfstatus_main##">DiCoP</a> - Added ##count## ##type##</h1>
+
+<div class="text">
+
+<p>
+##count## ##type## were successfully added.
+</p>
+
+<p>
+Go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>

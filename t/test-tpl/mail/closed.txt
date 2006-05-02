@@ -1,0 +1,25 @@
+# These comments will be stripped.
+# Field X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] Job ###jobid## ('##jobdescription##') finished - all keys checked
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: No comment
+
+Oops!
+
+On ##localtime## the job ##jobid## was closed, because all keys
+were checked without finding a result.
+
+The job got ##results## results, which you can view at the following URL:
+
+  ##selfstatus_results##
+
+Have fun!
+

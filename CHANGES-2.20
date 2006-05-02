@@ -1,0 +1,3488 @@
+
+=pod
+
+=head1 History revision for DiCoP up to version 2.20
+
+=head2 2003-03-13 (Server/Client v2.20 build 46)
+
+=item added
+
+=item fixed
+
+	prepared for release (speling fixes)
+
+=back
+
+=head2 2003-03-10 (Server/Client v2.20 build 45)
+
+=item added
+
+=item fixed
+
+	when comparing password/username, decode them first (wrecked havoc w/
+	  special chars in them)
+	when adding items, decode the browser information before inserting
+	wcr lib: Total: lines 13327, words 49060, chars 355856 
+	3196 tests
+
+=back
+
+=head2 2003-03-05 (Server/Client v2.20 build 44)
+
+=item added
+
+=item fixed
+
+	The client did not work under Win32 due to wrong cpuinfo extraction.
+	remove doc about Linux::Cpuinfo, since no longer necc. under Win32
+	Client.pm: print msg 101 when debug >= 1
+	Hash.pm: rehash when time stamp has changed (not only when it is
+		 newer), also rehash when size of file changed
+		 (fixes bug that Hash.pm stored _modified wrong and thus would
+		  sometimes not rehash file when it should)
+	Item.pm: cache string form, and upon next as_string(), re-use if poss.
+	wcr lib: Total: lines 13316, words 49043, chars 355588
+	3196 tests (item->as_string)
+
+=back
+
+=head2 2003-03-05 (Server/Client v2.20 build 43)
+
+=item added
+
+=item fixed
+
+	amended NEW
+	Client.pm: printed taken chunk time acc. included worker-update
+	link to clientmap from server detailed status page
+	note to reset single clients from reset all client form
+	fixed a undef warning in test.pl line 81 and reading of grouped sets
+	undef $crc in error case in Client.pm line 357
+	sort results in reversed order again (broken in build 35)
+	wcr lib: Total: lines 13305, words 49000, chars 355228 
+	3192 tests
+
+=back
+
+=head2 2003-02-20 (Server/Client v2.20 build 42)
+
+=item added
+
+	error message 432 - cannot delete object
+	check if we can delete a client and if not, return msg 432
+	Chunk.pm: del_verifier()
+
+=item fixed
+
+	Item.pm: 343 fix undef warning (root cause still unknown)
+	removed tpl/src/charsets.tpl and tpl/src/Charsets.pm from distribution
+	fixed a spurious "too late for -T" bug in untaining target data
+	wcr lib: Total: lines 13303, words 48951, chars 354972
+	3192 tests (del_verifier())
+
+=back
+
+=head2 2003-02-19 (Server/Client v2.20 build 41)
+
+=item added
+
+	reset result: include item id
+	reset all clients (w/ link to it from client map)
+
+=item fixed
+
+	Client.pm: use the name of the file you request for storing it,
+		   regardless what download name the server returns
+	clientmap: color on last chunk, not last connect
+	don't require password for confirm forms
+	added Dicop::decode() and made Client.pm use it on broken down chunk
+	fixed encode() to properly encode '+'
+	Client.pm: _fix_job_speed() - fix real speed of 0
+	in dicopd: print "started" and "initialized" messages to STDERR
+	cmd_reset counts as form, which means it works now fully
+	flag client as modified if reset() or discard_job() is called
+	link to "delete client" on client status page (works now)
+	Client.pm: encode() the filename we are going to ask the server for
+	extend characters considered safe in requested filenames
+	wcr lib: Total: lines 13242, words 48748, chars 353386
+	3188 tests (decode/encode, reset)
+
+=back
+
+=head2 2003-02-18 (Server/Client v2.20 build 40)
+
+=item added
+
+	Show client's last connect and chunk on single client status page
+	Added link to reset client from it's own status page
+	cmd_reset;type_client to reset client via web interface
+	tpl/reset.txt and reset() and reset_client() to use it
+	added count of online and offline clients in client status list
+	allow sorting client list by online/offline status, too	
+	cmd_status;type_clientmap - colored HTML map showing offline clients
+
+=item fixed
+
+	protect requests from browser for special chars (like "_") by encoding
+	  (this means you can enter data like "foo_bar" via the browser and it
+	   will work as expected, also the data will then travel in encoded
+	   form to the client, which will then pass it in decoded form to the
+	   worker, which fixes the "no _ in target file names" bug, too)
+	read_table_template: handle also <td>...</td> and remove the
+			     <--! start|end --> comments
+	upon reading data back in, fix the client's job speed values
+	adjust format of job_speed and failures for global get() method
+	forgot to change 'auth_user' & 'auth_pwd' in bottom of addcharset.txt
+	lock error log access in logger()
+	added newjob-ascii checkbox (and honour it) (fixes len|first|last
+		in newjob when adding a job (and tests for that))
+	check the type for cmd_confirm
+	read_table_template() uses File::Spec->catfile()
+	fixed bug that target file for testcases send inst. charsets.dev over
+	forms for changing something missed /g, causing leftover templates
+	cmd_form;type_proxy;id_N did not work (missing changeproxy.txt and bug
+	  in sub form() and sub option_list() re. 'proxys' vs 'proxies')
+	wcr lib: Total: lines 13195, words 48610, chars 352237
+	3153 tests (reset client, requests with newjob stuff, job w/ newjob,	
+		    confirm forms in datapm.t, clientmap)
+
+=back
+
+=head2 2003-02-16 (Server/Client v2.20 build 39)
+
+=item added
+
+	Client.pm: extract CRC from worker output, too
+
+=item fixed
+
+	added more to Security.pod
+	wcr lib: Total: lines 12938, words 47724, chars 345715
+	2803 tests
+
+=back
+
+=head2 2003-02-13 (Server/Client v2.20 build 38)
+
+=item added
+
+=item fixed
+
+	updated documentation in /pod quite a bit
+	removed unused event_* files from tpl/
+	removed unused event.lst lines from server.cfg.sample
+	2803 tests
+
+=back
+
+=head2 2003-02-11 (Server/Client v2.20 build 37)
+
+=item added
+
+	msg 751 - closed job (to log to server.log)
+
+=item fixed
+
+	Jobs status is FAILED, and not DONE when finding no result
+	test.pl: handle job description files and prefix/dictionaries
+	job target files for testcases are named testID.set
+	Job.pm: find_chunk() looped endlessly if a non-fitting VERIFY chunk
+                was in the chunk list
+	Job.pm: if _first_tobedone >= $cnt, job's status got wrongly set DONE
+	wcr lib: Total: lines 12935, words 47710, chars 345613
+	2803 tests (Job.pm)
+
+=back
+
+=head2 2003-02-10 (Server/Client v2.20 build 36)
+
+=item added
+
+	support also last:N in start/end for job
+	make first:N an alias for len:N in start/end (add job)
+
+=item fixed
+
+	fixed PREREQ
+	integrated and fixed more dictionary stuff
+	tie dictionary name to charset (and no longer to each job)
+	no need to enter dictionary name for adding job, but for add charset
+	msg 101 for dictionary done by File.pm, so don't do it in Data.pm
+	Files.pm: use File::Spec for path/filenames
+	wcr lib: Total: lines 12921, words 47612, chars 344927
+	2798 tests (dictionary test)
+
+=back
+
+=head2 2003-02-05 (Server/Client v2.20 build 35)
+
+=item added
+
+	Charset/Dictionary.pm: subclass of Charset.pm
+	Request.pm: allow type=dictionarycharset
+	File.pm: write out dictionary_stages and dictionary_mutations
+	tpl/addcharset.txt: added dictionary charset form
+	BUNDLE_CLIENT and bundle.pl to make client bundle easily
+
+=item fixed
+
+	Files.pm: write out dictionary charsets, too
+	removed double tests from requestpm.t and added more (styles, dict.)
+        Item.pm: write out zero Math::Strings as "", not ",0"
+	Data.pm: crumble() on _construct() errors
+		 eliminated status_results (adding keys() to Result.pm)
+	All: cleaning off of unnecc. "use Dicop::Event qw/crumble/" lines
+	Item.pm: id's of dictionary charsets count in same space than others
+	Testcase.pm: use "my $k" instead of $_
+	wcr lib: Total: lines 12879, words 47514, chars 343846
+	2776 tests (dictpm.t)
+
+=back
+
+=head2 2003-02-01 (Server/Client v2.20 build 34)
+
+=item added
+
+	Item.pm: get() handles all the different types and cases
+
+=item fixed
+
+	removed individual get() routines, since Item.pm handles these now
+	wcr lib: Total: lines 12549, words 46514, chars 336636
+	2719 tests (Item::get(), retaining bignumers)
+
+=back
+
+=head2 2003-01-31 (Server/Client v2.20 build 33)
+
+=item added
+
+	documented request-rate limit in TROUBLE
+
+=item fixed
+
+	Testcase.pm: set default prefix and dictionary to shut up warnings
+	Job.pm: use defaults() to cut C&P code
+	Data.pm: use File::Spec for config loading
+	Client.pm: msg 101 were not handled due to $1 vs. $2 and $2 vs. $3
+		   report malformed msg 101 and log them
+	increase rate limit to 30 connects per hour
+	increased the margin for VERIFY chunks by a factor of two
+	wcr lib: Total: lines 12655, words 46964, chars 340341
+	2697 tests (msg 101 handling, prefix/dictionary in testcases)
+
+=back
+
+=head2 2003-01-29 (Server/Client v2.20 build 32)
+
+=item added
+
+	Dicop::Event: give_up() - crumble and croak() afterwards
+
+=item fixed
+
+	forgot to move in code: msg 701 => 700, 700 => 750
+	forget to increment build number
+	use give_up() to prevent prevent double double error error msgs msgs
+	better error messages when data files are missing
+	2683 tests
+
+=back
+
+=head2 2003-01-21 (Server/Client v2.20 build 31)
+
+=item added
+
+=item fixed
+
+	reworked NEW, UPGRADE, BUGS
+	msg 701 => 700, msg 700 => 750
+	logs msg >= 750 into server.log, not error.log
+	use File::Spec->catfile() for logfile name
+	Cache.pm: fix remaining bugs (due to Dicop::time vs Dicop::time())
+	Cache.pm: no need to use Exporter, bump version
+	Cache.pm: ignore undef $key
+	2683 tests
+
+=back
+
+=head2 2003-01-17 (Server/Client v2.20 build 30)
+
+=item added
+
+	Cache.pm: touch() to implement LRU
+
+=item fixed
+
+	Request.pm: use Cache to chache req. strings (make check much faster)
+	Cache.pm: use Dicop::time() instead of time()
+	in case of unknown peer address, log [unknown]
+	2671 tests
+
+=back
+
+=head2 2003-01-16 (Server/Client v2.20 build 29)
+
+=item added
+
+	dump verifier list into mail when sending bad_result.txt
+	tpl/mail/verify_error.txt.sample for internal errors on verify
+	Chunk.pm: $chunk->verified_by($client)
+
+=item fixed
+
+	Event.pm: recursion in handler() due to crumble() vs. die()
+	Job.pm: don't 'find' chunks that were verified by the same client
+		(produced error -3 upon chunk's return)
+		print "(already done)" in case we have 100%, not 0%
+	Data.pm: error msg 414 and 415 were accidentily swapped
+		 removed some unecc. return statements for a trifle more speed
+		 log() prints IP and message code to log file
+		 log msg(700) (result, chunkid, jobid) for all SOLVED reports
+		 check_list() didn't work/didn't print msg w/ empty check list
+		 accidentily used log_msg() instead of msg() for work requests
+	Checklist.pm: also inherit all get_xxx() methods, cut down C&P
+	chunkpm.t and chunkcl.t include chunk.inc to cut down C&P
+	2671 tests (handler(), verified_by(), verify_error, verified_by())
+
+=back
+
+=head2 2003-01-15 (Server/Client v2.20 build 28)
+
+=item added
+
+=item fixed
+
+	Job.pm: _construct() makes sure prefix and dictionary are defined
+	Job.pm: rounding in percent_done() was botched
+	2635 tests (percent_done())
+
+=back
+
+=head2 2003-01-14 (Server/Client v2.20 build 27)
+
+=item added
+
+=item fixed
+
+	-f $file on non-existant files is whacky on win32
+	"binmode DICOP_HANDLE;" needed for win32 (worker download etc)
+	"Status Clients" now about 50-200% faster due to less BigFoo math
+	error message 604 contains now workername, instead of garbage
+	Client.pm: usage of $_ when $req was meant blew up on win32 
+	           "$path/$wname" vs. "$wname" bug
+	dictionary/prefix setting wasn't fully working (esp. in testcases)
+	2632 tests
+
+=back
+
+=head2 2003-01-13 (Server/Client v2.20 build 26)
+
+=item added
+
+	Support notation "len:X" (where X = 1..) for start/end in start newjob
+	use Math::BigInt::GMP (if installed) in dicopd, dicopp, server
+
+=item fixed
+
+	cache "Math::BigFloat->new(100)" in Job.pm for speed
+	use more digits accur. when calculating when job will be done
+	package signed with key Dicop - id 0AE0B231 
+	2632 tests
+
+=back
+
+=head2 2002-11-29 (Server/Client v2.20 build 25)
+
+=item added
+
+	Client.pm: architecture() plus doc
+
+=item fixed
+
+	doc about targethash
+	Client.pm: call _worker_name() only once
+	fix client.pm test with hardcoded "linux" string to use architecture()
+	2632 tests (architecture())
+
+=back
+
+=head2 2002-11-26 (Server/Client v2.20 build 24)
+
+=item added
+
+	document bug that under windows file hashing seems not to work at all
+
+=item fixed
+
+	Data.pm: don't send hash for targetfiles as targethash, but as msg 101
+	Client.pm: no longer checks for targethash (already handles msg 101)
+	2631 tests (nothing changed)
+
+=back
+
+
+=head2 2002-11-26 (Server/Client v2.20 build 23)
+
+=item added
+
+=item fixed
+
+	Client.pm: send no result for DONE chunks
+	Server: check for result on DONE chunks => error msg 416
+	messages 420 and 421 relocated to 430 and 431
+	requests w/ errors were evaluated, this caused return of wrong msg
+	normalize "trusted" to be 0 or 1
+	trusted setting on adding clients is optional (able to turn it off)
+	2631 tests (error message on crc empty, DONE w/ result etc)
+
+=back
+
+=head2 2002-11-25 (Server/Client v2.20 build 22)
+
+=item added
+
+	support for checking build number of client
+	Client.pm: send build number
+	save peeraddress and include it as ##peeraddress## into email
+
+=item fixed
+
+	add colors for BAD and VERIFY chunks
+	typo on Data.pm regarding loading (borken in build 21)
+	Chunk.pm::_construct(): get_client(0) (borken in build 21)
+	print "took X seconds" to 3 digits after dot (not 4)
+	missing ->{cfg} in client
+	creating the verified list had a surplus scalar
+	error message 404 (wrong client) was never issued (check was missing)
+	2630 tests (build number check, message 404)
+
+=back
+
+=head2 2002-11-21 (Server/Client v2.20 build 21)
+
+=item added
+	
+	Chunk: add_verifier() cross check input
+	Chunk: read in and write out list of verifiers
+	Data.pm: read in checklist of job if it exists
+
+=item fixed
+
+	Chunk.pm: token set by issue(), not by caller afterwards
+	fixed a regexp buglet in Dicop::Item::from_string()
+	as_string() can skip empty items
+	Chunk: get('verified') returns proper string or undef for empty list
+	       add_verifier() stores status (DONE, SOLVED) AND result
+	       verify() return status(BAD) on bad add_verifier()
+	TODO file
+	Data.pm: use File::Spec for creating filenames
+	File::Spec into Makefile.PL
+	2607 tests (chunk: as_string, from_string, token, verified, verify())
+
+=back
+
+=head2 2002-11-20 (Server/Client v2.20 build 20)
+
+=item added
+
+=item fixed
+
+	finally fixed that users added via HTTP wouldn't be able to
+	 authenticate to submit forms which require username and password
+	changed 'auth_user' to 'auth-user' and 'auth_pwd' to 'auth-pass'
+	2587 tests (cmd_add;type_user, password mismatch, authenticate users)
+
+=back
+
+=head2 2002-11-19 (Server/Client v2.20 build 19)
+
+=item added
+
+	Chunk.pm: is_open()
+	subclass Dicop::Data::Chunk::Checklist.pm
+
+=item fixed
+
+	Job.pm: get_chunk() also looks into checklist
+		when check_also() puts chunk into checklist, set job to $self
+		bless chunks in checklist to Dicop::Data::Chunk::Checklist
+		store result for chunks in checklist (needed for shrink)
+		don't shrink chunks in checklist immidiately
+		shrink chunks when they are issued out of the checklist
+		find_chunk_in_checklist => find_in_checklist
+		find_in_checklist uses $client, $now and $checkage
+	moved shrink() to subclass Checklist.pm (only necc. there)
+	forgot to add t/client2.cfg to MANIFEST
+	2568 tests ($chunk->is_open(), get_chunk, check_also, Chunk::Checklist)
+
+=back
+
+=head2 2002-11-18 (Server/Client v2.20 build 18)
+
+=item added
+
+	addclient.tpl: checkbox for trusted client
+	Chunk.pm: sub shrink() plus doc
+	Job.pm: keep checklist, clean it, add chunks to it, del chunks from it
+	Item.pm: copy() (deep copy)
+
+=item fixed
+
+	Request.pm: require trusted setting for adding client
+	Chunk.pm: documented merge(), fixed doc fuer border()
+	Item.pm: as_string(): can handle fields that are arrays
+	Job.pm: missing doc for subroutines
+	2480 tests ($chunk->shrink(), item->copy(), as_string w/ arrays
+	            checklist feature)
+
+=back
+
+=head2 2002-11-14 (Server/Client v2.20 build 17)
+
+=item added
+
+=item fixed
+
+	Client.pm: send back a (dummy) crc value
+	Chunk: compare CRC as string, not numeric
+	Request.pm: make 'crc' mandatory on reporting results
+	uninitialized warnings in Request::check_empty()
+	fixed some problems with VERIFY handling
+	use config fields 'verify_done_chunks' and 'verify_solved_chunks'
+	 instead of hardcoded '1'
+	2446 tests (reporting chunk twice w/ VEIRFY)
+
+=back
+
+=head2 2002-11-13 (Server/Client v2.20 build 16)
+
+=item added
+
+	'darwin' as supported architecture
+	worker/darwin
+	added README.win32, README.linux, README.darwin
+
+=item fixed
+
+	Request.pm: check 'target' and 'rank' not being empty on adding job
+		    allow prefix, prefixinascii and dictionary on adding job
+	2440 tests (test for unknown architecture causing error, Requests.pm)
+
+=back
+
+=head2 2002-11-12 (Server/Client v2.20 build 15)
+
+=item added
+
+	Settings "prefix", "dictionary" and "prefixinascii" to addjob.txt
+
+=item fixed
+
+	write_job_target() create proper return value, handle errors
+	send to client JOBID.set instead of charset ID if have job target
+	add charset=ID into JOBID.set file
+	Dicop::Files is package Dicop::Data
+	When we don't have work for client, just sent msg 301 (skip msg 101)
+         (but do send some debug output if a worker was missing)
+	described bug with hardcoded "target" preventing target_dir working
+	print "took X seconds" to 3 digits after dot
+	CLIENT.readme, NEW
+	2430 tests (Dicop/Files, JOBID.set, msg 301 alone, check_age(BAD))
+
+=back
+
+=head2 2002-11-11 (Server/Client v2.20 build 14)
+
+=item added
+
+=item fixed
+
+	Dicop.pod about requesting work/test, file hashes etc
+	message 101 in client handling to accept msg 101 for specific
+	 request and skip only these if some files are missing
+	send dictionary and additional target file as msg 101 with specific
+	 request id to client (so that client can ignore jobs it was not able
+	 to get these additional files for)
+	hashes for additional files are stored in target_hash, not worker_hash
+	create/sent JOBID.set w/ msg 101 when prefix or dictinary are present
+	sent dictionary file hash and name as msg 101 if present in job
+	Data:Job take arguments for prefix and dictionary
+
+=back
+
+=head2 2002-11-06 (Server/Client v2.20 build 13)
+
+=item added
+
+	write_job_target: write prefix and dictionary name to .tgt file
+	explanations to Files.pod for files used by client
+	fleshed out Security.pod a bit more to describe actual implemented
+	 security stuff
+
+=item fixed
+
+	moved writing of charsets.def and JOBID.tgt to Dicop::Files.pm
+	speling of comments in charsets.def
+	client init assign false to "trusted" so default is untrusted client
+	2422 tests (client trusted)
+
+=back
+
+=head2 2002-11-06 (Server/Client v2.20 build 12)
+
+=item added
+
+	5 config variables:
+		verify_every_done_chunks
+		verify_done_chunks
+		verify_solved_chunks
+		verify_trusted_done_chunks
+		verify_trusted_solved_chunks
+		verify_done_chunks_with_trusted
+		verify_solved_chunks_with_trusted
+
+=item fixed
+
+	show request handle time in fractions by using Time::HiRes
+	Chunk::check_age(): return -1 if not ISSUED, FAILED, VERIFY or BAD
+			    support for chunks in BAD or VERIFY state 
+			    call clear_verifiers()
+	find_chunk() to handle VERIFY (and too big VERIFY) chunks properly 
+	2421 tests (check_age, find_chunk())
+
+=back
+
+=head2 2002-11-05 (Server/Client v2.20 build 11)
+
+=item added
+
+	chunk status VERIFY, BAD
+	chunks can be verified by more than one client, these need to agree
+	 on the result and the (not yet computed) checksum for this chunk
+	 before it is accepted as DONE or SOLVED
+	messages 414 (DONE) and 415 (SOLVED) to signal a VERIFY failure
+	Dicop::Data::Client::punish() for VERIFY failures
+	tpl/mail/bad_result.txt.sample
+	send mail on bad results
+
+=item fixed
+
+	Dicop::Data::job->report_chunk() was called w/ wrong params
+	Dicop::Data::job->report_chunk() now only takes chunk and "took" time
+	2405 tests (VERIFY, BAD, verifier(), clear_verifier(), punish(), etc)
+
+=back
+
+=head2 2002-11-04 (Server/Client v2.20 build 10)
+
+=item added
+
+	client: support for parameters 'retries' and 'chunk_count'
+	use Time::HiRes to track flushtime
+
+=item fixed
+
+	rewritten NEW
+	2385 tests (chunk_count and retries)
+
+=back
+
+=head2 2002-10-31 (Server/Client v2.20 build 9)
+
+=item added
+
+
+=item fixed
+	
+	The owner of an item (most import. for jobs) is set from admin/user
+	2365 tests (duplicating owner field on newjob, reading owner field)
+
+=back
+
+=head2 2002-10-07 (Server/Client v2.20 build 8)
+
+=item added
+
+	changeuser.txt
+
+=item fixed
+
+	add user has a field to repeat pwd (to guard against misspelings)
+	adding user displayed non-hexified salt and pwdhash (these two are now
+        skipped)
+
+=back
+
+=head2 2002-09-05 (Server/Client v2.20 build 7)
+
+=item added
+
+=item fixed
+
+	prime_gen had bsqrt() twice and forgot to add 2
+
+=back
+
+=head2 2002-09-04
+
+=item added
+
+=item fixed
+
+	Dicop.pm: can export simple_ago()
+		  ago() and simple_ago() convert BigInt's to scalars:
+		  cmd_status;type_clients (all clients) is now about 20% faster
+	2362 tests (ago()/simple_ago() with BigInt/BigFloat)
+
+=back
+
+=head2 2002-09-02 (Server/Client v2.20 build 6)
+
+=item added
+
+=item fixed
+
+	Data/Client.pm: forgot to convert some subs calls to the _foo() style
+			print $res->message() on debug for better diagnostics
+	client: print build number
+
+=back
+
+=head2 2002-08-30 (Server v2.20 build 5)
+
+=item added
+
+=item fixed
+
+	Data/Client.pm: count_failures init {failures}->{jobtype} to []
+			remove needless call to speed_factor() in jobspeed()
+
+=back
+
+=head2 2002-08-29 (Server v2.20 build 4)
+
+=item added
+
+	dicopp does not start if config is for dicopd, and vice versa
+
+=item fixed
+	
+	Chunk.pm: removed unneeded _check_checksum()
+		  token() does no longer call _checksum()
+		  _checksum(): don't include 'token' in checksum
+	Dicop: random() uses a buffer of 4K to make calls to it much faster
+	2354 tests (dicopd/dicopp)
+
+=back
+
+=head2 2002-08-28 (Server v2.20 build 3)
+
+=item added
+
+	dicopp - proxy deamon (opposed to dicopd)
+	Dicop::random() to use /dev/urandom or rand()
+
+=item fixed
+
+	Certain calls to rand() (salting, chunk secrets) replaced by random()
+	Dicop::Proxy is real base class of Dicop::Data
+	All Client.pm's method are internal except new/work, so mark with '_'
+	test for Dicop::Client::worker_name was useless, added scalar test
+	2353 tests (fixed proxy tests, fixed client tests, random)
+
+=back
+
+=head2 2002-08-27 (Server v2.20 build 2)
+
+=item added
+
+	Job.pm: find_chunk tracks the first open chunk to make it faster
+		merge_chunk modifies first_tobedone accordingly
+                v2.20 is now finally O(1) in finding work for a client:
+        Benchmark on a PIII 500 calling N times find_chunk() on an empty job:
+	
+	           N: | 100  500 1000  2000  4000
+	--------------|---------------------------
+	v2.18         | 2.4 15.7 40.8 121.7 397.9
+	v2.19         | 2.2 12.1 26.7  64.5 168.3
+	v2.20 build 2 | 2.1 10.8 21.5  44.3  89.4 (in seconds for all N calls)
+
+=item fixed
+
+	server: try another job instead of sending error when worker is missing
+	test for existing worker _before_ finding a chunk for the client
+	Event::msg: '90 foo' => '090 foo'
+	can not => cannot in messages.txt
+	2349 tests (find_chunk, merge_chunks, request_work, retry, Event)
+
+=back
+
+=head2 2002-08-26 (Server v2.20 build 1, Client 2.20)
+
+=item added
+
+	make sure server has a trailing / to avoid "192.168.1.1:8888?params"
+
+=item fixed
+
+	Client: stop working on hard errors (allowing outer script to fetch
+		another (possible newer) client archive and try again)
+	Client: fixed buglet with file hashes (warnings and needless new())
+	Client: fixed bug in rewritten handle_responses for code >= 500
+	2262 tests (handle_response)
+
+=back
+
+=head2 2002-08-26 (Server v2.19 build 1, Client 2.20)
+
+=item added
+
+=item fixed
+
+	various speling and grammar mistakes. fixed in INSTALL
+	sub {} vs sub { @_; } in data2pm.t caused tests to fail under v5.8.0
+
+=back
+
+=head2 2002-08-22
+
+=item added
+
+        support of grouped charsets mentioned in NEW
+
+=item fixed
+
+	various spellings and doc nits
+	various pm files: Removed some useless EXPORT and EXPORT_OK
+			  upped version
+	some <TABLE> tags in add.*.txt were misplaced/missing
+	some (older/newer) wget have different output formats, so parse them
+
+=back
+
+=head2 2002-07-12
+
+=item added
+
+	build number and showing it in cmd_status to avoid version confusion
+	dicopd: display build nr
+		take first arg as config file name (needs better handling)
+	finished writing UPGRADE
+
+=item fixed
+
+	fix for windows: (and perl workers) "./perl test.pl" isn't going to fly
+			 check for -e $wname.exe failed due to missing path
+	renamed workers test and prime to test.pl and prime.pl
+	missing <table> in addtestcase.txt
+	Job.pm: Using Math::BigInt 1.60 instead of v1.59, the time to create
+		the list of full jobs is roughly halved.
+         The time in seconds to handle a work request N times in a row
+         (creating a longer and longer chunklist):
+                N =  500   1000   2000
+         ------------------------------
+	  v1.59:   0.050  0.052  0.058
+	  v1.60:   0.047  0.048  0.050
+
+	typo in addclient.txt
+	2258 tests (build)
+
+=back
+
+=head2 2002-07-08
+
+=item added
+
+	documented via=wget and via=wget,proxy=OFF in Client.pod
+	support for --via=wget,proxy=OFF
+	test worker for armv4l
+
+=item fixed
+
+	two typos in HTML templates
+	Client: upon hard error, clear send queue and refill with ident & work
+	don't warn for undef as IP, but return 0 to indicate invalid
+	added msg 410, no such testcase and avoided hard error on this
+	shuffled some error messages (from all failed to single failed etc)
+	(469 => 411, 470 => 412, 472 => 413, 471 => 469)
+	allow ./worker and ./target for file requests, too
+	Dicop::h2a: h2a('0') and a2h('0') failed
+	2257 tests ((il)legal file requests, wget with parameters, a2h, h2a)
+
+=back
+
+=head2 2002-07-05
+
+=item added
+
+
+=item fixed
+
+	tpl/styles/Default/footer.txt was missing link to view testcases
+
+=back
+
+=head2 2002-07-04
+
+=item added
+
+
+=item fixed
+
+	Data::authenticate_user()
+	Adding users failed with error 455, now works finally
+	Request.pm: cmd_add;type_user and tests for it
+	adduser.tpl, addclient.tpl and addproxy.tpl: TYPE=TEXT => TYPE=PASSWORD	
+	Job.pm: streamlined percent_done() a bit
+		find_chunk() checks chunk ages only once every minute.
+         The time in seconds to handle a work request N times in a row
+         (creating a longer and longer chunklist):
+                N =  500   1000   2000
+         ------------------------------
+	  Before:  0.058  0.072  0.098
+	  After:   0.050  0.052  0.058
+
+        0.05 seconds is probably a constant overhead per connect.
+
+	1735 tests (Job check age shortcut, add user, authenticate user)
+
+=back
+
+=head2 2002-07-02
+
+=item added
+
+	tpl/user.tpl
+
+=item fixed
+
+	dicopd: flush data outside of request time frame
+	warning about non-existent key 'speed' when sorting proxy list
+	non-existing profile dir is silently ignored
+	password entry fields in forms are <INPUT TYPE=PASSWORD ...> now
+	added authenticate-yourself section in addcharset.txt
+	added authenticate-yourself sections in all the change forms
+	added a 'pwd' field to tpl/addproxy.txt since each proxy needs a pwd
+	max_request_time => maximum_request_time, dicopd now really uses it
+
+=back
+
+=head2 2002-07-01
+
+=item added
+
+	different rate-limit for proxies (every 5s instead every 5m)
+
+=item fixed
+
+	further fixes in authentication (check first clients, then proxies)
+		status requests don't need auth record
+	fixed sample configs to have 'any', and not 'all' for net definitions
+	fixes in AUTOLOAD, and Dicop/Data/Proxy.pm
+	test that an info request listing a proxy (vs. client) fails
+        Security.pm: single IPs are a valid "net" 
+	die if invalid nets are discovered in config at startup time
+	finally fixed the uptime/loadavrg bug and the testcases for it
+	1730 tests (proxy stuff, authentication, find_title), all tests pass
+
+=back
+
+=head2 2002-06-27
+
+=item added
+
+=item fixed
+
+	Data.pm:  parse config values for allow/deny and check them
+                  handle_request reworked to cover new authentication stuff
+	Security: handle nets "any" and "none"
+		  fix bug in ip_is_in_net, add test
+	die if config file reading fails instead of merely ignoring error
+	1690 tests (authentication), but 49 tests fail
+
+=back
+
+=head2 2002-06-26
+
+=item added
+
+	Security.pm: ip_is_in_net_list and tests for it
+
+=item fixed
+
+	When a client sends auth and info requests, check that it is a proxy
+         (die with message 456 otherwise)
+	dicopd: don't read more than 32 KByte for POST requests
+	typo in adduser.pl
+	1708 tests (is_in_net_list)
+
+=back
+
+=head2 2002-06-24
+
+=item added
+
+=item fixed
+
+	target field is stripped of trailing/leading spaces before check
+
+=back
+
+=head2 2002-06-21
+
+=item added
+
+	Security.pm: (action, pwd) = $self->evaluate_request (request)
+	loop over requests and evaluate them to check for auth and pwd
+	pwd field in addclient.txt
+
+=item fixed
+
+	"Use of uninitialized value ... at lib/Dicop/Data/Chunk.pm line 387."
+	Spelings and nits in various classes
+	1708 tests (Security: evaluate_request)
+
+=back
+
+=head2 2002-06-17
+
+=item added
+
+	request: cmd_status;type_users
+
+=item fixed
+
+	die if no users defined (to force running adduser.pl before startup)	
+	global @objects => @MY_OBJECTS
+	some qw/jobs clients etc/ converted to @_MY_OBJECTS
+	1680 tests (Dicop::Data die, profile in form commands)
+
+back
+
+=head2 2002-06-13
+
+=item added
+
+	tpl/profiles/ with some examples, glossar entry, section in Server.pod
+	Files.pod
+
+=item fixed
+	
+	template files include profile section to select a profile
+	Request.pm: allow profile for cmd_form;type_foo and cmd_add;type_user
+
+=back
+
+=head2 2002-06-12
+
+=item added
+
+	adduser.txt (for adding administrator acounts)
+	Dicop::Data::User
+
+=item fixed
+
+	1598 tests
+
+=back
+
+=head2 2002-06-11
+
+=item added
+
+	Security.pod
+	authenticate_user
+
+=item fixed
+
+	removed needless globals in Config.pm
+	require Linux::Cpuinfo 1.5, Math::BigInt 1.59
+	update CLient to use the new Linux::CpuInfo NoFatal
+	template files include input fields for username and password
+	1595 tests
+
+back
+
+=head2 2002-06-07
+
+=over 2
+
+=item added
+
+	secret.cfg.sample
+	adduser.pl
+
+=item fixed
+	
+
+=back
+
+=head2 2002-06-06
+
+=over 2
+
+=item added
+
+
+=item fixed
+	
+	wget.pm: works fully now (inclusive 'faked' post())
+	added armv4l to allowed architectures
+	fixes in Client.pm to handle msg 101 properly (hash additional files)
+	only prefix "perl " if worker ends in ".pl"
+	chdir to worker dir and execute worker there
+
+=back
+
+=head2 2002-06-02
+
+=over 2
+
+=item added
+
+
+=item fixed
+	
+	tests for perl test worker from workerframe
+	fixed buglets in pure-perl testworker to make it pass all tests 
+	1587 tests
+
+=back
+	
+=head2 2002-05-31
+
+=over 2
+
+=item added
+
+
+=item fixed
+	
+	test worker reads in charsets.def (lib/Charsets.pm dropped)
+	1280 tests
+
+=back
+	
+=head2 2002-05-29
+
+=over 2
+
+=item added
+
+	Security.pm: valid_ip, valid_net, ip_is_in_net and tests for these
+	request_(test|work): send msg 101 for charset def's incl. hash & tests
+
+=item fixed
+	
+	1283 tests
+
+=back
+
+=head2 2002-05-22
+
+=over 2
+
+=item added
+
+	tests for generating charset definition file
+
+=item fixed
+	
+	generating charsets.def: write in hex, do grouped sets properly
+	991 tests
+
+=back
+
+=head2 2002-05-21
+
+=over 2
+
+=item added
+
+	doc for config entries:
+	 allow_admin, allow_work, allow_status, allow_stats, deny_admin,
+	 deny_work, deny_status, deny_stats
+	some tests for allow/deny features
+
+=item fixed
+	
+	991 tests
+
+=item back
+
+=head2 2002-05-16
+
+=over 2
+
+=item added
+
+	--arch for client (for armv4l since it is detected as linux)
+
+=item fixed
+
+	Client.pod
+
+=back
+
+=head2 2002-05-14
+
+=over 2
+
+=item added
+
+=item fixed
+
+	README.client
+
+=back
+
+=head2 2002-05-10
+
+=over 2
+
+=item added
+
+        Dicop::Client::wget
+        client: option --via for wget or LWP (defaults to LWP)
+
+=item fixed
+
+        Dicop::Data: better diagnostics if file in data/ doesn't exist
+        dicopd: END block can cope with non-existant $data object
+        client: better diagnostics if no config file at all
+        Dicop.pm: sub () instead of use constant for older Perls
+        client-side:
+          pm's require 5.004 (not 5.005) and don't use base anymore
+          Item.pm no longer uses Math::BigInt and Math::String
+          Client.pm: no longer needs Math::String (replaced by simple ++)
+          Client.pm: require Dicop::Client::$via at runtime
+        removed useless shebang lines in packages
+        Client.pm: no longer uses File::Spec (bad? good?)
+
+=back
+
+=head2 2002-05-08
+
+=over 2
+
+=item added
+
+=item fixed
+
+	added some more proxy doc
+
+=back
+
+=head2 2002-04-30
+
+=over 2
+
+=item added
+
+=item fixed
+
+	moved LWP dependand code to extra sub-object to allow alternatives
+
+=back
+
+=head2 2002-04-23 (Server v2.18, Client 2.18)
+
+=over 2
+
+=item fixed
+
+	The LICENSE is now GPL Version 2 - Yeah!
+	prepared for release
+
+=back
+	
+=head2 2002-03-19
+
+=over 2
+
+=item added
+
+	sort returned testcases on jobtype
+	add job: enter 'len:n' for first string with length n for start/end
+
+=item fixed
+
+	addcharset.txt: fixed entry for default charset in grouped
+	979 tests
+
+=back
+
+=head2 2002-03-18
+
+=over 2
+
+=item added
+	
+	add_item: check for illegal item types
+	add_item: call generate_includes
+
+=item fixed
+
+	improved doc coverage and added some new tests
+	Dicop::Proxy is own package (for coverage analysis), removed method
+	 name prefixes, init() => new(), added more doc
+	Display simple charsets better, display grouped charsets correctly
+	add_item: groupedcharset => charset (add grouped charset did not work)
+	976 tests (relocated 192 workerframe tests to own tarball)
+
+=back
+
+=head2 2002-03-14
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Dicop::Data::Request: accept cmd_add;type_groupedcharset and friends
+	don't write out "style"
+	1152 tests
+
+=back
+
+=head2 2002-03-13
+
+=over 2
+
+=item added
+
+=item fixed
+
+	charsets.tpl to correctly generate grouped sets
+	added tests for grouped charsets via pwdtest and worker.t
+	1149 tests
+
+=back
+
+=head2 2002-03-11
+
+=over 2
+
+=item added
+
+	cmd_form;type_charset: ability to add grouped charsets
+	Dicop::Data::Charset: support grouped charsets
+
+=item fixed
+
+	t/datapm.t: use loop for "no leftover templates check", cuts down size
+	added "leftover template" tests for cmd_form;type_foo
+	added test for loading a charset of type "grouped"
+	Dicop::option_list can handle multiply occurances of SELECT="name"
+	some more doc (option_list, Charset)
+	1120 tests, coverage: stmt 80%, pod 65%
+
+=back
+
+=head2 2002-03-05
+
+=over 2
+
+=item added
+
+=item fixed
+
+	added tests and pods to increase coverage
+	Coverage: stmt 76%, pod 65%
+
+=back
+
+=head2 2002-03-04
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Proxy: done_keys was unitialized
+	added tests and pods to increase coverage
+	Coverage: stmt 76%, pod 59%
+
+=back
+
+=head2 2002-02-27
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Fixed bug in Chunk.pm that broke it under Math::String 1.16 and newer
+	Require Math::String 1.17 and Math::BigInt 1.51
+	Some protection against NaN values
+	Write out values like 1.11 without quotes
+	Coverage (using Devel::Cover): stmt 73%, pod 56%
+
+=back
+
+=head2 2002-02-25
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Loading of messages < 100 (leading zeros)
+	msg 505 and 506 => 90 and 91 so that client ignores it
+	Client: if more than one download locations, use one at random
+
+=back
+
+=head2 2002-02-22
+
+=over 2
+
+=item added
+
+	documented cmd_request;type_file in Dicop.pod
+	added: multiply file_server lines in config are ok
+	tests for file_server and cmd_request;type_file
+	
+=item fixed
+
+	doc about file_server in config
+
+=back
+
+=head2 2002-02-19
+
+=over 2
+
+=item added
+	
+=item fixed
+
+	sleep_factor in client was accidentily disabled
+	CHANGED => CHANGES
+	Error: "email connection timed out" is now proper error message
+
+=back
+
+=head2 2002-02-18
+
+=over 2
+
+=item added
+	
+	restrict_clients and deny_clients in proxy.cfg and doc about this
+
+=item fixed
+
+=back
+
+=head2 2002-02-15
+
+=over 2
+
+=item added
+	
+	version number increased to 2.18
+
+=item fixed
+
+=back
+
+=head2 2002-02-14 (Server v2.17, Client 2.17)
+
+=over 2
+
+=item added
+	
+=item fixed
+
+	fixed documentation a great deal
+
+=back
+
+=head2 2002-02-08
+
+=over 2
+
+=item added
+	
+=item fixed
+
+	failure count was not honoured when looking for work in a job
+	a failed chunk did not increase the failure counter for the client
+
+=back
+
+=head2 2002-02-07
+
+=over 2
+
+=item added
+	
+	added msg 506 ('can not find target' instead of 'can not find worker')
+	target/test/dummy.txt into server and client bundles
+
+=item fixed
+
+	forgot "\n" when sending msg 505 or 506 to client
+	simplified rate-limit code a bit
+	support for testcases with a target file (*.tgt)
+	dicopd: print $Dicop::VERSION (instead of $Dicop::Data::VERSION)
+	counts of done/failed/suspended jobs on extended status page were 0
+	1038 tests
+
+=back
+
+=head2 2002-02-06
+
+=over 2
+
+=item added
+
+	testcase for adding new job on result
+	Prime.pod for worker/prime
+
+=item fixed
+
+	never flush testsuite data upon modify
+	calculation of average time between connects was completely wrong
+	last connect wasn't removed upon rate-limitation
+	1036 tests
+
+=back
+
+=head2 2002-02-05
+
+=over 2
+
+=item added
+
+	dicopd: print version on startup
+	worker/prime: find prime factors
+
+=item fixed
+
+	Client: honor update_files setting in config
+	update_workers => update_files and doc in Config.pod
+	modified testdata to test for loading chunks with results
+	chunks with an result broke due to loading jobs before results
+	fixed main.tpl table with styles
+	style wasn't always carried over when posting forms (only for add job)
+
+=back
+
+=head2 2002-02-04
+
+=over 2
+
+=item added
+
+
+=item fixed
+
+	better and more default config values
+	result list sorted on date (newest on top)
+	job list sorted in reverse (newest on top)
+	##BGCOLOR = #FFFFFF## in config.tpl
+	target/dummy.txt and logs/dummy.txt into client bundle
+	1029 tests
+
+=back
+
+=head2 2002-02-01
+
+=over 2
+
+=item added
+
+	target_dir in config
+
+=item fixed
+
+	style was not carried over when executing forms (add job etc)
+	1032 tests
+
+=back
+
+=head2 2002-01-30
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Hash.pm: cope with non-existing or unreadable files
+
+=back
+
+=head2 2002-01-29
+
+=over 2
+
+=item added
+
+	Client: ask server for new workers/targets
+		download worker/targets and verify them
+
+=item fixed
+
+	return reqxxxx 200 URL instead of reqxxxx URL for file requests
+	Client.pm: remove leftover nojobs in initial requests
+	Request.pm: remove nojobs
+	Hash.pm: as_hex() does automatically update()
+
+=back
+
+=head2 2002-01-28
+
+=over 2
+
+=item added
+
+	Glossar.pod
+	cmd_request;type_file for client requesting files (worker/target files)
+	config item 'file_server' for answering cmd_request;type_file requests
+
+=item fixed
+
+	doc about styles and cmd's
+	4 times log_msg() without $self in Data.pm resulting in
+	  "unknown error code" instead of correct error code
+	1025 tests
+
+=back
+
+=head2 2002-01-23
+
+=over 2
+
+=item added
+
+	cmd_status;type_style for selecting output style
+	support for different styles in HTML output
+	 (default, sea, honey, salmon, grass, dust, bare, blackand-white)
+
+=item fixed
+
+=back
+
+=head2 2001-12-13
+
+=over 2
+
+=item added
+	
+	result list has now ID as first column
+
+=item fixed
+
+	storing result in chunk and displaying it actually works
+	NaNs (undef values) no longer trigger warnings in Item.pm
+	result_ascii is removed from output/input (since deprecated)
+ö	_construct of results is delayed after jobs are loaded
+
+=back
+
+=head2 2001-12-05 (Server v2.16)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	some parameters (proxy name, jobtype script) were missing in Request.pm
+	added tests for requests 'cmd_form' and 'cmd_add'
+	addproxy.tpl: added field ID
+	nojobs is no longer a valid field
+	998 tests
+
+=back
+
+=head2 2001-12-04
+
+=over 2
+
+=item added
+
+=item fixed
+
+	get_foo(): return undef, not error message in case of error
+	don't try to un-ref error messages for printing out results
+
+=back
+
+=head2 2001-11-27 
+
+=over 2
+
+=item added
+
+	Data/Chunk.pm: start(), end()
+	Client.pm: print status code of running a worker
+	in extended client stats: show client's description
+
+=item fixed
+
+	TIMEOUT chunks status is valid when reported
+	server: split chunk on result-border when TIMEOUT occured
+	Dicop::Data::Chunk::split(): split at fixed border
+	Dicop::status_code() streamlined (use hash lookup)
+	959 tests
+
+=back
+
+=head2 2001-11-20 (Server v2.16)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	wrong URL in failed chunks field (client vs clients)
+
+=back
+
+=head2 2001-11-19
+
+=over 2
+
+=item added
+
+	chunk_maxsize in client.cfg, and send this as timeout to worker
+	store result for chunk inside chunk and show in chunklist
+
+=item fixed
+
+	error_.log => error_0.log
+	Dicop/Data/Client.pm undef warning in line 282 (was Data.pm calling
+	  failures() for undef jobs)
+	951 tests
+
+=back
+
+=head2 2001-11-15
+
+=over 2
+
+=item added
+
+	Client: extract_result and tests for it
+
+=item fixed
+
+	server.cfg.sample - speling errors and nits
+	947 tests
+
+=back
+
+=head2 2001-11-14
+
+=over 2
+
+=item added
+
+	bundle for worker source
+
+=item fixed
+
+	templates: client-name in result list leads to client status page
+	client: changed to accept new worker frame's printout => v2.16
+	workerframe: fixed bug in pwdgen where start eq end
+	server: require client v2.16 or newer
+	lost chunks/lost keys not inc. when chunks were marked TOBEDONE again
+	945 tests
+
+=back
+
+=head2 2001-11-12
+
+=over 2
+
+=item added
+
+	new tests for workers/password generator (set 14)
+
+=item fixed
+
+	dicop.c: fixed a2H to take length (for embedded zeros)
+	pwdtest: print (and compare) passwords in hex for embedded zeros
+
+=back
+
+=head2 2001-11-09
+
+=over 2
+
+=item added
+
+	test for workers/password generator (test-worker pwdtest and worker.t)
+	new flexible framework for workers w/ new password generator
+
+=item fixed
+
+	898 tests, covered lines /=% subs /=% doc /=%
+
+=back
+
+=head2 2001-11-06
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Client::get_as_hex() falls back to get_as_string()
+
+=back
+
+=head2 2001-10-30 (Server v2.15)
+
+=over 2
+
+=item added
+
+	TROUBLE: troubleshooting tips
+
+=item fixed
+
+	fixed bug in email() and added test for this
+	README: added overview for first time installs
+	777 tests
+
+=back
+
+=head2 2001-10-29
+
+=over 2
+
+=item added
+
+=item fixed
+
+	send email: don't loose header, never write twice to file
+	INSTALL: better troubleshooting and instruction on various errors
+	don't use uptime but read /proc directly
+
+=back
+
+=head2 2001-10-02 (Server v2.14, Client 2.15)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	client: sleep(1) at start is unnecc.
+	client: on each error, double sleeping time 4 times (w/ fallback to 1)
+	gather all mails in a mail-queue and send them _after_ handling client
+	streamlined Dicop::Data::Chunk::split and made it 3 times as fast
+	  (since it was taking way over 50% time of a typical work request...)
+	777 tests
+
+=back
+
+=head2 2001-10-01
+
+=over 2
+
+=item added
+
+=item fixed
+
+	dicopd: remove \n in log message if died on time out
+	don't block on sending email, timeout of 3s to prevent "logspamming"
+	security: don't:
+	 accept chunks that aren't issued anymore
+	 enter results twice into results list
+	 send mail for duped results (that won't get added to result list)
+	 add a newjob twice to job list upon closing old job
+	more tests for request handling and it's error handling/conditions
+	772 tests
+
+=back
+
+=head2 2001-09-28
+
+=over 2
+
+=item added
+
+=item fixed
+
+	dicopd: flush data on normal kill (pre_server_close_hook {} => END {})
+
+=back
+
+=head2 2001-09-27
+
+=over 2
+
+=item added
+
+	Request.pm: empty can handle 'command', too (could only 'command_type')
+	Request.pm: is_report(), is_request(), copy()	
+	check for clients going offline and sent email for missing ones
+	tpl/mail/offline.txt and config: client_check_time/client_offline_time
+	calculate average count of cluster-nodes based on reference client
+
+=item fixed
+
+	Request.pm: as_request_string: undef for errors
+	755 tests
+
+=back
+
+=head2 2001-09-26
+
+=over 2
+
+=item added
+
+	Cache.pm - cache items with a timeout value, complete w/ cachepm.t
+	more logic in Proxy.pm (handling of responses, caches, testcases etc)
+
+=item fixed
+
+	691 tests, covered lines 2058/2904=71% subs 155/261=59.3% doc /=%
+
+=back
+
+=head2 2001-09-25
+
+=over 2
+
+=item added
+
+	Separate request counter for work and test requests/reports
+
+=item fixed
+
+	test that status page don't contain templates after replacement
+	646 tests
+
+=back
+
+=head2 2001-09-24
+
+=over 2
+
+=item added
+
+	Output how long does job run in job status page
+
+=item fixed
+
+	fixed: debug: failure counter is sent to client properly
+
+=back
+
+=head2 2001-09-21 (Server 2.13)
+
+=over 2
+
+=item added
+
+	Proxy.pod: Covering the guts of a proxy
+
+=item fixed
+
+	read job speed table and failure table in extended client status page
+	 from template file instead of generating hardcoded HTML
+	proxy: coded disallowed request commands and check for them (w/ tests)
+	606 tests
+
+=back
+
+=head2 2001-09-20
+
+=over 2
+
+=item added
+
+	count of chunks per job per client
+	count requests per report/request/status/auth to differentiate
+
+=item fixed
+
+	job id in "All Open Chunks" is clickable
+	failure count/timestamp is now stored per jobtype on client
+	598 tests
+
+=back
+
+=head2 2001-09-19
+
+=over 2
+
+=item added
+
+	make status color fields in main job list 'clickable'
+	Dicop/Proxy.pm: proxy_init, proxy_talk_to_server, proxy_clear_cache etc
+	Server: new() takes argument 'config' as config file name (for tests)
+	track flush time to enable better time-per-connect data collection
+	doc about DATA INTEGRITY, updated PERFORMANCE section
+
+=item fixed
+
+	client bundle: bundle test worker, include Config.pod
+	more tests for Dicop/Proxy.pm
+	547 tests
+
+=back
+
+=head2 2001-09-18
+
+=over 2
+
+=item added
+
+	implemente cmd_status;type_main;filter_JOBTYPE
+
+=item fixed
+
+	don't send email with "job added" if add job fails
+	tests for status requests with set filter
+	status_code return -1 for unknown ones, plus a test for that
+	main view only shows running jobs, menu in footer lets you display all
+	535 tests, covered lines 1914/2721=70% subs 146/245=60%
+
+=back
+
+=head2 2001-09-14
+
+=over 2
+
+=item added
+
+	doc about config files (format and explanation of possible keys/values)
+	troubleshooting section in Client.pod
+
+=item fixed
+
+	don't need to send version with worker names to client anymore
+
+=back
+
+=head2 2001-09-13 (Server v2.12)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	install documentation reworked to cover missing modules and prereq's
+	5.6.0 seems to destroy $/ sometimes, so explicitly set it every time
+	fixed sample mail and config files to be more generic
+	client: average speed only for jobs that are still running
+		dont calc average speed upon new() (jobs are not yet available)
+	dicopd: $cfg->{server_log} vs. $cfg->{error_log}
+	BASH_ENV needs untainting under RedHat
+	some more config defaults to guard against missing entries
+	server: requests and connects are now BigInt's
+	529 tests, covered lines 1894/2702=70% subs 146/243=60%
+
+=back
+
+=head2 2001-09-12 (Day 1 after WTC attack :(
+
+=over 2
+
+=item added
+
+	client_architectures lists allowed architectures in server config
+	create and maintain hashes for workers (not yet written back to disk)
+	send hashes for correct worker (architecture, job depended) to client
+	throw error for client's with unsupported architectures (msg 467)
+	  (they won't have workers available, nor hashes for them, anyway)
+
+=item fixed
+
+	sort client list by name, id, speed or keys (really works now)
+	doc (dicop.pod: proxies, network, performance, client list sorting)
+	made worker a separate distribution bundle
+	527 tests, covered lines 1881/2689=70% subs 146/243=60% doc /=%
+
+=back
+
+=head2 2001-09-03 (Server v2.11)
+
+=over 2
+
+=item added
+
+
+=item fixed
+
+	doc (INSTALL etc)
+	logic of request handling, split up parse_request from handle_requests
+	more tests for request handling
+	don't even try to parse more than max_requests+1 (twart DOS attacks)
+	518 tests, covered lines 1863/2664=70% subs 147/242=60% doc 103/190=54%
+
+=back
+
+=head2 2001-08-31
+
+=over 2
+
+=item added
+
+	sort client list by name, id, speed or keys
+	tests for failed client authentication, outdated clients etc
+	pod_cover.pl addded to dist for documentation coverage
+
+=item fixed
+
+	handling of request lists from proxies (one auth, many info requests)
+	allow only one auth request per connect
+	typos in messages.txt (##param1## vs. ##param##)
+	460 tests, covered lines 1627/2668=61% subs 135/241=56% doc ?
+
+=back
+
+=head2 2001-08-30
+
+=over 2
+
+=item added
+
+	Dicop::Data::uptime and tests for it
+	show uptime and load average on status page
+	pod_cover.pl (via Pod::Coverage) to see how bad doc is (was: 36.7%)
+
+=item fixed
+
+	some calls to log_msg() were missing '$self->'
+	449 tests, coverage: lines: 1500/2652=56.6%, subs: 121/240=50% doc: 60%
+
+=back
+
+=head2 2001-08-27
+
+=over 2
+
+=item added
+
+	Dicop::Data: Use Dicop::Client as proxy-client
+	Dicop::Client: allow user-agent 'Proxy', some other settings for proxy
+
+=item fixed
+
+	no $self->check() for server on startup (speedup)
+	removed Net::Daemon as prerequisite, require Net::Server v0.75
+	fixed problem that logfiles were not created under correct user/group
+
+=back
+
+=head2 2001-08-24 (Server v2.10)
+
+=over 2
+
+=item added
+
+=item fixed
+
+	status_changed => form_changed in client.txt
+	all 443 tests pass, coverage: lines: 1478/2636=56%, subs: 118/239=49%
+
+=back
+
+=head2 2001-08-23
+
+=over 2
+
+=item added
+
+	save chunk size to disk to reduce startup time by about 30%
+	Dicop::Data::type() ('proxy' or 'server')
+	read in proxy.cfg when server type is 'proxy'
+
+=item fixed
+
+	all instances of msg() in Data are now log_msg()
+	cmd_form;type=chunk was using chunk() instead of get_chunk()
+	log_level was not assembled from config
+	added ##type## in template, removed double replacing of ##version##
+	testcases weren't resend to client after some time after failure
+	all 441 tests pass, coverage: lines: 1478/2636=56%, subs: 118/239=49%
+
+=back
+
+=head2 2001-08-22 (Server v2.09)
+
+=over 2
+
+=item added
+	
+	test-data & test-config to try server object Dicop::Data in testsuite
+
+=item fixed
+
+	Data.pm: arg 'dir' => 'data_dir', use data_dir from cfg if defined
+	return instead of next in adjust_jobs if no running jobs
+	all 434 tests pass, coverage: lines: 1437/2622=55%, subs: 114/237=48%
+
+=back
+
+=head2 2001-08-21
+
+=over 2
+
+=item added
+
+	keys_done() (and fake key keys_done) for job
+
+=item fixed
+
+	do not merge chunks before reporting/using them (!)
+	percent in client's list was accidentily calculated as integer
+
+=back
+
+=head2 2001-08-20
+
+=over 2
+
+=item added
+
+	log returned messages w/ code >= 300 to error log
+
+=item fixed
+
+	wrong result field (hex/ascii) in mail text
+	write out client's job speed's in sorted order (by numerical job id)
+	charset 6 had lower/upper characters swapped
+	all 408 tests pass
+
+=back
+
+=head2 2001-08-16
+
+=over 2
+
+=item added
+
+	add caller() for crumbles in get_foo()
+
+=item fixed
+
+	bug with succedded_test and failed_test looking for wrong job_id
+	tests for config->set() and config->{_modified}
+	all 404 tests pass
+
+=back
+
+
+=head2 2001-08-15 (Server v2.08)
+
+=over 2
+
+=item added
+
+	log_level, resend_test in config
+
+=item fixed
+
+	Bugs in speed correct using integer instead of float
+	keys/s for job corrected by percent of this job
+	if chunk time too short, increase clientspeed by 20% (>5s) or 50% (<5s)
+          (not 100% or more since the chunk could be a small on by purpose)
+	fixed Dicop::ago for 0 seconds
+	forgot datapm.t and configpm.t in MANIFEST
+	all 401 tests pass, coverage: lines: 1370/2595=53%, subs: 104/232=45%
+
+=back
+
+=head2 2001-08-15 (Server v2.07, Client v2.14)
+
+=over 2
+
+=item added
+
+	some support for TIMEOUT as status code
+	keep count of failures and time of last failure per job and client
+        disable client if more than 3 failed chunks or one failed testcase
+	if disabled too long for a job, resend him testcases for that jobtype
+	re-enable client if testcase succeded
+        show count of failures in job_speed table (extended client stats)
+
+=item fixed
+
+	write out jobs/testcases etc sorted _numerical_ on ID
+	reduce client speed to 0.2 only for TIMEOUT, not for FAILED
+	Client: send FAILED to server if worker not found/failure
+	Data::speed(): skip clients w/ too many failures or never worked on job
+	job start/end/target in mail text was broken (again not in hex)
+	client sleeps if no work for it
+	all 395 tests pass, coverage: lines: 1368/2588=53%, subs: 104/232=45%
+
+=back
+
+=head2 2001-08-14
+
+=over 2
+
+=item added
+
+	show cpuinfo in detailed client stats
+	client: use Linux::Cpuinfo and send it to server
+
+=item fixed
+
+	prereq: Linux::Cpuinfo v1.3
+	last_chunkcolor, last_connectcolor = grey for > 1 hour and < 2 hours
+	Dicop::Data::Client: tests for colors, cpuinfo (all 369 tests pass)
+	fixed testcase storing of result/target (hex/ascii vs. Math::String)
+	don't add job if script cannot extract target information
+
+=back
+
+=head2 2001-08-13 (Server v2.06, Client v2.13)
+
+=over 2
+
+=item added
+
+	show keys/s for each job (and calculate guess based on this)
+	Dicop::Data::Job::size() and tests
+	now possible to write --server=127.0.0.1 (without http:// in front)
+
+=item fixed
+
+	Client::is_online: use last_chunk, not last_connect
+	Dicop::simple_ago and Dicop::ago: make argument integer
+	calculate client's jobspeed in keys/second (no longer needs to keep
+         the client-wanted-size of the chunk to calulate the speed)
+	fixed speed() and removed get_active_clients (iterative approach)
+	renamed mail texts to filename.txt.sample
+	all 355 tests pass, coverage: lines: 1291/2518=51%, subs: 98/228=43%
+
+=back
+
+=head2 2001-08-09 (v2.05)
+
+=over 2
+
+=item added
+
+	prediction of job running time is based on current cluster speed and
+	 done percent of the job
+	Data::get_active_clients: list of all clients active in last N seconds
+	Data::speed: return keys/per seconds for a given job
+	bsi.asc - PGP key file
+
+=item fixed
+
+	INSTALL documentation
+	nits in mail texts (include job target and server name)
+	Dicop::ago and added tests, all 350 tests pass
+	do not log empty error messages ($@ is defined, but eq '')
+	untaint logfile names
+	untaint target filenames when adding jobs
+	show job start/end as hex (to prevent browser problems)
+	show certain times (chunk_time, willtake etc) as Dicop::ago
+
+=back
+
+=head2 2001-08-08 (v2.04)
+
+=over 2
+
+=item added
+
+	Detailed server stats (cmd_status;type_server via server.txt)
+	Show version of running server, last flush etc on server status page
+	Deny access for outdated clients (config: require_client_version)
+
+=item fixed
+
+	renamed Dicop::willtake to Dicop::ago, and ago to simple_ago
+	error handling of client between code 400 and 450 was broken
+	  (broken in last version, now do test for it)
+	all 346 tests pass, coverage: lines: 1281/2472=52%, subs: 97/226=43%
+
+=back
+
+=head2 2001-08-07 (v2.03)
+
+=over 2
+
+=item added
+
+	display time of last flush in footer
+
+=item fixed
+
+	Server: never hands out chunks of size 1 (min size is charset's size)
+	        tests for that (all 286 tests pass)
+	flush algorithmn (did never flush)
+	removing worker version (did test-1.2 => test, but also test12 => test)
+	show chunk start/end as hex in html
+	added check.tpl to MANIFEST
+	handling of failed testcases in client was broken (endless loop)
+	text of msg 403, msg 303 => 409
+	last_chunkcolor is now different from last_connectcolor in client list
+
+=back
+
+=head2 2001-08-06
+
+=over 2
+
+=item added
+
+	dicopd: show how long server process is running
+	show more stats on extended client stats page (os, version, arch)
+	keep a checklist per job, and display it in Job's detailed status page
+	track last 16 connect times of client, and limit if client is too fast
+ 	more tests (all 285 pass)
+
+=item fixed
+
+	Client: report correct version to server
+		arch must be lowercase (find workers on non-unix)
+	Server: store arch for clients
+	Dicop:	don't sputter if parameters are empty
+	dicopd: log start/stop to server.log (from config)
+		log errors to error.log (from config)
+
+=back
+
+=head2 2001-08-03
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Testcase: check() in case of errors: make Math::String from start/end
+	dicopd: stop alarm() in case of die(), too
+	bug in Dicop::Data::Client::connected (version/os were swapped)
+	tests for Dicop::Data::Client::connected(): all 276 pass
+	show correct version on webpages (Dicop::VERSION, not Data::VERSION)
+
+=back
+
+=head2 2001-08-02 (v2.02)
+
+=over 2
+
+=item added
+
+	timeout on initial lock
+
+=item fixed
+
+	dicopd: incorrect headers
+	dicopd: don't segfault on errors
+	Data.pm: Don't try to unlock twice
+
+=back
+
+=head2 2001-08-01
+
+=over 2
+
+=item added
+
+	Documentation about dicopd (Dicopd.pod)
+	tests for file-locking (all 268 pass)
+	removing file lock unlinks lockfile
+
+=item fixed
+
+	Data.pm: force flush of data when results are found
+	dicopd: print content-type for each request, flush data at exit
+	additional lock for each request (for dicopd)
+
+=back
+
+=head2 2001-07-31
+
+=over 2
+
+=item added
+
+	Dicop/Hash.pm (MD5 hashes of files, with updating) 
+	tests for Hash.pm, Data/Result.pm, Data/Proxy.pm 
+	 (all 265 tests pass, coverage:
+	 lines: 1058/1590=66.54%, subs: 80/166=48.19%)
+	
+=back
+
+=head2 2001-07-30
+
+=over 2
+
+=item added
+
+=item fixed
+
+	doc Server.pod (was partly outdated, added section about check list)
+
+=back
+
+=head2 2001-07-27
+
+=over 2
+
+=item added
+
+	3 tests in charsetspm.t (had one dummy test only - all 250 pass)
+
+=item fixed
+
+	allow all paths for requests to dicopd (drop /cgi-bin/dicop/server)
+	doc about dicopd, benchmarking, speling errors
+
+=back
+
+=head2 2001-07-26
+
+=over 2
+
+=item added
+
+	dicopd - daemon to act as mini http server (much faster: 0.2 seconds
+          for one round trip of GET /cgi-bin/dicop/server)
+	doc for dicopd and why to use it in Dicop.pod
+
+=item fixed
+
+	testcase: store start/end as "string,number"
+	 (3.1 seconds for one round-trip of perl ./server)
+	fixed Testcase.pm tests (all 248 pass)
+	--chunks=x failed for values != 0 in client
+
+=back
+
+
+=head2 2001-07-25
+
+=over 2
+
+=item added
+
+	tests for $chunk->get(/start|end) (all 244 pass now)
+
+=item fixed
+
+	job priorities of lowest rank (12.34 vs. 12.3412382373)
+	charset: moved construction of charset to _construct (save time)
+	chunk: store start/end as "string,number" to save time upon read/start
+	 (3.4 seconds for one round-trip of perl ./server)
+
+=back
+
+=head2 2001-07-24
+
+=over 2
+
+=item added
+
+	update_workers in client.cfg (not used yet)
+
+=item fixed
+
+	bug in Chunk.pm that flagged chunk, it's Job and Data as modified, thus
+	 causing the entire data written back to disk even if it did not change
+	 (4.4 seconds to 6 seconds for one round-trip of perl ./server)
+
+=back
+
+=head2 2001-07-23
+
+=over 2
+
+=item added
+
+	extra page with client details listing it's speed for each job etc
+	Max_Request_Time: read via config file
+
+=item fixed
+
+	calculate job_speed as ratio of true speed/jobtype speed
+	calculate avrg speed as average ratio of jobspeed ratios (100 == 1.0)
+	Stop client after X chunks (when requested as per --chunks)
+	--test=x => --test and --notest
+
+=back
+
+=head2 2001-07-20
+
+=over 2
+
+=item added
+
+=item fixed
+
+	avrg speed is not <0.1 and >4.0 of previous value
+
+=back
+
+
+=head2 2001-07-19
+
+=over 2
+
+=item added
+
+	--test, --server and --chunks to client
+	added client.txt for extended client stats
+	document the new parameters for adding jobs and jobtypes
+
+=item fixed
+
+	no more multiple empty table-rows in all-open-chunks listing
+	merge_chunk() failed for first chunk in list (number 0)
+	report_chunk() did not increment 'chunks' counter
+	some more tests in clientpm.t and jobpm.t (all in all 227)
+	deleted unused chunk.txt
+	dist contains 'name.cfg.sample' instead of 'name.cfg' to not overwrite
+
+=back
+
+
+=head2 2001-07-18 (v2.00)
+
+=over 2
+
+=item added
+
+	multiple jobs with lowest rank share priority equally
+
+=item fixed
+
+	color of FAILED jobs and DONE => FAILED in description text
+	really send out emails
+
+=back
+
+
+=head2 2001-07-17
+
+=over 2
+
+=item added
+
+	tpl/src/Charsets.pm (unused yet)
+	Job.pm: results() and doc
+	tests for Job::results(), Job::chunks()
+	show client and issue time for failed chunks
+	different mail texts for closing (not halting) job w/ and w/o result
+
+=item fixed
+
+	Speed correct: 0.2 instead of 0.5 for failed chunks
+	Bug in Charsets.pm (0..9,A..Z,a..z => 0..9,a..z,A..Z)
+	test worker: end must be greater than start, print chunk size
+	report percent_done with 2 digits after '.'
+	second try: store what client really wanted in chunk (and tests for it)
+	  (chunk was actually issued twice, and second one overrode the value)
+	config.tpl and closed.txt into MANIFEST
+	chunk tests (all 205 tests pass now)
+
+=back
+
+=head2 2001-07-12
+
+=over 2
+
+=item added
+
+	view server configuration (cmd_status;type_config)
+	tests for chunk-list merging in jobpm.t
+
+=item fixed
+
+	fixed merging of chunks (was crashing)
+	self in config includes only path (not host:port) to shorten output
+	removed event() entirely
+	Job.pm: get_chunk, get_chunk_nr and tests for them
+	fixed "will take" time display
+	store chunk size client really wanted in chunk (instead default 1200)
+
+=back
+
+=head2 2001-07-11
+
+=over 2
+
+=item added
+
+	link to results in main job list
+	show jobs priority-percents in main job list
+	adjust_job_priorities(), show priorities
+	after solving a job, add a result to the list of results
+
+=item fixed
+
+	fixed msg "Failed/Solved report for" (chunk and job were swapped)
+	upon newjob, close old job, create new and hand out from new jobs only
+	mistakes in mailtexts
+	newjob end/start were hexified twice
+
+=back
+
+=head2 2001-07-10
+
+=over 2
+
+=item added
+
+	show job's current status in job status
+	show worker version in jobtype list
+
+=item fixed
+
+	start new job: rank and dexscription with replacements
+	allow 'fixed' in cmd_add;type_jobtype
+	Testcase: field 'target' is not checked against charset, but hexified
+	halt job on result if requested
+	client correctly handles more than one answert to a request
+	server checks for SOLVED and DONE testcases
+	server: handle all reports before requests (for job chaining)
+
+=back
+
+=head2 2001-07-09
+
+=over 2
+
+=item added
+
+	code to start a new job with target of solved job
+	code to generate emails for 'newjob', 'stopped' and 'result'
+
+=item fixed
+
+	made Math::* a prerequisite
+
+=back
+
+=head2 2001-07-06
+
+=over 2
+
+=item added
+
+	add job form: check results for jobs, start new job, notify admin etc
+	configuration data in server.cfg for email
+	mail templates: newjob.txt, result.txt and stopped.txt
+
+=item fixed
+
+	from_strring() handles '-' in item names
+	deleted Event.pm and events
+	added a lot of options to "add job"
+	multiple charset embedded into form
+	border is ignored if border==0
+
+=back
+
+
+=head2 2001-07-05
+
+=over 2
+
+=item added
+
+	fields 'script', 'fixed' to jobtype
+	run script to extract target info from file when adding job
+	"looking for target" in job status
+	proxy.cfg
+
+=item fixed
+
+	include "add"-menu in footer.txt, remove from main.txt
+	sort lists (events/charsets etc) embedded in forms by id
+	sort main job view by job id
+
+=back
+
+=head2 2001-07-04
+
+=over 2
+
+=item fixed
+
+	AUTHOR's information in all pm and pod files
+	Client send SOLVED instead of FAILED for tests
+	Server does no longer accept FAILED tests as "good"
+	add jobtype lists available charsets
+	timeout in test worker was not optional
+	table outputs (all jobs, job types etc) are now sorted on numeric id
+	Job.pm: bugs with new Math::String/Math::BigInt version
+	Merging of chunks did not work as expected
+
+=back
+
+=head2 2001-07-02
+
+=over 2
+
+=item fixed
+
+	in templates: <H1>...</H2> => <H1>...</H1> (for Konquerer)
+	\_ warnings in Perl v5.6.1+
+	$t || 0 fix in Dicop.pm (for 5.7.1 borkeness)
+	THANX => CREDITS
+	bundle.pl to generate file name with version
+	croak if can not create dir "data/##id##/" for job
+
+=item added
+
+	"All Open Chunks" list
+
+=back
+
+=head2 2001-04-20
+
+=over 2
+
+=item added
+	
+	field wanted to Chunk
+
+=item fixed
+
+	When retrying jobs to find work, do retry at random
+	fixed numerius bugs in client <=> server communication
+	token stored with chunk instead of simple using checksum (it changed)
+
+=back
+
+=head2 2001-04-19
+
+=over 2
+
+=item added
+	
+	Worker doc is in separate file Worker.pod
+	test for broken charsets
+	first time that client runs in loop, getting tests and work
+
+=item fixed
+	
+	test worker to print correct return code/message
+	report_work in Data.pm
+	reading of charsets from disk (had broken Math::String::Charset object)
+	mkdir($dir) => mkdir($dir,0755) for Perl 5.005
+	Server tries 10 times to find a chunk in some job, then gives up
+
+=back
+
+=head2 2001-04-18
+
+=over 2
+
+=item added
+
+	sample charsets/jobtypes compatible with old model
+	msg 303 (test failed) and 204 (test passed)
+	addded field target to Testcase
+	some tests for Requests.pm
+
+=item fixed
+
+	BUGS listing
+	Request.pm - adding of job types
+	base speed (of test job) is 100 (was 10000)
+	ignore test passed reports (send msg 204), 304 cases are still missing
+	msg 461 => 407 (required parameter missing)
+	certain error responses from server missed 'req0000 ' in front
+	client's error handling was partly borken
+
+=back
+
+=head2 2001-04-17
+
+=over 2
+
+=item added
+
+	test worker as perl version with timeout etc
+	Charsets.pm (manually generated for now)
+
+=item fixed
+
+	MANIFEST, BUNDLE_CLIENT
+
+=back
+
+=head2 2001-04-12
+
+=over 2
+
+=item added
+	
+	Config: supports multiple instances of names and creates array from them
+	Client supports multiple (and random) servers
+	Client tries to connect a server for connect_retries and then dies
+
+=item fixed
+
+	spellings in doc
+
+=back
+
+=head2 2001-04-11
+
+=over 2
+
+=item added
+
+	server doc about chunk size, client speed
+	parameter 'os' to auth/info requests, field 'os' to Client
+	hash list (MD5) to jobtype for it's workers
+	send worker hash to client
+	client sends 'arch'
+
+=item fixed
+
+	Request.pm doc
+	TODO, BUGS
+	removed Dicop::Data::new_id()
+	removed report_test() (test cases are reported like normal work)
+	request_test returns now list of all test cases
+	some leftover cases of message code 299 => 099
+	debug output of client honours --debug
+
+=back
+
+=head2 2001-04-10
+
+=over 2
+
+=item added
+
+	test cases for Client.pm (parsing responses)
+	client: --debug option
+
+=item fixed
+
+	prerequisite Digest::MD5 v2.09
+
+=back
+
+=head2 2001-04-09
+
+=over 2
+
+=item added
+
+	Request: request_id (additional to field('_id','req0002')) plus tests
+
+=item fixed
+
+	small doc fixes
+	revamped client to use stack for tobesent and chunks
+	client's error/idle handling and retrying on failures
+	fixed servers text-style output to have <PRE> before _first_ line
+
+=back
+
+
+=head2 2001-04-06
+
+=over 2
+
+=item added
+
+=item fixed
+
+	a lot documentation errors (req0000 inhibited for client, etc)
+
+=back
+
+
+=head2 2001-04-04
+
+=over 2
+
+=item added
+
+	support for ##time## in messages
+	bundle.pl for creating separate client and test data package
+
+=item fixed
+
+	MANIFEST
+	test suite (added eventpm, moved several files into /t/data)
+	open $handle, $file => open DICOP_HANLDE, $file for older Perl
+	die() on lock-failure instead of merely crumbling
+
+=back
+
+=head2 2001-04-03
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Client: response handling
+	README; MANIFEST (missing files)
+	dependencies (Digest::MD5 2.11 vs 2.13)
+	distribution now actually works
+
+=back
+
+=head2 2001-04-02
+
+=over 2
+
+=item added
+
+	THANX
+
+=item fixed
+
+	lists in Request parameters (nojobs etc), including testcase
+	empty parameters in Requests
+	Client: send_requests, test_cases, parse_response, more_work
+	message 299 is now 099 (for easier testing < 100)
+	INSTALL, MANIFEST with comments
+
+=back
+
+=head2 2001-03-26
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Makefile.PL lists Digest::MD5 v2.13 as prerequisite
+	testsuite and Request.pm/Job.pm now work with Perl v5_005
+	documentation fixes, split general doc into Server, Client and Dicop
+
+=back
+
+=head2 2001-03-22
+
+=over 2
+
+=item added
+
+	moved all templates from /msg to /tpl
+	documented client (install/mount/start/options etc) in client.pod
+	documented parameter format for worker
+
+=item fixed
+
+	saving, loading of client's job_speed
+	display of proxy list works now
+	load_messages return 1 upon success, undef for error
+	client script logs to correct file/directory
+
+=back
+
+=head2 2001-03-21
+
+=over 2
+
+=item added
+
+	menu to footer.txt
+
+=item fixed
+
+	adding of groups
+	user-supplied id on cmd=add
+	listing of clients (sorted, percent_done, keys etc)
+
+=back
+
+=head2 2001-03-20
+
+=over 2
+
+=item added
+
+	client/proxy: is_proxy()
+	Data::results()
+
+=item fixed
+
+	Dicop::time()
+	Data::request_work, client authentication
+	Chunk::split() and split-limit
+
+=back
+
+=head2 2001-03-19
+
+=over 2
+
+=item added
+
+	Dicop: time(), cache_time(), ago()
+	Request::is_auth()
+
+=item fixed
+
+	handling of cmd=request without authentication info
+	file names in config file
+	display of chunks for a job
+	display of clients
+	chunk new() & checksumming code
+	Job::percent_done
+	testsuite
+	cmd=test => cmd_request;type_test
+
+=back
+
+=head2 2001-03-16
+
+=over 2
+
+=item added
+
+	display status page of a job (incl chunklist)
+
+=item fixed
+
+	can now add jobs
+	keep record of highest ID of an item and create new with ID+1
+	lowestrank and lowestjob are displayed properly
+	save/load/create chunk lists
+	request params for requesting form to change a chunk
+
+=back
+
+=head2 2001-03-15
+
+=over 2
+
+=item added
+
+	ID number can be given upon creating a client
+	preferedid to add_client
+	highlight if listing with given id (f.i. cmd_status;type_jobs;id_1)
+
+=item fixed
+
+	server dies if request handling takes too long
+	spelling errors in templates caused infinite loop
+	can_change reports only changeable fields as, well changeable
+	check => check_fields
+	items _construct() themselves instead of Dicop::Data
+	jobs can be added, clients can be changed
+
+=back
+
+=head2 2001-03-14
+
+=over 2
+
+=item added
+
+	first version of client
+	request::as_request_string
+	Dicop::Client
+	client, and config for it
+
+=item fixed
+
+	complete test-suite works again
+	MANIFEST 
+
+=back
+
+=head2 2001-03-07
+
+=over 2
+
+=item added
+
+=item fixed
+
+	Request.pm testcases work again
+
+=back
+
+=head2 2001-02-21
+
+=over 2
+
+=item added
+
+	nothing
+
+=item fixed
+
+	clean-ups, made backup
+
+=back
+
+=head2 2001-02-19
+
+=over 2
+
+=item added
+
+	Job.pm: events.
+	Deletion and comnfirmation of deletion of objects.
+
+=item fixed
+
+=back
+
+
+=head2 2001-02-18
+
+=over 2
+
+=item added
+
+	Testcase.pm incl tests, adding, list and doc
+
+=item fixed
+
+	Bug in a2h, h2a regarding undefined/empty strings
+	Charset.pm: 'charset' => '_charset'
+	Job.pm: stringify charset/jobtype
+		merge only if chunk is reported DONE
+		increment results if chunk is reported SOLVED
+
+=back
+
+=head2 2001-02-16
+
+=over 2
+
+=item added
+
+	cannot edit some values of 'dirty' objects (mostly for charset)
+	regression tests for Dicop/Data/Charset
+	Dicop/Data/Charset.pm uses Math::String::Charset to represent set
+
+=item fixed
+
+	add job did not work
+	all regression tests pass now again
+
+=back
+
+=head2 2001-02-15
+
+=over 2
+
+=item added
+
+	jobtype's speed (incl doc, form etc)
+	Dicop::Data::Result & Dicop::Data::Proxy
+	adding of charsets and proxies
+	results.tpl, proxies.tpl
+
+=item fixed
+
+	request's check for empty fields
+	##selfjobs## => ##selfstatus_jobs## to allow add form etc as links
+
+=back
+
+=head2 2001-02-14
+
+=over 2
+
+=item added
+
+	server can parse option lists in forms
+	Jobtype.pm (no tests yet)
+	show job types and charsets (jobtypes.tpl, charsets.tpl)
+	show count of jobtypes and charsets on main status page
+
+=item fixed
+	
+	bug in Group.pm: check => _check_field
+	main status page(leftover bugs from array => hash conversion)
+
+=back
+
+=head2 2001-02-13
+
+=over 2
+
+=item added
+
+	show clients (clients.tpl)
+	client: id, lost_chunks, lost_keys (incl. doc about all fields)
+
+=item fixed
+	
+	list of groups in add client form
+	Item.pm as_string bug regarding get for Math:: refs
+
+=back
+
+=head2 2001-02-12
+
+=over 2
+
+=item added:
+
+	request command 'add' and 'change' with checks
+	server can handle normal form submits
+	generic page to show after adding something
+	Group.pm (inclusive regression tests)
+	regression test for Client.pm
+
+=item fixed:
+
+	doc about requests cmd=(add|change)
+	groups_list, client_list, job_list are loaded correctly
+	new/init of client (using defaults and check)
+
+=back
+
+=head2 2001-02-05
+
+=over 2
+
+=item added:
+
+	request command 'form'
+	more tests for requests
+
+=item fixed:
+
+	doc about requests status/form
+	testsuite dicoppm (messages)
+	all the status/form pages work now (sort of empty)
+
+=back
+
+=head2 2001-02-02
+
+=over 2
+
+=item added:
+
+=item fixed:
+	
+	bug in parseFormArgs, adapted to run server under Apache
+
+=back
+
+=head2 2001-01-30
+
+=over 2
+
+=item added:
+
+	regression test for Item.pm
+	from_string in Item (generic)
+
+=item fixed:
+
+	as_string puts keys in sorted order to reproduce results
+	dicoppm.t
+
+=back
+
+=head2 2001-01-29
+
+=over 2
+
+=item added:
+
+	documentation about client info command and response codes
+	regression test for Request.pm
+	sample server is able to put out main stats page
+
+=item fixed:
+
+	regression test for config works now with Harness
+	Request.pm works now
+
+=back
+
+=head2 2001-01-19
+
+=over 2
+
+=item added:
+
+	Dicop::Config is package
+	message.txt defines error messages
+
+=item fixed:
+	
+	event, logger and crumble more generic
+
+=back
+
+=head2 2001-01-18
+
+=over 2
+
+=item added:
+
+	Makefile.pl, Manifest
+
+=item fixed:
+
+=back
+
+=head2 2001-01-16
+
+=over 2
+
+=item added:
+
+	tests for Job, Client
+	Job->check()
+
+=item fixed:
+	
+	heaploads of bugs ;)
+
+=back
+
+=head2 2001-01-15
+
+=over 2
+
+=item added:
+
+	Charset.pm
+	Data.pm is all the clusters data, Item.pm is now base class
+	lib/, t/, test script for Chunk.pm
+
+=item fixed:
+
+	nothing
+
+=back
+
+=head2 2000-12-19
+
+=over 2
+
+=item added:
+
+	started rewrite from v1.0
+
+=item fixed:
+	
+	nothing
+
+=back
+
+=cut
+

@@ -1,0 +1,21 @@
+
+<h1><a class="h" href="##selfstatus_main##">DiCoP</a> - Changed ##type##</h1>
+
+<div class="text">
+
+<p>
+The ##type## was changed and now has the following settings:
+</p>
+
+<table>
+
+##params##
+
+</table>
+
+<p>
+Go back to the <a href="##selfstatus_main##">main page</a>.
+</p>
+
+</div>
+

@@ -1,0 +1,32 @@
+# These comments will be stripped.
+# Field X-Mailer: will be automatically inserted. Modify the rest to suit
+# your needs. 
+#
+Subject: [DiCoP-##name##] New job ###jobid## ('##jobdescription##')
+To: ##mail_to##
+From: ##mail_from##
+Errors-to: ##mail_errors##
+Priority: high
+Precedence: Bulk
+Sender: dicop@localhost
+X-Automated-Sending: Yes
+X-Comment: One job to bind them all
+
+On ##localtime##, a new job was added to the cluster '##name##'.
+
+The job's data is below:
+
+  Id:		##jobid##
+  Owner:	##jobowner##
+  Description:	##jobdescription##
+  Rank:		##jobrank## (means currently ##jobpriority##%)
+  Type:		##jobjobtype## (##jobtypedescription##)
+  Charset:	##jobcharset## (##charsetdescription##)
+  Start key:	##jobstart## (in hex)
+  End key:	##jobend## (in hex)
+  Target:	##jobtarget## (in hex)
+
+In case these settings are correct, no further action is required on your part.
+
+Have fun!
+

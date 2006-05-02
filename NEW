@@ -1,0 +1,475 @@
+
+=pod
+
+=head1 NAME
+
+NEW -- What's new
+
+=head1 CHANGES in v3.00
+
+This document details the changes between the last and the current version.
+
+=head1 REFACTORED CODE
+
+Although on the outside, v3.00 looks almost exactly like v2.23, this release
+is quite different under the hood. The code was split into generic and DiCoP
+specific parts and all the generic parts were moved to the package
+Dicop-Base. This allows us to reuse the generic parts for other projects.
+
+Here are some of the under-the-hood changes that make life for us (the
+developers) easier, but shouldn't affect you directly:
+
+=over 2
+
+=item Request patterns
+
+The requests (the messages exchanged between client or browser and the
+server) are no longer hardcoded into the source. Instead a text file
+C<def/request.def> defines now the allowed requests with their parameters
+and options. There should be no need to edit this file, though.
+
+=item Object patterns
+
+Likewise, the internal server objects (like jobs, testcases and so on) are
+now defined in C<def/objects.def>. There should be no need to edit this file,
+either.
+
+=item Better template system
+
+Edit and add forms are now generated via a general C<edit_object.tpl>
+respectively C<add_object.tpl> template, which automatically includes the
+relevant edit fields from small include files called C<editfield_FOO.inc>.
+This makes maintaining and/or changing them much easier and prevents mistakes
+from Copy&Paste.
+
+=back
+
+Here is a list of some of the changes that might affect you:
+
+=head1 DESIGN CHANGES
+
+=over 2
+
+=item Test::Simple v0.47 and Perl v5.8.3 requirements
+
+We started to move over the testsuite to Test::Simple - this means this module
+is now required to run the testsuite. However, since Dicop::Server now needs
+at least Perl v5.8.3 to run, you will likely already have the required
+Test::Simple module.
+
+=item IO::Socket::SLL (and OpenSSL and Net::SSLeay) requirements
+
+If you plan to use the new SSL feature of the server, or client, then these
+modules must be installed.
+
+=item The client requirements
+
+The client needs quite a few parts of Dicop::Base. However, we seperated the
+things so that you can simple drop a few of the Dicop::Base .pm files into
+the client dir, and have it work without making it nec. to install
+Mail::Sendmail, Net::Server etc at the node.
+
+Here is a short list of files the client needs:
+
+	lib/basics
+	lib/Dicop.pm
+	lib/Dicop/Base.pm
+	lib/Dicop/Cache.pm
+	lib/Dicop/Client.pm
+	lib/Dicop/Config.pm
+	lib/Dicop/Event.pm
+	lib/Dicop/Hash.pm
+	lib/Dicop/Item.pm
+	lib/Dicop/Request.pm
+
+	lib/Dicop/Client/LWP.pm
+	lib/Dicop/Client/wget.pm
+
+	lib/Dicop/Request/Pattern.pm
+
+	lib/Linux/Cpuinfo.pm
+
+The other solution is to install Dicop::Base and all it's prerequisites
+at every node.
+
+To make it easier to deploy clients we publish a Dicop-Client-3.00.tar.gz
+package at our website, which contains everything the client needs, except
+C<libwww> and C<Linux::Cpuinfo>, which can be found on L<http://search.cpan.org>.
+
+=back
+
+=head1 WEB INTERFACE (GUI)
+
+The web-frontend (e.g the GUI you see when you connect to the server with
+a browser) has got many small fixes and enhancements. This includes:
+
+=over 2
+
+=item *
+
+graphical percentage bars instead of just plain text 
+
+=item *
+
+mouse-over titles for many links and texts that give you more information
+without clicking or burdening the view with lots of (usually not needed) text
+
+=item *
+
+menus in the upper-right corner for Help/Edit/Delete etc instead of hard
+to find text-links buried in the middle of the page
+
+=item *
+
+'Browse' buttons allow you to select files/directories from a list of
+existing files instead of manually typing their path and name into an
+edit field
+
+=item *
+
+all edit and add forms are now automatically puzzled together from templates
+for each valid field of the object, instead of generated from a single
+template file per object type. This allows much easier adjusting of these
+formulars and makes a lot of improvements like grouping (both by indending
+and coloring) possible.
+
+=back
+
+=head1 BUG FIXES
+
+Here is a listing of important bugs that have been fixed, testcases were
+added to prevent these from happening again:
+
+=over 2
+
+=item *
+
+Embedding the timestamp in the mail-templates results now in a readable
+time, instead of just the seconds since 1970. Not everybody might be able
+to do the conversion in his head ;)
+
+=item *
+
+Editing the C<minlen> of a Jobtype is now possible.
+
+=item *
+
+Editing the settings of a proxy is now again possible.
+
+=item *
+
+It is now possible to give a file as a target for a testcase (as it always
+was possible for normal jobs), and if there was a script associated with the
+testcase's jobtype, then this script will be run and generate a C<.tgt> file
+for the testcase.
+
+=item *
+
+Setting a field of an object to the empty string was not possible since all
+empty browser params were filtered away.
+
+Formerly this wasn't actually necessary, but now cases can have empty URL
+fields.
+
+=item *
+
+Errors in a config file now cause the server to actually report a
+proper warning including filename and line number where they are encountered.
+
+=item *
+
+Obsolete keys in the config are now detected, and produce an error upon startup.
+
+=item *
+
+The client now first gathers all filenames it needs to do it's work, then
+checks which ones are missing/outdated and then asks the server in one connect
+to get the download locations of the missing/outdated files. It then downloads
+them one by one, as usual.
+
+This solves the problem that fresh clients that need to download a lot of
+workers (f.i. just to work on the testcases) caused a lot of connects to the
+server to ask for the download locations of the files. And with lots of
+connects in a short time frame the client could hit the B<rate-limit> even
+before it did any real work, since requests for filenames count towards that
+limit.
+
+This also reduces the number of connects to the server, and hence it's load.
+
+=item *
+
+When adding simple charsets, multiple sequences are now handled correctly. This
+means that you can enter things like C<'a'..'z', '0'..'9'> and it will work
+as expected. Formerly only one sequence was allowed, contradicting what the
+help said.
+
+=item *
+
+Checking other jobs with a found result did not work properly, and the check
+list (e.g. the list containing the results from other jobs with the same
+charset) did not survive a shutdown/restart cycle of the server.
+
+=item *
+
+The server now handles requests for "favicon.ico" much more gracefully, e.g.
+it ignores them. Formerly, newer browsers like Firefox would request the
+icon with each request, and the server always generated the main status page
+instead. This caused longer delays and wasted CPU time for browsing the HTML
+interface.
+
+=back
+
+
+=head2 Improved security
+
+=over 2
+
+=item *
+
+The server now checks the IP address of the connecting client/proxy against
+the stored address and mask. Please make sure that your server contains the
+proper IP info, otherwise client connects will be denied!
+
+=item *
+
+The client now has the ability to support SSL connections to both the
+server/proxy and/or the fileserver. Use C<https://dicop-server:8888/>
+will automatically encrypt the connection with SSL if both the necessary
+modules are installed at the client, and the server/proxy supports
+SSl (config has C<proto = "SSL"> at the server/proxy side, see below).
+
+=item *
+
+Server, proxy and client now have the ability to support the SSL protocol via
+the C<proto = "ssl"> setting in the config file. Together with updated clients
+this allows all communication between server and client to be encrypted.
+
+However, at the moment the server can only be either C<ssl> or C<tcp>,
+as indicated by the C<proto = "foo"> setting in the config, e.g. you cannot
+mix SSL and non-SSL clients (this is a limitation of C<Net::Server>, and
+currently there is no way to overcome this without rewriting a lot of
+third-party code from scratch).
+
+This means that if you switch a server to SSL, B<all> clients must also
+connecting to that server must also support SSL.
+
+To overcome this limitation, use your server with C<proto = "tcp"> and then
+add a proxy to it. Run then a C<Dicop::Proxy> at the same machine (or another
+machine if desired), and switch that proxy to SSL and point it to your main
+server as it's upstream server.
+
+All clients that support SSL must then connect via that proxy, while all
+others must use the server directly. Here is a picture showing the setup:
+
+	+---------------+   TCP	 +---------------+
+	| Server (tcp)  |<-------| Proxy (ssl)   |
+	+---------------+	 +---------------+
+		^ 			^
+		| TCP			| SSL
+		|			|
+	+---------------+   	 +---------------+
+	| Client (tcp)  |	 | Client (ssl)  |
+	+---------------+	 +---------------+
+
+Note that the connection to the file server is independend of the connection
+to the server/proxy.
+
+Please see C<perldoc doc/Dicop.pod> for more details.
+
+=back
+
+
+=head1 NEW FEATURES
+
+=over 2
+
+=item *
+
+Setting up a complete new server is now made easier with the included script
+C<./setup>. Run it to generate the necessary config files, mail and event
+templates, user and group settings, as well as to change the permissions.
+
+=item *
+
+Dicop now contains cases, which are just containers to group jobs
+together. This will help you to manage many jobs more easier. Each job now
+must belong to exactly one case. If there are no cases upon loading the data,
+a default case will be created and all jobs added to this case. You can later
+modify the case, create now ones as well as move jobs from one case to another
+via the web interface.
+
+Apart from viewing the case details including a list of jobs belonging to that
+case, you can also get a complete list of all existing cases via the menu in the
+footer.
+
+=item *
+
+New config field C<case_url_format>. Cases (see previous item) have an URL
+field, and if that URL field is empty, it will be automatically generated
+from that config key and the current case whenever you view a case via the
+HTML interface. This means you do not have to type all URLs manually in,
+and changing them all later on is as easy as editign the config and restarting
+the server process.
+
+This feature allows you to link your cases to a case database from DiCoP.
+
+=item *
+
+New config field C<send_event_url_format>. If defined, the DiCoP server will
+send events like new job, job finished or result found to that URL by
+using the templates from C<tpl/event/>.
+
+=item *
+
+Client's now support the config option C<sub_arch>. If this field is set, the
+client will append it to the architecture name and send it to the server.
+For instance, two clients runnning under Linux could have C<sub_arch> set
+to C<i386> and C<ia64> and the server would then receive C<linux-i386>
+and >linux-ia64>, respectively.
+
+The difference would be that the server first tries to serve files from the
+sub directory named after the sub-architecture, and then one up, and so on.
+Here is an example for the architecture string 'linux-i386-amd', the server
+would look into this directories to serve a worker file to the client:
+
+		worker/linux/i386/amd
+		worker/linux/i386
+		worker/linux/
+
+This allows OS or CPU specific overrides to be specified on a per-client
+basis.
+
+=item *
+
+A new field in jobtypes allows you to define extra files that need to be
+downloaded by the client for the worker. The files are architecture-dependend 
+or architecture-independed ('all'). See also above for the new client's
+sub-arch feature, you can enter as architecture either the base architecture,
+like C<linux>, or the full architecture string like C<linux-i386>.
+
+In the first case all clients running under linux would get the extra file,
+in the second case only these reporting exactly C<linux-i386> would get it.
+ 
+=item *
+
+The list of all open chunks now also shows chunks in the VERIFY state.
+
+=item *
+
+Entry fields that require a filename (like job or testcase target fields) have
+a browse button which enables you to select the file from a direcrory view.
+
+=item *
+
+The client sends now upon failure the output from the worker as error
+message to the server. The last error message and the time it was generated can
+be seen on the server's client status page for each client.
+
+=item *
+
+The server now tracks the time for each connect, and the server status page
+displays a running average, the overall time and the time it took for the last
+connect. These times include all the overhead per connect, e.g. not just the
+time to generate the answer page.
+
+=item *
+
+Several error messages regarding daemon startup have been made more clear,
+providing hints on how to fix the problems. A new script called C<setup>
+will also help for setting up a server for the first time.
+
+=item *
+
+Support for chunk description files (CDF) is now complete. If extra parameters
+are necessary on a chunk-by-chunk basis, the server will generate a CDF and
+tell the client to:
+
+	* download this file
+	* pass it to the worker and
+	* afterwards delete it
+
+The client now also supports this fully. This feature is important for special
+charsets like Dictionary or Extract sets, because these have parameters (like
+file offsets) that change for every chunk.
+
+The I<job description files> are still supported and used when their are
+parameters that are necessary for a job, but do not change for the chunks.
+
+=item *
+
+In addition to the now fully supported JDF/CDF (see above), the server and
+client now support "inline" files. For short files (just like CDF/JDF), the
+server inlines the file data into the answer sent to the client, which extracts
+and stores it. This saves the client from asking the server for the download
+location and downloading the file from the file server.
+
+=item *
+
+It is now possible to disable testcases. Each testcase can be disabled on it's
+own. This allows you to temp. disable testcases that are known not to work.
+
+=back
+
+=head1 KNOWN ISSUES
+
+=over 2
+
+=item SSL Support
+
+SSL support does not actually work. We are still investigating why.
+
+=item Event Posting
+
+Events (job finished, job started etc) will be done while the current
+request is worked on. If the remote server is down or slow, this may
+cause the request to be stalled or aborted. Events should be posted
+outside the main request handling loop, just as emails are being sent.
+
+We plan to implement this soon.
+
+=item Selecting files/dirs with '_'
+
+It is no longer possible to select files with "_" in the name after you have
+hit "Reload" on the file selector page.
+
+=item Dirs without proper permission
+
+These cause an unknown error instead of a more readable "permission denied"
+when selecting files and directories.
+
+=back
+
+=head1 CAVEATS
+
+=over 2
+
+=item Obsolete config settings
+
+The config setting C<is_proxy> is obselete and no longer supported. Please
+remove the appropriate line from your config file. The daemon will warn and
+refuse to start if it is still present.
+
+=item Old browser
+
+The HTML interface now uses CSS quite extensively. Old browsers without CSS
+support (like Netscape 4.x) or with incomplete CSS support (like Konqueror
+before 3.2, Internet Explorer 5.x etc) will have problems rendering the
+interface properly. It should be still usable, but it will not be pretty.
+
+Especially in the light of security and looming exploits, we strongly
+encourage you to upgrade your browser to the newest version.
+
+=back
+
+=head1 AUTHOR
+
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006
+
+DiCoP is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License version 2 as published by the Free
+Software Foundation.
+
+See the file LICENSE or L<http://www.bsi.bund.de/> for more information.
+
+=cut
+

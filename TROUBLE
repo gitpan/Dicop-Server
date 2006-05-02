@@ -1,0 +1,25 @@
+
+TROUBLESHOTING
+==============
+
+The documentation about troubleshooting is now in "doc/Trouble.pod". You can
+either read it with:
+
+	perldoc doc/Trouble.pod
+
+on the console, or when the server is running, by clicking on "Help" and
+the choosing the "Troubleshooting" topic from the list.
+
+(C) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006.
+
+For licensing information please refer to the LICENSE file.
+
+Contact:
+
+	Address: BSI
+	         Referat 123
+        	 Godesberger Alle 185-189
+	         Bonn 53175
+	         Germany
+	email:   dicop @ bsi.bund.de              (for public key see dicop.asc)
+	www:     http://www.bsi.bund.de/

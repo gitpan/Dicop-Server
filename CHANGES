@@ -8,6 +8,21 @@ This document details the complete changes from v3.01 onwards.
 See the other CHANGES files like C<CHANGES-2.20>, C<CHANGES-3.00> etc for the
 full version history up to version v3.00.
 
+=head2 2006-06-01 (Server/Client v3.03)
+
+=over 2
+
+=item fixed
+
+	rename Jobtype::extrafields to extra_fields for consistency
+	revert the "/usr/bin/env perl" change
+	fix all the POD errors and add tests for POD errors and coverage
+	bring POD coverage to 100%
+	wcr lib: Total: lines 11202, words 42244, chars 313076
+	4898 tests
+
+=back
+
 =head2 2006-05-02 (Server/Client v3.02)
 
 =over 2
@@ -15,17 +30,14 @@ full version history up to version v3.00.
 =item fixed
 
 	use "/usr/bin/env perl" vs. "/usr/bin/perl"
-        fixups in Makefile.PL, use PREREQ_FATAL
-        fix (c) dates, contact address etc
-        make a non-beta version for release
+	fixups in Makefile.PL, use PREREQ_FATAL
+	fix (c) dates, contact address etc
+	make a non-beta version for release
 	fix t/data/clientpm.t to not use ok() wrongly
-        add a SIGNATURE again (for CPAN release)
-        wcr lib: Total: lines 11065, words 41785, chars 309646
+	add a SIGNATURE again (for CPAN release)
+	wcr lib: Total: lines 11065, words 41785, chars 309646
 	4845 tests
 
-=back
-
-	
 =back
 
 =head2 2005-06-20 (Server/Client v3.01 build 5)

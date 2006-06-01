@@ -16,6 +16,8 @@ Net::Server along the lines of:
 
 This seems to be spurious and can be ignored.
 
+=back
+
 =head2 Server
 
 =over 2

@@ -57,8 +57,8 @@ is ($jobtype->get('script'),'script', 'script');
 is ($jobtype->get('fixed'),0, 'fixed');
 is ($jobtype->get('minlen'),1, 'minlen');
 is ($jobtype->get('extrafields'), '', 'no extra fields');
-is (join(":",$jobtype->extrafields()), '', 'no extra fields');
-is (scalar $jobtype->extrafields(), 0, 'no extra fields');
+is (join(":",$jobtype->extra_fieldnames()), '', 'no extra fields');
+is (scalar $jobtype->extra_fieldnames(), 0, 'no extra fields');
 
 ###############################################################################
 # change and can change
@@ -79,7 +79,7 @@ is ($jobtype->{name},'tname','name');
 is ($jobtype->{minlen},'9','minlen');
 is ($jobtype->{files},'','files');
 is ($jobtype->get('extrafields'), 'username,userhaircolor', 'two extra fields');
-is (join(":",$jobtype->extrafields()), 'username:userhaircolor', 'two extra fields');
+is (join(":",$jobtype->extra_fieldnames()), 'username:userhaircolor', 'two extra fields');
 
 ###############################################################################
 # extra_files()

@@ -700,11 +700,11 @@ For a description of fields a chunk has, see C<doc/Objects.pod>.
 
 =head1 METHODS
 
-=head2 new
+=head2 new()
 
 Create a new chunk object.
 
-=head2 merge
+=head2 merge()
 
 	$self->merge($other_chunk);
 
@@ -712,11 +712,11 @@ Merge second chunk into the first one, fusing them together. Does only work
 if both chunks are adjacent to each other, e.g. the second one starts where
 the first one ends, or vice versa.
 
-=head2 token
+=head2 token()
 
 Get/set the (secret) token of the chunk.
 
-=head2 check_age
+=head2 check_age()
 
 When an chunk was issued too long ago, free it so that other clients can tackle
 it.
@@ -726,7 +726,7 @@ some (off-line) clients can have a longer linger time than others.
 
 Returns true when the chunk was modified (set to TOBEDONE), otherwise undef.
 
-=head2 is_open
+=head2 is_open()
 
 	if ($chunk->is_open())
 	  {
@@ -735,31 +735,36 @@ Returns true when the chunk was modified (set to TOBEDONE), otherwise undef.
 
 Returns true if the chunk is open, e.g. not DONE nor SOLVED.
 
-=head2 status
+=head2 status()
 
 Return the status code.
 
-=head2 result
+=head2 result()
 
 Return the result or undef for no result yet.
 
-=head2 start
+=head2 start()
 
 Return the first key in this chunk.
 
-=head2 end
+=head2 end()
 
 Return the last key in this chunk.
 
-=head2 size
+=head2 size()
 
 Return the size in keys/passwords from start to end.
 
-=head2 checksum
+=head2 checksum()
 
 Return the checksum.
 
-=head2 border
+=head2 charset()
+
+Return the Math::String::Charset object that is used for the start
+and end key.
+
+=head2 border()
 
 	$self->border($fixed_chars,$key,$round_up);
 
@@ -774,7 +779,7 @@ up, C<$round_up != 0> means rounding down.
 Or in other words, it ensures that the given limit of keys is a multiple of
 the size of the border string.
 
-=head2 verify
+=head2 verify()
 
 	$new_chunk_status =
           $chunk->verify ($client, $result, $crc, $need_done, $need_solved);
@@ -803,14 +808,14 @@ caller after taking appropriate action by logging or whatever needs to be
 done. Actually, status BAD can linger around for some hours to let the admin
 see the BAD chunks and the clients that caused that smell...
 
-=head2 verifiers
+=head2 verifiers()
 
 	my $count = $chunk->verifiers();
 
 Returns the number of entries in the verifier list. Each client that works
 on this chunk will be added to this list, including his result and CRC.
 
-=head2 add_verifier
+=head2 add_verifier()
 
 	$chunk->add_verifier($client,$status,$crc);
 
@@ -818,27 +823,37 @@ Add an client to the list of verifiers, along with the result (SOLVED, DONE)
 and the crc (as returned by the client) for the chunk. Does nothing if the
 result is not DONE or SOLVED (e.g. it was FAILED or TIMEOUT).
 
-=head2 del_verifier
+=head2 del_verifier()
 
 	$chunk->del_verifier($client);
 
 Remove the client from the list of verifiers. The client does not necc. to
 be in the list, in this case nothing will be done.
 
-=head2 clear_verifiers
+=head2 clear_verifiers()
 
 	$chunk->clear_verifiers();
 
 Clear the list of verifiers. Done when a chunk failed verification, or was
 merged with another chunk.
 
-=head2 dump_verifierlist
+=head2 dump_verifierlist()
 
 	my $text  =  $chunk->dump_verifierlist();
 
 Return verifierlist as text dump suitable for logging, or embedding in a mail.  
 
-=head2 verified_by
+=head2 client_in_verifier_list()
+
+	if ($chunk->client_in_verifier_list($client))
+	  {
+	  ...
+	  }
+
+Return true if the given client is in the list of verifiers for this
+chunk.
+
+=head2 verified_by()
 
 	if ($chunk->verified_by($client))
 	  {
@@ -847,6 +862,22 @@ Return verifierlist as text dump suitable for logging, or embedding in a mail.
 
 Returns true if the client is already in the verifier list of that chunk. Used
 to avoid giving a chunk twice to a client.
+
+=head2 reason()
+
+	my $reason = $chunk->reason();
+
+Return the error message in case the chunk was marked as FAILED.
+
+=head2 split()
+
+Splice a chunk into two, the size given is either relatively (<1.0) or
+absolutely. Return new chunk, aka the second one of the two.
+
+=head2 issue()
+
+Issue a chunk to a specific client, e.g. mark it as issued and note
+the client ID for a later verify.
 
 =head1 BUGS
 

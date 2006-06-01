@@ -683,8 +683,8 @@ $job->{jobtype} = Dicop::Data::Jobtype->new ( id => 5, fixed => 3, extrafields =
 $job->{extra0} = 'bar';
 $job->{extra1} = 'baz test';
 
-is (scalar $job->{jobtype}->extrafields(), 2, 'username, foo_bar');
-is (join(",", $job->{jobtype}->extrafields()), 'username,foo_bar', 'extrafields()');
+is (scalar $job->{jobtype}->extra_fieldnames(), 2, 'username, foo_bar');
+is (join(",", $job->{jobtype}->extra_fieldnames()), 'username,foo_bar', 'extrafields()');
 
 is ($job->extra_params(), 'username_bar;foo%5fbar_baz+test', 'extra_params');
 is ($job->extra_fields(), "extra0=757365726e616d65,626172\nextra1=666f6f5f626172,62617a2074657374\n", 'extra_fields');

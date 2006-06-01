@@ -47,7 +47,7 @@ if ($debug < 2)
   warn ("*********** Warning:\n");
   warn ("  You do not seem to have Devel::Leak or Devel::Size installed. Debug support will not be available.\n");
   warn ("  You need to install the latest version of Devel::Size and Devel::Leak from http://search.cpan.org/\n"); 
-  sleep(5);
+  sleep(3);
   }
 
 #############################################################################
@@ -62,7 +62,7 @@ WriteMakefile(
     'VERSION'           => $version,
     'PREREQ_FATAL'	=> 1, 
     'PREREQ_PM'		=> { 
-		'Dicop::Base' => 3.02,
+		'Dicop::Base' => 3.03,
 		'Digest::MD5' => 2.09,
 		'File::Spec' => 0.82,
 		'Mail::Sendmail' => 0.77,

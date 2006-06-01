@@ -22,7 +22,7 @@ use Dicop::Base qw/decode/;
 use Dicop qw( MAX_FAILED_AGE MAX_ISSUED_AGE FAILED DONE SOLVED TIMEOUT );
 use Math::BigFloat;
 
-sub MAX_CONNECTS () { 24; }
+sub _MAX_CONNECTS () { 24; }
 sub is_proxy () { 0; }
 
 #############################################################################
@@ -78,9 +78,7 @@ sub _construct
 
 sub put
   {
-  my $self = shift;
-  my $var = shift;
-  my $data = shift;
+  my ($self,$var,$data) = @_;
  
   if ($var =~ /^(done_keys|lost_keys)/)
     {
@@ -206,7 +204,7 @@ sub connected
   push @$c,$self->{last_connect} 
     if @$c == 0 || $c->[-1] < $self->{last_connect};
 
-  @$c = splice (@$c,-MAX_CONNECTS(),MAX_CONNECTS) if scalar @$c > MAX_CONNECTS;
+  @$c = splice (@$c, - _MAX_CONNECTS(), _MAX_CONNECTS) if scalar @$c > _MAX_CONNECTS;
   $self->{chunk_time} = 0;
   if (@$c > 1)
     {
@@ -229,7 +227,7 @@ sub rate_limit
   my $self = shift;
 
   # rate-limit client to no more than one per 2.5 minutes
-  return ((@{$self->{connects}} > (MAX_CONNECTS-2)) && ($self->{chunk_time} < 60));
+  return ((@{$self->{connects}} > (_MAX_CONNECTS-2)) && ($self->{chunk_time} < 60));
   }
 
 sub discard_job
@@ -617,7 +615,7 @@ For a description of fields a client has, see C<doc/Objects.pod>.
 
 =head1 METHODS
 
-=head2 architectures
+=head2 architectures()
 
 	my @archs = $client->architectures();
   
@@ -625,31 +623,50 @@ Returns the architectures the client belong to. C<{arch}> can be something like
 "linux-i386" and a client with that belongs to 'linux-i386' and 'linux', so this
 would return a list of ('linux-i386', 'linux').
 
-=head2 went_offline
+=head2 went_offline()
 
 Returns 0 for no, and 1 for yes. Returns only one time 1, then returns 0
 until the client goes offline again.
 
-=head2 is_online
+=head2 is_online()
 
 Given a time in seconds, test whether client did a connect in that timeframe.
 If yes, return 0 (client is online) or 1 (client offline).
+
+=head2 is_proxy()
+
+Return true if the client is a proxy. False for normal clients.
 
 =head2 lost_chunk
 
 Client failed to report back for a chunk, so update his stats.
 
-=head2 discard_job
+=head2 reset()
+
+	$client->reset();
+
+Reset the clients statistics, like job speed, average speed, and
+delete failure counters etc.
+
+=head2 discard_job()
 
 A job on the server is done/suspended/closed so the client can discard cached
 information (notebly the speed value). This is necc. to avoid huge cache
 growths.
 
-=head2 speed_factor
+=head2 adjust_speed()
+
+	my $speed = $client->adjust_speed($size, $took, $jobid, $status);
+
+Adjusts the speed factor of the job on this client, taking
+into account the size of the chunk (in keys), the time it took to
+complete (in seconds) and the status (failed or timeout?).
+
+=head2 speed_factor()
 
 Recalculate the average speed factor from the different job speeds.
 
-=head2 count_failure
+=head2 count_failure()
 
 Increment the failure counter for a given jobtype. If given increment is zero,
 the counter will be reset.
@@ -657,7 +674,7 @@ the counter will be reset.
 	$self->count_failure($jobtype,2);	# inc by 2
 	$self->count_failure($jobtype,0);	# reset
 
-=head2 failures
+=head2 failures()
 
 Return number of failures (the so-called failure score) for a jobtype. For
 each FAILED chunk the score is raised by 1, and for each FAILED testcase the
@@ -670,7 +687,14 @@ appropriate testcases if the failure counter is too high. Alternatively a
 restart of the client will reset the counter, since the client will request
 and work on all testcases.
 
-=head2 punish
+=head2 store_error()
+
+	$client->store_error( $time, $error_text);
+
+Given a time stamp and an error message, stores these two to
+display them on the GUI later.
+
+=head2 punish()
 
 	$client->punish($pain);
 
@@ -691,7 +715,7 @@ into the suspicious group, which means it absolutely *must* verify the work
 with a trusted client and *must* succeed in doing so. Only then it is put
 back in the "untrusted" group.
 
-=head2 job_speed
+=head2 job_speed()
 
 Return a clients speed for a given job in keys/s. In case this is not defined,
 calculates the speed from it's onw average speed and the given default speed
@@ -699,22 +723,22 @@ for the jobtype based on the following formula:
 
 	$jobspeed = $client_speed * $jobtype_speed / 100;
 
-=head2 report
+=head2 report()
 
 Client reported back work, so update his stats, recalculate speed value etc.
 
-=head2 connected
+=head2 connected()
 
 Client connected, update his stats.
 
-=head2 rate_limit
+=head2 rate_limit()
 
 	return if $self->rate_limit();
 
 Returns true if the client's rate limit was reached, meaning no more connects
 are allowed at the current time.
 
-=head2 terminate
+=head2 terminate()
 
 	$client->terminate()
 

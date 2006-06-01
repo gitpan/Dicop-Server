@@ -52,7 +52,7 @@ sub rate_limit
 
   # rate-limit proxy to no more than one connect per 2 seconds
 
-  return ((@{$self->{connects}} > (Dicop::Data::Client::MAX_CONNECTS()-2)) && ($self->{chunk_time} < 2));
+  return ((@{$self->{connects}} > (Dicop::Data::Client::_MAX_CONNECTS()-2)) && ($self->{chunk_time} < 2));
   } 
 
 #############################################################################
@@ -172,6 +172,14 @@ Return true if the field's value can be changed.
 
 Returns true if the client's rate limit was reached, meaning no more connects
 are allowed at the current time.
+
+=head2 is_proxy
+
+	if ($client->is_proxy())
+		{
+		}
+
+Returns true if the client is a proxy, or false for normal clients.
 
 =head1 BUGS
 

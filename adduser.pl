@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 
 # (c) Bundesamt fuer Sicherheit in der Informationstechnik 2002-2006. This
 # file is part of the DiCoP package and falls under the same licence.

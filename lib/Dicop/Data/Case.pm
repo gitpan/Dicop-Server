@@ -12,8 +12,8 @@
 
 package Dicop::Data::Case;
 use vars qw($VERSION);
-$VERSION = 0.02;	# Current version of this package
-require  5.006;		# requires this Perl version or later
+$VERSION = 0.03;	# Current version of this package
+require  5.008001;	# requires this Perl version or later
 
 use base qw(Dicop::Item);
 use strict;
@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-# Dicop/Data/Case - a container to group jobs in the Dicop system
+Dicop::Data::Case - a container to group jobs in the Dicop system
 
 =head1 SYNOPSIS
 
@@ -75,7 +75,7 @@ __END__
 
 =head1 REQUIRES
 
-perl5.005, Exporter, Data::Item
+perl5.008001, Exporter, Data::Item
 
 =head1 EXPORTS
 

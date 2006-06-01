@@ -27,8 +27,6 @@ server version into it. Do B<NOT> overwrite or patch the old installation!
 
 =item 4
 
-=head2 Verify the package
-
 Before you do anything with the downloaded package, verify the signature.
 
 Download our GnuPG key from http://www.bsi.bund.de/produkte/dicop/download.htm
@@ -181,11 +179,9 @@ overwrite the two files in tpl/ itself.
 
 Skip step 21 to 49, they aren't that important anyway.
 
-=item 50
+=back
 
 Lean back satisfied and enjoy the new version. ;)
-
-=back
 
 =head1 AUTHOR
 

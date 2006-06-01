@@ -281,15 +281,11 @@ Look at Data::Dumper, Freeze/Thaw etc to simplify code?
 Testsuite coverage needs to be increased. Especially the tpl files could be
 automatically tested for well-formed and valid HTML code.
 
-=item *
-
-Doc coverage needs to be increased
-
 =back
 
 =head1 AUTHOR
 
-(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2005
+(c) Bundesamt fuer Sicherheit in der Informationstechnik 1998-2006
 
 DiCoP is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License version 2 as published by the Free

@@ -472,7 +472,7 @@ sub _restrict_chunksize
   $wanted;
   }
 
-sub DEBUG () { 0; }
+sub _DEBUG () { 0; }
 
 sub find_chunk
   {
@@ -604,7 +604,7 @@ sub find_chunk
   my $open_chunks = 0;
   my $chunk_nr = -1;			# nr of chunk that we will use/split
 
-  print "DEBUG start $i (count ",scalar @{$self->{_chunks}},")\n" if DEBUG;
+  print "DEBUG start $i (count ",scalar @{$self->{_chunks}},")\n" if _DEBUG;
 
   # The following code contains coarse language, rude optimizations and
   # violent assignments, readers discretion is advised.
@@ -619,7 +619,7 @@ sub find_chunk
     $cur = $self->{_chunks}->[$i];	# shortcut
     $cur->check_age($client,$now)	# first, make TOBEDONE if too old
       if $check_age;			# but don't check too often 
-    print "DEBUG at chunk $i\n" if DEBUG;
+    print "DEBUG at chunk $i\n" if _DEBUG;
     $open_chunks++ if $cur->is_open();	# count chunks that are open 
     if (($cur->{status} == TOBEDONE) ||
         ($cur->{status} == VERIFY)) 	# this one could be used
@@ -637,7 +637,7 @@ sub find_chunk
        if !defined $self->{_first_tobedone};
 
       $fits = ($cur->size() < $maxsize) || 0;
-      print " DEBUG fits: $fits\n" if DEBUG;
+      print " DEBUG fits: $fits\n" if _DEBUG;
 
       # if chunk is in the VERIFY state, and the client is already in the list
       # of verifiers, it cannot verify this chunk, so choose another chunk for
@@ -647,7 +647,7 @@ sub find_chunk
       # if none defined, take it alway
       if (!defined $chunk)		# if none yet, take this
         {
-        print " DEBUG taken\n" if DEBUG;
+        print " DEBUG taken\n" if _DEBUG;
         $chunk = $cur; $chunk_nr = $i; $chunk_fits = $fits;
         }
       else
@@ -657,7 +657,7 @@ sub find_chunk
         if (($chunk->{status} == VERIFY && !$chunk_fits) &&
             ($cur->{status} == TOBEDONE || $cur->size() < $chunk->size()))
           {
-          print " DEBUG taken another\n" if DEBUG;
+          print " DEBUG taken another\n" if _DEBUG;
           $chunk = $cur; $chunk_nr = $i; $chunk_fits = $fits;
           }
         }
@@ -665,7 +665,7 @@ sub find_chunk
       # old chunks temp. as ISSUED|FAILED and will corrected by the next run
       # through the list)
       last if $chunk_fits;
-      print "DEBUG still at it\n" if DEBUG;
+      print "DEBUG still at it\n" if _DEBUG;
 
       # We arrive here only for non-fitting chunks.
       # If we don't check the ages, we can stop if it doesn't fit and is
@@ -677,8 +677,8 @@ sub find_chunk
       }
     $i++;				# next chunk
     }
-  print "DEBUG steps $self->{_find_chunk_steps}\n" if DEBUG;
-  print "DEBUG next  ",$self->{_first_tobedone}||'undef',"\n" if DEBUG;
+  print "DEBUG steps $self->{_find_chunk_steps}\n" if _DEBUG;
+  print "DEBUG next  ",$self->{_first_tobedone}||'undef',"\n" if _DEBUG;
   if ($open_chunks == 0)		# found no chunks at all
     {
     $self->status(DONE);		# close job
@@ -1048,7 +1048,7 @@ sub get_as_string
   if ($key eq 'extras')
     {
     # get the names of the extra fields from our jobtype
-    my @extras = @{$self->{jobtype}->{extra_fields}};
+    my @extras = $self->{jobtype}->extra_fieldnames();
     my $txt = ''; my $i = 0;
     foreach my $extra (@extras)
       {
@@ -1117,13 +1117,12 @@ sub size
 
 sub extra_params
   {
-  my $self = shift;
-
   # like extra_fields, but returns
   # username_Biffy+Baff;nose_red
+  my $self = shift;
 
   # get the names of the extra fields from our jobtype
-  my @extras = $self->{jobtype}->extrafields();
+  my @extras = $self->{jobtype}->extra_fieldnames();
 
   return '' if @extras == 0;
 
@@ -1157,7 +1156,7 @@ sub extra_fields
   # (the strings are converted to hex like "444546,303132")
 
   # get the names of the extra fields from our jobtype
-  my @extras = $self->{jobtype}->extrafields();
+  my @extras = $self->{jobtype}->extra_fieldnames();
   
   return '' if @extras == 0;
 
@@ -1174,7 +1173,8 @@ sub extra_fields
 
 sub extra_files
   {
-  my ($self,$architecture) = @_;
+  # XXX implement
+  my ($self,$arch) = @_;
 
   # return extra files for client to download necc. for this job
   return;
@@ -1284,14 +1284,14 @@ is only checked at the time of finding a chunk to be issued to a client.
 
 =head1 METHODS
 
-=head2 extra_files
+=head2 extra_files()
 
         @files = $job->extra_files($architecture);
 
 Return list of extra filenames necc. for this job, including files neccessary
 due to the jobtype this job has.
 
-=head2 extra_fields
+=head2 extra_fields()
 
         $txt = $job->extra_fields();
 
@@ -1305,43 +1305,64 @@ The strings are converted to hex like "444546,303132".
 
 This routine is used to include them into the chunk description file.
 
-=head2 flush
+=head2 extra_params()
+
+        $txt = $job->extra_params();
+
+If the jobtype for that job mandates extra fields, will return a text listing
+them in the following format:
+
+  	username_Biffy+Baff;nose_red
+
+This is suitable for returning them as a Dicop::Request.
+
+=head2 flush()
 
 	$job->flush($base_dir):
 
 Write the chunk list of the job to the disk.
 
-=head2 check
+=head2 check()
 
-Check your chunklist, and in case of error, return this error. Undef for "ok".
+Check internal data structures like the chunklist, and in case of error,
+return this error. Undef for "ok".
 
-=head2 chunk
+=head2 chunk()
 
 Return the Nth chunk.
 
-=head2 chunks
+=head2 chunks()
 
 Return number of chunks with a certain status. If no argument is given,
 returns number if all chunks.
 
-=head2 status
+=head2 charset()
+
+Returns the jobs charset as a Math::String::Charset object.
+
+=head2 is_running()
+
+Returns true if the job is currently running, e.g. not suspended or
+done.
+
+=head2 status()
 
 Return status code of job.
 
-=head2 results
+=head2 results()
 
 Return number of results.
 
-=head2 get_chunk
+=head2 get_chunk()
 
 Return a chunk by it's id. This does also look in the checklist, so it will
 always return any chunk in the job, not only the "normal" ones.
 
-=head2 get_chunk_nr
+=head2 get_chunk_nr()
 
 Return a chunk's index number by it's id.
 
-=head2 report_chunk
+=head2 report_chunk()
 
 	$job->report_chunk($chunk,$took);
 
@@ -1351,7 +1372,7 @@ or split chunks, because the size of the chunk is needed later on.
 If the chunk was in the checklist, and is finally DONE, it will be removed
 from the checklist.
 
-=head2 merge_chunks
+=head2 merge_chunks()
 
 Given a chunk number (Nth chunk in array), tries to merge the next and
 previous chunks with that chunk until no longer both the next and the previous
@@ -1359,27 +1380,26 @@ chunk are C<DONE>.
 
 Returns number of merging operations (aka deleted chunks).
 
-=head2 size
+=head2 size()
 
-Return job's size (aka key-room size).
+Return jobs size (aka key-room size) as Math::BigInt.
 
-=head2 percent_done
+=head2 percent_done()
 
 Return the percent of already done keys in this job as float with two digits
 after the dot. See also L<keys_done>.
-after the dot.
 
-=head2 keys_todo
+=head2 keys_todo()
 
 Return the number of keys still todo in this job as a big integer.
 See also L<percent_done> and L<keys_done>.
 
-=head2 keys_done
+=head2 keys_done()
 
 Return the number of already done keys in this job as a big integer.
 See also L<percent_done>.
 
-=head2 find_chunk
+=head2 find_chunk()
 
 Given a client's speed value, try to find a suitable chunk for him. If we
 find a chunk that's too big, split it in two smaller pieces. The first slice
@@ -1393,23 +1413,23 @@ This is _HOT_ code, and executed for nearly each client request. OTOH,
 walking a list of 10.000 chunks takes currently less time than the final
 splitting of the chunk.
 
-=head2 checklist
+=head2 checklist()
 
 	my $count = $job->checklist();
 
 Return number of chunks currently in checklist.
 
-=head2 checklist_empty
+=head2 checklist_empty()
 
 Clears the check list (empties it).
 
-=head2 new_chunk_id
+=head2 new_chunk_id()
 
 	$chunk->{id} = $self->new_chunk_id();
 
 Create a new, unique ID for a new chunk.
 
-=head2 check_also
+=head2 check_also()
 
 	$job->check_also($chunk);
 

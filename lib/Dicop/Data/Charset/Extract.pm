@@ -13,7 +13,7 @@
 package Dicop::Data::Charset::Extract;
 use vars qw($VERSION);
 $VERSION = 0.01;	# Current version of this package
-require  5.005;		# requires this Perl version or later
+require  5.008001;	# requires this Perl version or later
 
 use base qw(Dicop::Data::Charset Exporter);
 use strict;
@@ -64,9 +64,7 @@ sub _construct
 
 sub image_file_name
   {
-  # Set the image file. After making a copy for the job, the image file is
-  # set and we use this newly created object (charset+file) to describe the to
-  # be extracted strings.
+  # Set the image file and start/end from the image file size.
   my ($self, $file) = @_;
  
   $self->{file} = File::Spec->catfile('target','images',$file);
@@ -194,7 +192,7 @@ Dicop::Data::Charset::Extract - describes string extraction from a file
 
 =head1 REQUIRES
 
-perl5.005, Exporter, Dicop::Base, Dicop::Item, Dicop, Dicop::Event, Math::BigInt
+perl5.008001, Exporter, Dicop::Base, Dicop::Item, Dicop, Dicop::Event, Math::BigInt
 
 =head1 EXPORTS
 
@@ -232,21 +230,24 @@ that would invalidate the job's keyspace.
 
 =head1 METHODS
 
-=over 2
-
-=item check()
+=head2 check()
 
 Perform an internal check and return '' for okay, otherwise an error message.
 
-=item type()
+=head2 type()
 
 Returns the type, in this case the string 'extract'.
 
-=item charset()
+=head2 charset()
 
 Return the internal Math::String::Charset object.
 
-=item check_strings()
+=head2 extract_set()
+
+Return the internal Math::String::Charset object, that is
+describing the strings that should be extracted.
+
+=head2 check_strings()
 
         $error = $self->check_strings ($hash, @keys);
 
@@ -257,7 +258,9 @@ out of it.
 To satisify external code, creates Math::String objects from the keys with
 a charset containing '.'..'9'.
 
-=back
+=head2 image_file_name()
+  
+Store the image file name, and set start/end from the image file size.
 
 =head1 BUGS
 

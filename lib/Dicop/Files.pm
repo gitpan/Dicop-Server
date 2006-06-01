@@ -189,7 +189,7 @@ sub description_file
   # extrafields in the jobtype also make this necessary
   my $jobtype = $job->{jobtype};
 
-  $needed ++ if scalar $jobtype->extrafields() > 0;
+  $needed ++ if scalar $jobtype->extra_fieldnames() > 0;
 
   # some description file necessary?
   # a target file means we need to hash it, and return a response

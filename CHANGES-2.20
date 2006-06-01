@@ -5,7 +5,7 @@
 
 =head2 2003-03-13 (Server/Client v2.20 build 46)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -15,7 +15,7 @@
 
 =head2 2003-03-10 (Server/Client v2.20 build 45)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -29,7 +29,7 @@
 
 =head2 2003-03-05 (Server/Client v2.20 build 44)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -48,7 +48,7 @@
 
 =head2 2003-03-05 (Server/Client v2.20 build 43)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -65,6 +65,8 @@
 =back
 
 =head2 2003-02-20 (Server/Client v2.20 build 42)
+
+=over 2
 
 =item added
 
@@ -83,6 +85,8 @@
 =back
 
 =head2 2003-02-19 (Server/Client v2.20 build 41)
+
+=over 2
 
 =item added
 
@@ -110,6 +114,8 @@
 =back
 
 =head2 2003-02-18 (Server/Client v2.20 build 40)
+
+=over 2
 
 =item added
 
@@ -150,6 +156,8 @@
 
 =head2 2003-02-16 (Server/Client v2.20 build 39)
 
+=over 2
+
 =item added
 
 	Client.pm: extract CRC from worker output, too
@@ -164,7 +172,7 @@
 
 =head2 2003-02-13 (Server/Client v2.20 build 38)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -176,6 +184,8 @@
 =back
 
 =head2 2003-02-11 (Server/Client v2.20 build 37)
+
+=over 2
 
 =item added
 
@@ -196,6 +206,8 @@
 
 =head2 2003-02-10 (Server/Client v2.20 build 36)
 
+=over 2
+
 =item added
 
 	support also last:N in start/end for job
@@ -215,6 +227,8 @@
 =back
 
 =head2 2003-02-05 (Server/Client v2.20 build 35)
+
+=over 2
 
 =item added
 
@@ -241,6 +255,8 @@
 
 =head2 2003-02-01 (Server/Client v2.20 build 34)
 
+=over 2
+
 =item added
 
 	Item.pm: get() handles all the different types and cases
@@ -254,6 +270,8 @@
 =back
 
 =head2 2003-01-31 (Server/Client v2.20 build 33)
+
+=over 2
 
 =item added
 
@@ -275,6 +293,8 @@
 
 =head2 2003-01-29 (Server/Client v2.20 build 32)
 
+=over 2
+
 =item added
 
 	Dicop::Event: give_up() - crumble and croak() afterwards
@@ -291,7 +311,7 @@
 
 =head2 2003-01-21 (Server/Client v2.20 build 31)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -308,6 +328,8 @@
 
 =head2 2003-01-17 (Server/Client v2.20 build 30)
 
+=over 2
+
 =item added
 
 	Cache.pm: touch() to implement LRU
@@ -322,6 +344,8 @@
 =back
 
 =head2 2003-01-16 (Server/Client v2.20 build 29)
+
+=over 2
 
 =item added
 
@@ -349,7 +373,7 @@
 
 =head2 2003-01-15 (Server/Client v2.20 build 28)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -361,7 +385,7 @@
 
 =head2 2003-01-14 (Server/Client v2.20 build 27)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -377,6 +401,8 @@
 =back
 
 =head2 2003-01-13 (Server/Client v2.20 build 26)
+
+=over 2
 
 =item added
 
@@ -394,6 +420,8 @@
 
 =head2 2002-11-29 (Server/Client v2.20 build 25)
 
+=over 2
+
 =item added
 
 	Client.pm: architecture() plus doc
@@ -408,6 +436,8 @@
 =back
 
 =head2 2002-11-26 (Server/Client v2.20 build 24)
+
+=over 2
 
 =item added
 
@@ -424,7 +454,7 @@
 
 =head2 2002-11-26 (Server/Client v2.20 build 23)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -439,6 +469,8 @@
 =back
 
 =head2 2002-11-25 (Server/Client v2.20 build 22)
+
+=over 2
 
 =item added
 
@@ -460,6 +492,8 @@
 =back
 
 =head2 2002-11-21 (Server/Client v2.20 build 21)
+
+=over 2
 
 =item added
 	
@@ -484,7 +518,7 @@
 
 =head2 2002-11-20 (Server/Client v2.20 build 20)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -496,6 +530,8 @@
 =back
 
 =head2 2002-11-19 (Server/Client v2.20 build 19)
+
+=over 2
 
 =item added
 
@@ -520,6 +556,8 @@
 
 =head2 2002-11-18 (Server/Client v2.20 build 18)
 
+=over 2
+
 =item added
 
 	addclient.tpl: checkbox for trusted client
@@ -540,7 +578,7 @@
 
 =head2 2002-11-14 (Server/Client v2.20 build 17)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -557,6 +595,8 @@
 
 =head2 2002-11-13 (Server/Client v2.20 build 16)
 
+=over 2
+
 =item added
 
 	'darwin' as supported architecture
@@ -572,6 +612,8 @@
 =back
 
 =head2 2002-11-12 (Server/Client v2.20 build 15)
+
+=over 2
 
 =item added
 
@@ -594,7 +636,7 @@
 
 =head2 2002-11-11 (Server/Client v2.20 build 14)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -613,6 +655,8 @@
 
 =head2 2002-11-06 (Server/Client v2.20 build 13)
 
+=over 2
+
 =item added
 
 	write_job_target: write prefix and dictionary name to .tgt file
@@ -630,6 +674,8 @@
 =back
 
 =head2 2002-11-06 (Server/Client v2.20 build 12)
+
+=over 2
 
 =item added
 
@@ -655,6 +701,8 @@
 
 =head2 2002-11-05 (Server/Client v2.20 build 11)
 
+=over 2
+
 =item added
 
 	chunk status VERIFY, BAD
@@ -676,6 +724,8 @@
 
 =head2 2002-11-04 (Server/Client v2.20 build 10)
 
+=over 2
+
 =item added
 
 	client: support for parameters 'retries' and 'chunk_count'
@@ -690,8 +740,7 @@
 
 =head2 2002-10-31 (Server/Client v2.20 build 9)
 
-=item added
-
+=over 2
 
 =item fixed
 	
@@ -701,6 +750,8 @@
 =back
 
 =head2 2002-10-07 (Server/Client v2.20 build 8)
+
+=over 2
 
 =item added
 
@@ -716,7 +767,7 @@
 
 =head2 2002-09-05 (Server/Client v2.20 build 7)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -726,7 +777,7 @@
 
 =head2 2002-09-04
 
-=item added
+=over 2
 
 =item fixed
 
@@ -739,7 +790,7 @@
 
 =head2 2002-09-02 (Server/Client v2.20 build 6)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -751,7 +802,7 @@
 
 =head2 2002-08-30 (Server v2.20 build 5)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -761,6 +812,8 @@
 =back
 
 =head2 2002-08-29 (Server v2.20 build 4)
+
+=over 2
 
 =item added
 
@@ -778,6 +831,8 @@
 
 =head2 2002-08-28 (Server v2.20 build 3)
 
+=over 2
+
 =item added
 
 	dicopp - proxy deamon (opposed to dicopd)
@@ -794,6 +849,8 @@
 =back
 
 =head2 2002-08-27 (Server v2.20 build 2)
+
+=over 2
 
 =item added
 
@@ -820,6 +877,8 @@
 
 =head2 2002-08-26 (Server v2.20 build 1, Client 2.20)
 
+=over 2
+
 =item added
 
 	make sure server has a trailing / to avoid "192.168.1.1:8888?params"
@@ -836,7 +895,7 @@
 
 =head2 2002-08-26 (Server v2.19 build 1, Client 2.20)
 
-=item added
+=over 2
 
 =item fixed
 
@@ -846,6 +905,8 @@
 =back
 
 =head2 2002-08-22
+
+=over 2
 
 =item added
 
@@ -862,6 +923,8 @@
 =back
 
 =head2 2002-07-12
+
+=over 2
 
 =item added
 
@@ -892,6 +955,8 @@
 
 =head2 2002-07-08
 
+=over 2
+
 =item added
 
 	documented via=wget and via=wget,proxy=OFF in Client.pod
@@ -914,8 +979,7 @@
 
 =head2 2002-07-05
 
-=item added
-
+=over 2
 
 =item fixed
 
@@ -925,8 +989,7 @@
 
 =head2 2002-07-04
 
-=item added
-
+=over 2
 
 =item fixed
 
@@ -951,6 +1014,8 @@
 
 =head2 2002-07-02
 
+=over 2
+
 =item added
 
 	tpl/user.tpl
@@ -969,6 +1034,8 @@
 =back
 
 =head2 2002-07-01
+
+=over 2
 
 =item added
 
@@ -990,7 +1057,7 @@
 
 =head2 2002-06-27
 
-=item added
+=over 2
 
 =item fixed
 
@@ -1004,6 +1071,8 @@
 =back
 
 =head2 2002-06-26
+
+=over 2
 
 =item added
 
@@ -1021,7 +1090,7 @@
 
 =head2 2002-06-24
 
-=item added
+=over 2
 
 =item fixed
 
@@ -1030,6 +1099,8 @@
 =back
 
 =head2 2002-06-21
+
+=over 2
 
 =item added
 
@@ -1047,6 +1118,8 @@
 
 =head2 2002-06-17
 
+=over 2
+
 =item added
 
 	request: cmd_status;type_users
@@ -1058,13 +1131,15 @@
 	some qw/jobs clients etc/ converted to @_MY_OBJECTS
 	1680 tests (Dicop::Data die, profile in form commands)
 
-back
+=back
 
 =head2 2002-06-13
 
+=over 2
+
 =item added
 
-	tpl/profiles/ with some examples, glossar entry, section in Server.pod
+	tpl/profiles/ with some examples, glossary entry, section in Server.pod
 	Files.pod
 
 =item fixed
@@ -1075,6 +1150,8 @@ back
 =back
 
 =head2 2002-06-12
+
+=over 2
 
 =item added
 
@@ -1089,6 +1166,8 @@ back
 
 =head2 2002-06-11
 
+=over 2
+
 =item added
 
 	Security.pod
@@ -1102,7 +1181,7 @@ back
 	template files include input fields for username and password
 	1595 tests
 
-back
+=back
 
 =head2 2002-06-07
 
@@ -1113,17 +1192,11 @@ back
 	secret.cfg.sample
 	adduser.pl
 
-=item fixed
-	
-
 =back
 
 =head2 2002-06-06
 
 =over 2
-
-=item added
-
 
 =item fixed
 	
@@ -1139,9 +1212,6 @@ back
 
 =over 2
 
-=item added
-
-
 =item fixed
 	
 	tests for perl test worker from workerframe
@@ -1153,9 +1223,6 @@ back
 =head2 2002-05-31
 
 =over 2
-
-=item added
-
 
 =item fixed
 	
@@ -1172,9 +1239,6 @@ back
 
 	Security.pm: valid_ip, valid_net, ip_is_in_net and tests for these
 	request_(test|work): send msg 101 for charset def's incl. hash & tests
-
-=item fixed
-	
 	1283 tests
 
 =back
@@ -1209,7 +1273,7 @@ back
 	
 	991 tests
 
-=item back
+=back
 
 =head2 2002-05-16
 
@@ -1228,8 +1292,6 @@ back
 =head2 2002-05-14
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1266,8 +1328,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	added some more proxy doc
@@ -1277,8 +1337,6 @@ back
 =head2 2002-04-30
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1337,8 +1395,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	Dicop::Data::Request: accept cmd_add;type_groupedcharset and friends
@@ -1350,8 +1406,6 @@ back
 =head2 2002-03-13
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1385,8 +1439,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	added tests and pods to increase coverage
@@ -1397,8 +1449,6 @@ back
 =head2 2002-03-04
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1411,8 +1461,6 @@ back
 =head2 2002-02-27
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1427,8 +1475,6 @@ back
 =head2 2002-02-25
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1458,8 +1504,6 @@ back
 
 =over 2
 
-=item added
-	
 =item fixed
 
 	sleep_factor in client was accidentily disabled
@@ -1496,8 +1540,6 @@ back
 
 =over 2
 
-=item added
-	
 =item fixed
 
 	fixed documentation a great deal
@@ -1508,8 +1550,6 @@ back
 
 =over 2
 
-=item added
-	
 =item fixed
 
 	failure count was not honoured when looking for work in a job
@@ -1579,9 +1619,6 @@ back
 
 =over 2
 
-=item added
-
-
 =item fixed
 
 	better and more default config values
@@ -1611,8 +1648,6 @@ back
 =head2 2002-01-30
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1692,8 +1727,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	some parameters (proxy name, jobtype script) were missing in Request.pm
@@ -1707,8 +1740,6 @@ back
 =head2 2001-12-04
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1740,8 +1771,6 @@ back
 =head2 2001-11-20 (Server v2.16)
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1835,8 +1864,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	Client::get_as_hex() falls back to get_as_string()
@@ -1863,8 +1890,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	send email: don't loose header, never write twice to file
@@ -1876,8 +1901,6 @@ back
 =head2 2001-10-02 (Server v2.14, Client 2.15)
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1893,8 +1916,6 @@ back
 =head2 2001-10-01
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -1913,8 +1934,6 @@ back
 =head2 2001-09-28
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -2076,8 +2095,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	install documentation reworked to cover missing modules and prereq's
@@ -2117,9 +2134,6 @@ back
 =head2 2001-09-03 (Server v2.11)
 
 =over 2
-
-=item added
-
 
 =item fixed
 
@@ -2187,8 +2201,6 @@ back
 =head2 2001-08-24 (Server v2.10)
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -2462,8 +2474,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	Testcase: check() in case of errors: make Math::String from start/end
@@ -2524,8 +2534,6 @@ back
 =head2 2001-07-30
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -2998,8 +3006,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	a lot documentation errors (req0000 inhibited for client, etc)
@@ -3028,8 +3034,6 @@ back
 =head2 2001-04-03
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -3061,8 +3065,6 @@ back
 =head2 2001-03-26
 
 =over 2
-
-=item added
 
 =item fixed
 
@@ -3207,8 +3209,6 @@ back
 
 =over 2
 
-=item added
-
 =item fixed
 
 	Request.pm testcases work again
@@ -3218,10 +3218,6 @@ back
 =head2 2001-02-21
 
 =over 2
-
-=item added
-
-	nothing
 
 =item fixed
 
@@ -3371,8 +3367,6 @@ back
 
 =over 2
 
-=item added:
-
 =item fixed:
 	
 	bug in parseFormArgs, adapted to run server under Apache
@@ -3464,10 +3458,6 @@ back
 	Data.pm is all the clusters data, Item.pm is now base class
 	lib/, t/, test script for Chunk.pm
 
-=item fixed:
-
-	nothing
-
 =back
 
 =head2 2000-12-19
@@ -3477,10 +3467,6 @@ back
 =item added:
 
 	started rewrite from v1.0
-
-=item fixed:
-	
-	nothing
 
 =back
 

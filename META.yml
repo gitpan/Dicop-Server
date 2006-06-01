@@ -1,13 +1,13 @@
 ---
 name: Dicop-Server
-version: 3.02
+version: 3.03
 version_from: lib/Dicop.pm
 license: gpl
 distribution_type: module
-generated_by: Dicop-Server version 3.02
+generated_by: Dicop-Server version 3.03
 installdirs: none
 requires:
-  Dicop::Base: 3.02
+  Dicop::Base: 3.03
   Digest::MD5: 2.09
   File::Spec: 0.82
   HTML::Tagset: 3.03

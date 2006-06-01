@@ -14,37 +14,37 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 02494980690c68e89fe3e786cb1c1cc23c26f983 BUGS
-SHA1 d32b2581804508acf73ddd02e95e76d1c7612632 CHANGES
-SHA1 bfff87cd322d553d20ad8e6832c93ef573768b5e CHANGES-2.20
+SHA1 b6dc93d2b04b1aaae4e4ec8962d37dcf76e01e04 BUGS
+SHA1 a6b47748f6b13eb4ca58a53a35813a93a5f336b4 CHANGES
+SHA1 845203dccf30761381fd6c6b04fb982c33227d32 CHANGES-2.20
 SHA1 4d666b8fc6d61ca4ff6c370c2f1990b276323700 CHANGES-2.22
 SHA1 159450211a125459c0f88a40db76ee14611fbfc7 CHANGES-2.23
-SHA1 149eb2c2b6fe71879c92bf8a41e9eab251edbaa6 CHANGES-3.00
+SHA1 2c7ad9fad016626f10b7d7f70c3dc4eeb30ff6d3 CHANGES-3.00
 SHA1 8a95ddd8b08dc9ab719d5f84cce828742aca8eb6 INSTALL
 SHA1 ba74339534569e38ec71285aa16ae3113634facd LICENSE
-SHA1 1047226de12d3c3299c9f7e133ca9581d68e864b MANIFEST
-SHA1 801e42f4ce52a0a25326033885ef5782c0db9a48 META.yml
-SHA1 7e582a94598f0a0ff9a5f49be4e88240159660af Makefile.PL
+SHA1 1e03d13145d5c2d72198922a7c55d44cb659f497 MANIFEST
+SHA1 214e2224712ddf339ad8a1119714b8f5fa5b5840 META.yml
+SHA1 c86beef4b0ec59d50eabfb86f169729892372946 Makefile.PL
 SHA1 f048be8dd6cacba6bde5cbfc02728e9f7382aabb NEW
 SHA1 3e6476303cc057aeec5486b35f3ecab5a42cf4b1 README
-SHA1 8abd572aa56901b25e19399dfcf002c046d1b791 README.client
+SHA1 dc9d43d3bb5f0a44ba83c78662de5ad1f050de3b README.client
 SHA1 6e1215dc722ccaa7710b435e328e7eb30d188b26 README.darwin
 SHA1 c3c92f5958e72179b0ba3cd191f68ce9b4a57be6 README.linux
 SHA1 5543b66542fa363dadca09c4ffa574bd6b36e05d README.win32
-SHA1 f01b41f098cc59a1908204c717224c9f9b99621c TODO
+SHA1 06f4de25491f5d2af4c06da7f432f5c639d74934 TODO
 SHA1 3ca8a68d3c8edb6881183fd0d6e3ffb6d34bb3d9 TROUBLE
-SHA1 a8b186614fd3ff1c6719fe61f90df847a72e6bf4 UPGRADE
-SHA1 680e3cefcd1fcfbc0e9854fa65037230f087f2dd adduser.pl
-SHA1 aaef53577e2b5fcf286723a7b42f82adf63298f0 build/BUNDLE_CLIENT
-SHA1 cd512e4a91044c76510ef55181448111a2d95dbe build/MANIFEST
+SHA1 4fb6d54914522c93af8f28044a09e335e9763b55 UPGRADE
+SHA1 84899c3f8113e9a35b2faa124212e48a327dd923 adduser.pl
+SHA1 7b2c8e603d241cd6ab53028725606cd952d7e201 build/BUNDLE_CLIENT
+SHA1 7385ae7d55278ade8d3a35b4ac20385f3d3de590 build/MANIFEST
 SHA1 b149da99429fbf65c8d51aa484ad9f77f6aa3633 build/README
-SHA1 7881e0927a61597df834bb55e8bfd136dcec0153 build/bundle.pl
+SHA1 17dd37b9f92b86ab4ab255463070e82826e72d5e build/bundle.pl
 SHA1 d16a7b09160aca70bc3b175867c046383ba65406 build/fix_help.pl
 SHA1 ac9c4450fd30dacf3cb45f7a8e9f25cfecd9cbcf build/gen_help.pl
 SHA1 025da8af092845cb38be7dd9d2a8433c1a2bb9f5 build/make_cover
 SHA1 3ca0847051bb56dc7f5a66d4ed81a38e96055bec build/wcr
 SHA1 da39a3ee5e6b4b0d3255bfef95601890afd80709 cache/dummy.txt
-SHA1 be36a878fdf01665969522322a618174232b6fa0 client
+SHA1 83b00b672708375523e799d91ba547fb6c4e4b19 client
 SHA1 79b7b0502333cee06026d66b7c6aa39d5e6e1082 config/client.cfg.sample
 SHA1 daefe31a3466023c829d68f9d5a38072f80ab049 config/server.cfg.sample
 SHA1 fe0120f7c2d9ecd565a3cb8332b121f31c746c3e data/dummy.txt
@@ -52,7 +52,7 @@ SHA1 d688cf6a5649fa3df4936e4a5dee8e35095d6aab def/client_request.def
 SHA1 258089e1f09abf4c4037b93e839ce2b4e3463bcf def/objects.def
 SHA1 2612da690cb78a53fb2a620cbf1c60df82959ca8 def/request.def
 SHA1 35e4359f8ec7659158e149eb7d71c11d61274d33 dicop.asc
-SHA1 788be0f04ccae69f55f69270ea2e7d102bd7f2c4 dicopd
+SHA1 ff103e0e3f077a5f54498e274b873ebf6861ef45 dicopd
 SHA1 32fca09ffc4260ea9f6a82f65f33fb8fd96543d8 doc/Client.pod
 SHA1 fd55e31e0c7dec41f691e8bf1c1d33eb8aed074b doc/Config.pod
 SHA1 cc0511215b736134d1361bc0e5f37872d3dc6835 doc/Dicop.pod
@@ -63,31 +63,31 @@ SHA1 dc00903d5f0705c0cc56be0bd9f20413af9d65fa doc/Objects.pod
 SHA1 cb054f653962042c83fc21e9b4a21e67fa4d5353 doc/Security.pod
 SHA1 7c04e244ed8c6dd5ee3160b61c71aa3e81942d5c doc/Server.pod
 SHA1 c05759b26c9ca5733d7e9857af97eea331e95dc9 doc/Worker.pod
-SHA1 2abc92e9b5edcda320a4a8b402beac961699f589 lib/Dicop.pm
+SHA1 50f9449d3efbd7d36ee6b124a9c96037cce2ff3d lib/Dicop.pm
 SHA1 61bff4c0ff02eecd4bec8d046b613121080c5098 lib/Dicop/Client.pm
-SHA1 02e80b8574d18f54f065cf6da7494f9e0c7b6170 lib/Dicop/Data.pm
-SHA1 ec9c2e3d2e696fc15798c484fb9a6af3d0e8d5a2 lib/Dicop/Data/Case.pm
+SHA1 932bbbd1636c45900673decaf25c95034a9a4c72 lib/Dicop/Data.pm
+SHA1 167c3b1ee7ca1eed10432ce42b601c11db933186 lib/Dicop/Data/Case.pm
 SHA1 13c6abf2005be82500d36646da9acde00641d60e lib/Dicop/Data/Charset.pm
 SHA1 41f8af52dc7683b4f7d171d739c5cf03490968c3 lib/Dicop/Data/Charset/Dictionary.pm
-SHA1 ef0099d1ad91b4ef581a9c3947d071afdc0c1c17 lib/Dicop/Data/Charset/Extract.pm
-SHA1 f41e53123bbac0ab9093accc17c8ac9ab4361882 lib/Dicop/Data/Chunk.pm
+SHA1 3af42a6ad84a8f14b1327d068e780b93787c8350 lib/Dicop/Data/Charset/Extract.pm
+SHA1 3a2c59b4c3d918b8a7f9178a019d736df89797da lib/Dicop/Data/Chunk.pm
 SHA1 e452c2aa0570390cb06fc8df012ae30f7b50f5a4 lib/Dicop/Data/Chunk/Checklist.pm
-SHA1 15c11cd1952ed8d6333b494a521ce48e47b76e2a lib/Dicop/Data/Client.pm
+SHA1 4bdcf9194614b7f2503580c6fd9288674b848244 lib/Dicop/Data/Client.pm
 SHA1 1cd000238d454f3d0159f74e75ee795d3a615ccd lib/Dicop/Data/Group.pm
-SHA1 79d4a6516b2ab150b4ae3a14de4167420da7c833 lib/Dicop/Data/Job.pm
-SHA1 ab12029cd053e4056086fece243d084798196b60 lib/Dicop/Data/Jobtype.pm
-SHA1 8b49502095981435eb99c42fcfc1e257ce2d765c lib/Dicop/Data/Proxy.pm
+SHA1 820b57fbb5afc385f3a2af3e30712ab4bbd67c95 lib/Dicop/Data/Job.pm
+SHA1 004a0d7fc2d8adaef71449c6dad89b898cc47d03 lib/Dicop/Data/Jobtype.pm
+SHA1 e0630ef69c48fa4b854fb8c5fb6f3b19a822741f lib/Dicop/Data/Proxy.pm
 SHA1 6932e2e575f96b5036e9168c294e11e97f0dc4e4 lib/Dicop/Data/Result.pm
-SHA1 4e816d0e718da14ba5ce23e7f12a79d2f6a31408 lib/Dicop/Data/Testcase.pm
+SHA1 8bbfbd44f4d435e13d874368292f72f86582a7e3 lib/Dicop/Data/Testcase.pm
 SHA1 e307ded6ab900f62e7786d2d1ea91142ea0b31d3 lib/Dicop/Data/User.pm
-SHA1 633fc5fdb87911596e04abadea5a9f0a4eea4b8e lib/Dicop/Files.pm
+SHA1 6c80b21cc35397966d96d3fa1551daa0934a288d lib/Dicop/Files.pm
 SHA1 bba0f4a9ffb5e8679f146aced15fd79d3de98351 lib/Dicop/Server/Config.pm
 SHA1 3f4029e6858659c5ee4078059cce5a4929d087f0 logs/dummy.txt
 SHA1 d633633b822d898821ac7f5c1d1c744dbd0fe809 msg/de/messages.txt
 SHA1 d633633b822d898821ac7f5c1d1c744dbd0fe809 msg/en/messages.txt
 SHA1 d633633b822d898821ac7f5c1d1c744dbd0fe809 msg/messages.txt
 SHA1 a43cdf0cf039386855a1a71e1676dedae0243d55 scripts/sample
-SHA1 092b63d7ab0cc0680b2ff588d0bbbc28627ee24c setup
+SHA1 459a5b08b3910a2e753e6977b8645537a2bf113a setup
 SHA1 ed8104ed7cd063bc2b195d0a7b776fc9a28935ab t/charsets.def
 SHA1 85aff77ff853afbe24c4bf71a21a1976cd3c159e t/checkreq.pl
 SHA1 c1cb43a21ebd010f0d7e779a2109f8a4b040bcb4 t/client.cfg
@@ -105,8 +105,8 @@ SHA1 d4d654d3b1405c82a9ad8ac8a645c57ff16600da t/data/clientpm.t
 SHA1 c03fe722e0b72f4deff8f22f57116e248579ff25 t/data/dictpm.t
 SHA1 70e72833931bc8e8e7a47785cbfd11c512ae1f5f t/data/extract.t
 SHA1 532cc12b76f3cdd3f19be4dc8dc449fb9c6809cf t/data/grouppm.t
-SHA1 98e13c7062b81e1daad4df900802d06e45d663fd t/data/jobpm.t
-SHA1 5d122176ba82f92cf5d493e1f645cacdbdde05a9 t/data/jobtypepm.t
+SHA1 4bbd0d23446e5a0177abc2bbc443bc3c1cb09f2c t/data/jobpm.t
+SHA1 0a6d6cef479f330f10d9166dd367bf9746ce39c0 t/data/jobtypepm.t
 SHA1 6c03f29f3c198840464f0e19328a0dd7ddd8da35 t/data/proxypm.t
 SHA1 d54fbddbc3c07d3765405c298296ae7db415f121 t/data/rand_req.t
 SHA1 ee33e648316ed6b114466934b72488f9322d298d t/data/requestpm.t
@@ -123,6 +123,8 @@ SHA1 9f74775acf3d07d73a2bb6183af834ac25c27250 t/def/request.def
 SHA1 e6b18915afe8eaeb14f309155ce9cb262a3a337c t/dicoppm.t
 SHA1 b373e8d9473448f123171980b404a9b3dc9efa68 t/event.t
 SHA1 a0060a637479f92ae1b870d08c7723dc154a98d0 t/filespm.t
+SHA1 69b05ec76440b790eb564bac9c29f82998aae8f1 t/pod.t
+SHA1 1a916cf4fa8b593f2cfd8a96a1cabe694e6ece2c t/pod_cov.t
 SHA1 ad09774cb48d717503c82f91597a6aa43242cf0c t/security.t
 SHA1 2d09df050fa4234e52fd4a56dfe72c7830447a3a t/srvrcfg.t
 SHA1 41fbe34ce4e4f054514c1d68a306e9d932c9d030 t/target/dictionaries/testlist.lst
@@ -309,11 +311,11 @@ SHA1 45d6a4d40b9b6a1930ce19aef25388cfb92a1df5 tpl/styles/Dust/header.txt
 SHA1 03927880c2db9cae90c597182373bea438f0e592 tpl/styles/Grass/header.txt
 SHA1 5fc2d17d0855029793154f670866952b8220d4e5 tpl/styles/Honey/header.txt
 SHA1 498cfff4d15a1dc15032346f9c09b55f9e911314 tpl/styles/Ice/header.txt
+SHA1 c6a8543268f4f87c1538dc949ed193a356dc3048 tpl/styles/README
 SHA1 bf5763f2218ecdf3228d8ab9c63c69e746656fab tpl/styles/Salmon/header.txt
 SHA1 f43f3b80b5e50d2db97ddcd06f90858a64b465ac tpl/styles/Sea/header.txt
 SHA1 f2d67ac3d21a13a9d366d736b14838855432841a tpl/styles/arms.inc
 SHA1 1831bbdf1340cd4b013405cd29238ea9b2aaa88a tpl/styles/default.inc
-SHA1 c6a8543268f4f87c1538dc949ed193a356dc3048 tpl/styles/readme.txt
 SHA1 6540476c8af6c22595c55f7e4f031bd689d3e5a7 tpl/styles/round.inc
 SHA1 055b335b0d739c34b97aff4b6b43c048b3ba421a tpl/styles/square.inc
 SHA1 cba057873235e54af4b8d3b225076f5c48c614f3 tpl/terminate_client.tpl
@@ -331,7 +333,7 @@ SHA1 a47b095bd7ff6f8600e62eb93c54d59742c62603 worker/os2/test.pl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.2 (GNU/Linux)
 
-iD8DBQFEV2HaYmqMGoA0pxgRAt/6AJ4o6k63bp3PgFXY7sZaq2tUsWnrEACfdV/X
-inr3k48W2kPYK0qw6yDOy0w=
-=0eH4
+iD8DBQFEfv5lYmqMGoA0pxgRAp5BAJ0QzxK7LR8gftIHvpEa1Q6dso321wCghLkn
+ZGVN+X75qNUeBChmMlYo25o=
+=dD8F
 -----END PGP SIGNATURE-----

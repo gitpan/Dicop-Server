@@ -1,7 +1,7 @@
 # This file lists all the files that are necc. for a Dicop-Client bundle
 # The ##base## part is replaced by something like ../Dicop-Base-3.00/
 LICENSE
-README.client
+README.client README
 lib/Dicop/Client.pm
 lib/Dicop.pm
 msg/messages.txt

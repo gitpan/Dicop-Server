@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w -T
+#!/usr/bin/perl -w -T
 
 # DiCoP - Distributed Computing in Perl - HTTP Daemon
 

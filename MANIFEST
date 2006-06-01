@@ -81,6 +81,8 @@ t/data_del.t			test Dicop::Data del() function
 t/data_mail.t			check the check for the mail templates
 t/event.t			check generation of event_urls
 t/filespm.t			test Dicop/Files.pm
+t/pod.t				test for POD errors
+t/pod_cov.t			test POD coverage
 t/security.t
 t/srvrcfg.t			Dicop::Server::Config
 t/test.cfg
@@ -269,7 +271,7 @@ tpl/mail/verify_error.txt.sample	client can't be a verifier
 tpl/event/new_job.txt.sample
 tpl/event/found_result.txt.sample
 tpl/event/job_failed.txt.sample
-tpl/styles/readme.txt
+tpl/styles/README
 tpl/styles/Bare/header.txt
 tpl/styles/Black-and-White/header.txt
 tpl/styles/Coral/header.txt

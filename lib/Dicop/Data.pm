@@ -14,7 +14,7 @@ package Dicop::Data;
 use vars qw/$VERSION/;
 $VERSION = '2.08';	# Current version of this package
 
-use base Dicop::Handler;
+use base qw/Dicop::Handler/;
 use strict;
 use vars qw($AUTOLOAD $BUILD);
 
@@ -2392,10 +2392,12 @@ sub extra_files
   my @files = $job->extra_files(@arch);
   foreach my $file (@files)
     {
+    # XXX TODO: error checking
     $response .= $self->hash_file(
       File::Spec->catfile('target', @$file),
       'target');
     }
+  # XXX TODO: error checking
   @files = $job->{jobtype}->extra_files(@arch);
   foreach my $file (@files)
     {
@@ -3018,6 +3020,10 @@ certain time period has passed.
 
 =head1 METHODS
 
+=head2 output()
+
+=head2 result_list()
+
 =head2 get_job, get_proxy, get_charset, get_jobtype, get_testcase, get_result, get_client, get_group
 
 Given an ID, return the appropriate object.
@@ -3118,6 +3124,14 @@ Upon error, it returns a ref to an error message.
 
 This is used by both L<request_work> and L<request_test>.
 
+=head2 extra_files()
+
+	my $response = $object->extra_files($job, $arch);
+
+Returns a string containing a respone for the client with all
+the extra files needed to work on the given job on the given
+architecture.
+
 =head2 log_msg()
 
 Return a message string by number, along with embedded parameters. Works just
@@ -3151,7 +3165,7 @@ then (they do not make sense for every email template). C<type> is the name
 of the actual mail template without path and extension. C<cc> contains the
 address(es) to Cc: on the mail.
 
-=head2 chunk_list
+=head2 chunk_list()
   
 Create a table of all chunks of one job from an HTML template. See also
 L<check_list()>.
@@ -3218,19 +3232,36 @@ Client requested test cases (or server determined it was time to send the
 tests to the client again), so send him all or only the testcases for a
 specifiy jobtype.
 
-=head2 status_chunks()
-  
-Create as HTML output a table of all open chunks across all jobs.
-
 =head2 help()
 
 Create as HTML output either a help overview page (type eq 'list') or a help
 page to a certain topic (type is the topic name).
 
+=head2 status_chunks()
+  
+Create as HTML output a table of all open chunks across all jobs.
+
 =head2 status_clients()
 
 Create as HTML output a status page about all the clients, sorted by their
 speed, name, keys done so far, id or online status.
+
+=head2 status_casebyname()
+
+Generate HTML statistics about a case specified by the
+name of the case (opposed to its ID).
+
+=head2 status_client()
+  
+Generate HTML statistics about a specific client.
+
+=head2 status_jobresults
+
+Generate an HTML page with the results for the specified job only.
+
+=head2 status_debug()
+ 
+Generate HTML statistics with debug output.
 
 =head2 terminate_clients
 
@@ -3239,6 +3270,11 @@ speed, name, keys done so far, id or online status.
 Flags all clients so that upon next connect they will terminate immidiately
 and can be restarted by the outer client script, effectively forcing an
 upgrade of all clients.
+
+=head2 terminate_client()
+
+Flags this client so that upon the next connect it will terminate
+immidiately. See also C< terminate_client() >.
 
 =head2 reset()
 

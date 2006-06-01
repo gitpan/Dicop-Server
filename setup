@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 
 #############################################################################
 # This script sets up certain files and things that are necessary before
@@ -27,6 +27,8 @@
 #   * chown parent directory for lock files
 # 2006-04-24 0.03
 #   * use /usr/bin/env perl -w vs /usr/bin/perl -w
+# 2006-04-24 0.04
+#   * use /usr/bin/perl
 
 use strict;
 use File::Spec;
@@ -40,7 +42,7 @@ BEGIN
   $|++;	# output buffer off
   }
 
-print "\nDiCoP Setup v0.03\n";
+print "\nDiCoP Setup v0.04\n";
 print " (c) Bundesamt fuer Sicherheit in der Informationstechnik 2004-2006\n\n";
 
 print " Usage:  ./setup [config_file]\n\n";

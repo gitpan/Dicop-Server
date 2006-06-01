@@ -22,6 +22,17 @@ use Dicop::Data::Job;
 use Math::String;
 
 #############################################################################
+
+BEGIN
+  {
+  # re-use the routines from a Job.pm
+
+  *extra_fields = \&Dicop::Data::Job::extra_fields;
+  *extra_files = \&Dicop::Data::Job::extra_files;
+  *extra_params = \&Dicop::Data::Job::extra_params;
+  }
+
+#############################################################################
 # private, initialize self 
 
 sub _construct
@@ -164,8 +175,7 @@ sub get_as_string
   if ($key eq 'extras')
     {
     # get the names of the extra fields from our jobtype
-    return '' unless ref $self->{jobtype}->{extrafields} eq 'ARRAY';
-    my @extras = @{$self->{jobtype}->{extrafields}};
+    my @extras = $self->{jobtype}->extra_fieldnames();
     my $txt = ''; my $i = 0;
     foreach my $extra (@extras)
       {
@@ -179,21 +189,6 @@ sub get_as_string
 
   $self->SUPER::get_as_string($key);
 
-  }
-
-BEGIN
-  {
-  # reuse the routines from a Job.pm
-
-  *extra_fields = \&Dicop::Data::Job::extra_fields;
-  *extra_params = \&Dicop::Data::Job::extra_params;
-  }
-
-sub extra_files
-  {
-  my ($self,$arch) = @_;
-
-  return;
   }
 
 1;
@@ -254,6 +249,19 @@ If the jobtype for that job mandates extra fields, will return a text listing.
 See C<Dicop::Data::Job>.
 
 This routine is used to include them into the chunk description file.
+
+=head2 extra_files()
+
+        my $response = $object->extra_files($job, $arch);
+
+Returns a string containing a respone for the client with all
+the extra files needed to work on the given testcase on the given
+architecture.
+
+=head2 check()
+
+Applies self-check and crumbles if there are errors in internal data
+structure.
 
 =head1 BUGS
 

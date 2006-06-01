@@ -11,6 +11,8 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 
 =head2 2005-02-15 (Server/Client v3.00 build 101)
 
+=over 2
+
 =item fixed
 
 	amend README.client and NEW
@@ -22,6 +24,8 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 
 =head2 2005-02-02 (Server/Client v3.00 build 100)
 
+=over 2
+
 =item fixed
 
 	fix menu and sort links in tpl/cases.tpl
@@ -31,6 +35,8 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 =back
 
 =head2 2005-01-03 (Server/Client v3.00 build 99)
+
+=over 2
 
 =item fixed
 
@@ -44,6 +50,8 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 
 =head2 2004-12-22 (Server/Client v3.00 build 98)
 
+=over 2
+
 =item fixed
 
 	amended NEW, doc/Glossary.pod, doc/Dicop.pod
@@ -53,6 +61,8 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 =back
 
 =head2 2004-12-21 (Server/Client v3.00 build 97)
+
+=over 2
 
 =item fixed
 
@@ -1117,6 +1127,7 @@ and the CHANGES-2.23 file for the full version history up to version v2.23.
 	slight fixes to CSS for dir listings
 	wcr lib: Total: lines 11406, words 43144, chars 315017
 	4490 tests ()
+
 =back
 
 =head2 2004-08-23 (Server/Client v3.00 build 40)

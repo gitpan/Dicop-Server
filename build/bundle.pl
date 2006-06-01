@@ -37,8 +37,10 @@ foreach my $bundle (keys %$VERSION)
     {
     chomp $src;
     next if $src =~ /^#[^#]/;		# skip comment lines
-    $src =~ s/\s.*$//;			# remove spaces after the filename
-    my $dst = $src; 
+    $src =~ s/\s*$//;			# remove spaces after the filename
+    my $dst;
+    ($src,$dst) = split / /, $src;	# "A B" => "A","B", and "A" to "A","A"
+    $dst = $src unless $dst;
     $src =~ s/##base##/$base_dir/;	# insert Dicop-Base dir
     $dst =~ s/##base##//;		# remove Dicop-Base dir
 
@@ -58,9 +60,12 @@ foreach my $bundle (keys %$VERSION)
   # add MANIFEST, sign, then package up
   chdir "bundle/";
 
+  print "\n Copying MANIFEST and signing:\n";
+
   `cp ../build/MANIFEST $bundle_name/MANIFEST`;
   `cd $bundle_name/; cpansign --sign; cd ..`;
 
+  print "tar and gzip:\n";
   `tar -cf $bundle_name.tar *`;
   `gzip -9 $bundle_name.tar`;
   `mv $bundle_name.tar.gz ..`;

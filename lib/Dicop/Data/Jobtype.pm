@@ -16,8 +16,8 @@ $VERSION = 1.02;    # Current version of this package
 require  5.005;     # requires this Perl version or later
 
 use strict;
-use Dicop::Item;
 use Dicop;
+use Dicop::Item;
 use Dicop::Hash;
 
 use base qw(Dicop::Item);
@@ -87,7 +87,7 @@ sub extra_files
   @files;
   }
 
-sub extrafields
+sub extra_fieldnames
   {
   # return extra field names as array
   my $self = shift;
@@ -142,6 +142,13 @@ Exports nothing on default.
 For a description of fields a jobtype has, see C<doc/Objects.pod>.
 
 =head1 METHODS
+
+=head2 extra_fieldnames
+
+	@fields = $jobtype->extra_fieldnames();
+
+Returns the names of the extra fields nec. for jobs of this
+type as an array.
 
 =head2 extra_files
 

@@ -58,11 +58,13 @@ my $version = $Dicop::VERSION;
 $version .= "_$Dicop::BUILD" if $Dicop::BUILD > 0;
 
 WriteMakefile(
-    'NAME'		=> 'Dicop-Server',
-    'VERSION'           => $version,
-    'PREREQ_FATAL'	=> 1, 
-    'PREREQ_PM'		=> { 
-		'Dicop::Base' => 3.03,
+	'NAME'		=> 'Dicop-Server',
+	'VERSION'	=> $version,
+	'AUTHOR'	=> 'BSI',
+	'ABSTRACT'	=> 'A distributed client/server system',
+	'PREREQ_FATAL'	=> 1, 
+	'PREREQ_PM'		=> { 
+		'Dicop::Base' => 3.04,
 		'Digest::MD5' => 2.09,
 		'File::Spec' => 0.82,
 		'Mail::Sendmail' => 0.77,
@@ -77,10 +79,11 @@ WriteMakefile(
 		'Math::String' => 1.27,
 		'Math::String::Charset::Wordlist' => 0.07,
 		'Net::Server' => 0.86,
+		'Term::ReadLine' => 1.01,
 		'Test::Simple' => 0.47,
 		'Time::HiRes' => 1.2,
-    },
-    'test'		=> { TESTS => 't/*.t t/data/*.t' },
+	},
+	'test'		=> { TESTS => 't/*.t t/data/*.t' },
 );
 
 my $ver = Dicop->base_version();
@@ -119,21 +122,25 @@ sub MY::metafile {
   require YAML::Node;
   my $node = YAML::Node->new({});
 
-  $node->{name}                 = $self->{DISTNAME};
-  $node->{version}              = $self->{VERSION};
-  $node->{version_from}         = 'lib/Dicop.pm';
-  $node->{license}              = 'gpl';
-  $node->{distribution_type}    = 'module';
-  $node->{generated_by}         = "$self->{DISTNAME} version $self->{VERSION}";
-  $node->{installdirs}          = 'none';
-  $node->{requires}             = $self->{PREREQ_PM};
+  $node->{name}			= $self->{DISTNAME};
+  for my $k (qw/
+     AUTHOR ABSTRACT VERSION/)
+    { 
+    $node->{ lc($k) } = $self->{$k};
+    }
+  $node->{version_from}		= 'lib/Dicop.pm';
+  $node->{license}		= 'gpl';
+  $node->{distribution_type}	= 'module';
+  $node->{generated_by}		= "$self->{DISTNAME} version $self->{VERSION}";
+  $node->{installdirs}		= 'none';
+  $node->{requires}		= $self->{PREREQ_PM};
 
   my $dump = YAML::Dump( $node );
 
   $dump =~ s/^(.*)$/\t\$(NOECHO) \$(ECHO) "$1" >>META.yml/gm;
   $dump =~ s/>>META\.yml/>META.yml/;
 
-  return "metafile:\n$dump";
+  "metafile:\n$dump";
 }
 
 

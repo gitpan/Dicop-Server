@@ -297,6 +297,7 @@ tpl/menu_added.inc
 tpl/menu_add.inc			Help | Add
 tpl/menu_case_joblist.inc
 tpl/menu_charsets.inc
+tpl/menu_charset.inc			for a charset: Help | Add | Delete | Edit
 tpl/menu_client.inc
 tpl/menu_clientmap.inc
 tpl/menu_edit.inc			Delete | Add

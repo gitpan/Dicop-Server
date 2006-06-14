@@ -9,37 +9,34 @@ This document details all the necc. information to run a DiCoP client.
 
 =head1 INSTALLATION
 
-This package is a part of the Dicop server/client package and contains
-all the neccessary parts to run a client, inclusive bundled
+The Dicop-Client package is a part of the Dicop server/client package
+and contains all the neccessary parts to run a client, inclusive bundled
 modules from the Dicop::Base package.
 
-=head2 Signature check
+=head2 Creation
 
-Before you do anything with the downloaded and extracted package, verify the
-signature!
+You can create a Dicop-Client package by doing the following steps:
 
-Download our GnuPG key from http://www.bsi.bund.de/produkte/dicop/download.htm
-then do:
+Copy the B<matching> Dicop-Server and Dicop-Base packages into
+the same directory and in the following steps replace the
+version numbers with the version you got:
 
-	gpg Dicop-Client-3.03.tar.gz.asc
+	tar -xzf Dicop-Server-3.04.tar.gz
+	tar -xzf Dicop-Base-3.04.tar.gz
+	cd Dicop-Server-3.04
+	./build/bundle
 
-(Replace 3.03 by the actual version you got).
-
-If the signature does not verify ok, please notify us immidiately. B<DO NOT>
-run perl Makefile.PL or anything else nor install the package when the
-signature cannot be successfully verified.
-B<Your system might get compromised!>.
+This will create a Dicop-Client bundle in the current directory.
 
 =head2 Installation
 
-You can extract it to a separate directory:
+You can simple unzip this client bundle into a directory.
 
-	tar -xzf Dicop-Client-3.00_36.tar.gz
+There is no need to install anything, except maybe some
+Perl modules on some platforms, please see below for a list.
 
-(Replace 3.00_36 by the actual version you got).
-
-There is no need to install anything. The only thing you might want to do is
-to edit the configuration file inside C<config/>.
+The only thing you might want to do is to edit the configuration
+file inside C<config/>.
 
 It is possible to specify the most important options on the command line,
 though, so you can even skip this step:
@@ -62,12 +59,12 @@ Here is a sample client start:
 
 =head2 Requirements
 
-You will need Perl v5.8.1 or better (Perl v5.8.6 recommended), for Windows you
+You will need Perl v5.8.1 or better (Perl v5.8.8 recommended), for Windows you
 need to use ActiveState Perl 8xx from
 L<http://www.activestate.com/Products/ActivePerl/>.
 
-For non-Windows you will probably need some additional modules. All of these
-modules can be found via L<http://search.cpan.org/>.
+For non-Windows platforms you will probably need some additional
+modules. All of these modules can be found via L<http://search.cpan.org/>.
 
 Please see the platform specific README files for more details.
 

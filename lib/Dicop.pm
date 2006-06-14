@@ -14,9 +14,9 @@ package Dicop;
 use vars qw($VERSION $BUILD $BASE_MIN_VER @ISA @EXPORT_OK);
 use strict;
 
-$VERSION = '3.03';		# Current version of this package
+$VERSION = '3.04';		# Current version of this package
 $BUILD = 0;			# Current build of this package
-$BASE_MIN_VER = '3.003000';	# We need at least this build of Dicop::Base
+$BASE_MIN_VER = '3.004000';	# We need at least this build of Dicop::Base
 require 5.008001;		# requires this Perl version or later
 
 require Exporter;
@@ -87,7 +87,7 @@ __END__
 
 =head1 NAME
 
-Dicop - routines shared between the server and/or client part
+Dicop - a collection of routines used by a Dicop Server and Client
 
 =head1 SYNOPSIS
 
@@ -100,6 +100,13 @@ perl5.008003, Exporter
 =head1 EXPORTS
 
 Exports nothing on default.
+
+Can export on request:
+
+	UNKNOWN DONE ISSUED SOLVED TOBEDONE FAILED SUSPENDED
+	TIMEOUT VERIFY BAD WAITING
+        MAX_ISSUED_AGE MAX_FAILED_AGE
+	status status_code
 
 =head1 DESCRIPTION
 

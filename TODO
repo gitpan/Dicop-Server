@@ -1,13 +1,15 @@
 
 =pod
 
+=head1 NAME
+
+TODO -- the TODO list for this project
+
 =head1 Todo (laundry list)
 
 You can read this file better with C<perldoc TODO>.
 
-Shortterm:
-
-TODO:
+=head2 Shortterm:
 
 * sort cases by number of jobs is borken
 
@@ -159,11 +161,6 @@ bigger dictionaries (lazy load in wordlist?)
 
 =item *
 
-html links in generated help pages are wrong sometimes (=item vs. =head, can a
-better pod2html fix this?)
-
-=item *
-
 when backgrounding the server, it prints the "shutdown" message wrongly
 (it thinks it is shutting down) (probably printing the msg twice)
 
@@ -209,8 +206,8 @@ Add job: Make trial run so that errors can be seen and corrected.
 Also make field for suspending the newly added job right-away.
 
 The reason is that editing jobs only lets you edit "unimportant" fields
-like the description etc, but not the charset (e.g. everthing that
-defines the target or the keypsace).
+like the description etc, but not the charset (e.g. everything that
+defines the target or the keyspace).
 
 Or another idea would be to suspend the job for the first 5 minutes
 and then allow editing while no client has yet got a chunk from the job.
@@ -224,6 +221,8 @@ which only happens when you invalidate the token anyway).
 
 This would save roughly 10% of the chunks.txt file and probably quite some
 memory.
+
+Likewise, a chunk does not need the owner field set.
 
 =item *
 

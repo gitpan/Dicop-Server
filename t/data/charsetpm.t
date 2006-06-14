@@ -20,7 +20,7 @@ use Dicop::Data::Charset;
 use Dicop::Data::Jobtype;
 my $jobtype = new Dicop::Data::Jobtype ( id => 5 );
 
-# while ocnstructing, also test that normal and hex sequences work
+# while constructing, also test that normal and hex sequences work
 
 my $charset1 = new Dicop::Data::Charset ( set => '\x61 .. \x7a', id => 1 );
 $charset1->_construct();
@@ -83,13 +83,13 @@ my $text;
 $text  = "Dicop::Data::Charset {\n";
 $text .= "  description = \"Digits (0-9)\"\n";
 $text .= "  dirty = 0\n";
-$text .= "  id = 2\n";
+$text .= "  id = 9\n";
 $text .= "  set = 30313233343536373839\n";
 $text .= "  }\n";
 
 $charset = Dicop::Item::from_string ( $text );
 $charset->_construct();
-is ($charset->get('id'),2,'id');
+is ($charset->get('id'),9,'id');
 $cs = $charset->charset();
 is (ref($cs),'Math::String::Charset','ref');
 

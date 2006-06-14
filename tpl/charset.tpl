@@ -1,6 +1,6 @@
 <!-- details for one charset -->
 
-##include_menu_object.inc##
+##include_menu_charset.inc##
 
 <h1><a class="h" href="##selfstatus_main##">DiCoP</a> - Charset ###id##</h1>
 

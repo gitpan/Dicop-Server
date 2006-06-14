@@ -12,8 +12,9 @@
 
 package Dicop::Data;
 use vars qw/$VERSION/;
-$VERSION = '2.08';	# Current version of this package
+$VERSION = '2.09';	# Current version of this package
 
+require 5.008001;
 use base qw/Dicop::Handler/;
 use strict;
 use vars qw($AUTOLOAD $BUILD);
@@ -2977,7 +2978,7 @@ __END__
 
 =head1 NAME
 
-Dicop::Data -- contains all the jobs (with chunks), proxies, testcases, clients etc
+Dicop::Data - base class of a Dicop::Server, contains all data and methods
 
 =head1 SYNOPSIS
 
@@ -2992,7 +2993,7 @@ See C<dicopd> and C<dicopp> on how to use this.
 
 =head1 REQUIRES
 
-perl5.005, Dicop::Base, Dicop::Item, Dicop::Data::Charset, Dicop::Data::Job, 
+perl5.008001, Dicop::Base, Dicop::Item, Dicop::Data::Charset, Dicop::Data::Job, 
 Dicop::Data::Charset::Dictionary, Dicop::Data::Client, Dicop::Data::Proxy,
 Dicop::Request, Dicop::Data::Result, Dicop::Data::Chunk,
 Dicop::Data::Group, Dicop::Data::User, Dicop::Data::Jobtype,
@@ -3021,6 +3022,9 @@ certain time period has passed.
 =head1 METHODS
 
 =head2 output()
+
+This method is called by C<_connect_server()> and used to output error
+messages to STDERR. It is overriden here to do nothing.
 
 =head2 result_list()
 

@@ -12,7 +12,7 @@
 
 package Dicop::Data::Charset;
 use vars qw($VERSION);
-$VERSION = 1.02;	# Current version of this package
+$VERSION = 1.03;	# Current version of this package
 require  5.005;		# requires this Perl version or later
 
 use base qw(Exporter Dicop::Item);
@@ -113,8 +113,7 @@ sub check_strings
   my $cs = $me->{_charset};
   Dicop::Item::_from_string_form($hash, $cs, @strings);
 
-  return $hash->{_error} || '';
- 
+  $hash->{_error} || '';
   }
 
 sub can_change
@@ -273,15 +272,24 @@ sub get_as_string
     {
     my $txt = '';
     my $cs = $self->{_charset};
-    for (my $i = 1; $i < 9; $i++)
+    my $min_len = $cs->minlen(); $min_len = 1 if $min_len < 1;
+    my $max_len = $cs->maxlen(); $max_len = 9 if $max_len > 9;
+    for (my $i = $min_len; $i < $max_len; $i++)
       {
-      $txt .= "For length <b>$i</b> there are <b>";
-      $txt .= $cs->class($i) . "</b> different strings:\n";
-      my $f = Math::String->first($i,$cs);
-      $txt .= " First string is: '$f' (" . $f->as_number() . ")\n";
-      $f = Math::String->last($i,$cs);
-      $txt .= " Last string is : '$f' (" . $f->as_number() . ")\n";
-
+      my $len = $cs->class($i);
+      $txt .= "For length <b>$i</b> there are <b>$len</b> different strings";
+      if ($len == 0)
+	{
+	$txt .= ".\n";
+	}
+      else
+	{
+	$txt .= ":\n";
+	my $f = Math::String->first($i,$cs);
+	$txt .= " First string is: '$f' (" . $f->as_number() . ")\n";
+	$f = Math::String->last($i,$cs);
+	$txt .= " Last string is : '$f' (" . $f->as_number() . ")\n";
+	}
       }
     return $txt;
     }

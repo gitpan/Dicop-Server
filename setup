@@ -29,6 +29,10 @@
 #   * use /usr/bin/env perl -w vs /usr/bin/perl -w
 # 2006-04-24 0.04
 #   * use /usr/bin/perl
+# 2006-06-14 0.05
+#   * use Term::ReadLine for pwd prompt
+#   * use Carp::confess for errors
+#   * do not add user/group if they already exist
 
 use strict;
 use File::Spec;
@@ -36,13 +40,14 @@ use lib 'lib';
 use Dicop::Config;		# to find user/group settings
 use Dicop::Base qw/read_file random a2h/;
 use Digest::MD5;
+use Term::ReadLine;
 
 BEGIN
   {
   $|++;	# output buffer off
   }
 
-print "\nDiCoP Setup v0.04\n";
+print "\nDiCoP Setup v0.05\n";
 print " (c) Bundesamt fuer Sicherheit in der Informationstechnik 2004-2006\n\n";
 
 print " Usage:  ./setup [config_file]\n\n";
@@ -127,11 +132,25 @@ print "Done.\nCopying event templates...\n";
 my $users = File::Spec->catfile($data_dir, $user_file);
 add_admin ( $users ) if -s $users == 0;
 
-print "Done\n\nLooks like your dicopd will use '$user' and '$group' as user and group.\n";
-print "Now trying to create the user and group...\n";
+print "Done\n\n";
 
-print ' '; print `groupadd $group`;
-print ' '; print `useradd $user`;
+# Make sure the user and group will exist
+print "Looks like your Dicop::Server will use:\n";
+print " User: '$user'\n Group: '$group'\n";
+
+if (!getpwnam($group))
+  {
+  print "Now trying to create the group '$group' via 'groupadd $group'...\n ";
+  print `groupaddu $group`;
+  }
+error("Couldn't create group '$group': $!") unless getpwnam($group);
+
+if (!getpwnam($user))
+  {
+  print "Now trying to create the user '$user' via 'useradd $user'...\n ";
+  print `useraddu $user`;
+  }
+error("Couldn't create user '$user': $!") unless getpwnam($user);
 
 print "Done.\n\nNow setting permissions for $user/$group...";
 
@@ -184,7 +203,7 @@ sub read_dir
   {
   my $dir = shift;
 
-  opendir DIR, $dir or die ("Can't read dir '$dir': $!");
+  opendir DIR, $dir or error ("Can't read dir '$dir': $!");
   my @files = readdir DIR;
   closedir DIR;
 
@@ -199,21 +218,27 @@ sub add_admin
   my ($name,$pwd);
 
   my $users = read_file($file);
-  die ("Error: Can't read $file: $!") if !ref $users;
+  error ("Can't read $file: $!") if !ref $users;
 
-  print "\n Enter name [A-Z,a-z,0-9-_]: ";
+  print "\n Enter name [A-Za-z0-9-_]: ";
   $name = <STDIN>; chomp($name); $name = $name || '';
-  die ("User name must not be empty") if $name eq '';
-  die ("User name should contain only A-Z, a-z, 0-9 and _-")
+  error ("User name must not be empty") if $name eq '';
+  error ("User name should contain only A-Z, a-z, 0-9 and _-")
     if $name !~ /^[A-Za-z0-9_-]/;
 
-  print "\n The password MUST contain upper- and lowercase, and be longer than 7 characters:\n";
-  print "\n Enter password [A-Za-z0-0.:!()<>@ -]: ";
-  $pwd = <STDIN>; chomp($pwd); $pwd = $pwd || '';
-  die ("Error: Password must be longer than 7 characters") if length($pwd) < 8;
-  die ("Error: Password contains illegal characters")
+  print  "\n The password MUST contain upper- and lowercase,"
+        ." and be longer than 7 characters:\n\n";
+
+  my $term = Term::ReadLine->new('setup');
+  my $attribs = $term->Attribs();
+  # prevent display of input
+  $attribs->{redisplay_function} = $attribs->{shadow_redisplay};
+
+  $pwd = $term->readline(' Enter password [A-Za-z0-9.:!()<>@ -]: ') || '';
+  error ("Password must be longer than 7 characters") if length($pwd) < 8;
+  error ("Password contains illegal characters")
     if $pwd !~ /[A-Za-z0-9.:!()<>@ -]/;
-  die ("Erorr: Password must contain upper and lower case letters")
+  error ("Password must contain upper and lower case letters")
     if ($pwd !~ /[A-Z]/ || $pwd !~ /[a-z]/);
 
   my $salt = a2h(random(256));
@@ -229,7 +254,7 @@ sub add_admin
   my $md5 = Digest::MD5->new(); $md5->add("$salt$pwd\n");
 
   open FILE,
-   ">$file" or die "Cannot append to $file: $!";
+   ">$file" or error("Cannot append to $file: $!");
   print FILE "Dicop::Data::User {\n";
   print FILE "  id = 1\n";
   print FILE "  name = \"$name\"\n";
@@ -237,5 +262,14 @@ sub add_admin
   print FILE '  pwdhash = "' .  $md5->hexdigest() . "\"\n";
   print FILE "  }\n";
   close FILE;
+  }
+
+sub error
+  {
+  my $msg = shift;
+
+  require Carp;
+  $Carp::CarpLevel = 1;
+  Carp::confess ("Error: $msg");
   }
 

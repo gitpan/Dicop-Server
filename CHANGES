@@ -8,6 +8,26 @@ This document details the complete changes from v3.01 onwards.
 See the other CHANGES files like C<CHANGES-2.20>, C<CHANGES-3.00> etc for the
 full version history up to version v3.00.
 
+=head2 2006-06-14 (Server/Client v3.04)
+
+=over 2
+
+=item fixed
+
+	add ABSTRACT to Makefile.PL
+	delete Dicop-Client from CPAN due to index issues, adapt README.client
+	small POD fixes
+	Fix undef warnings in Dicop::Data::Charset when viewing charsets
+	 with zero strings on some lengths (grouped)
+	Make menu work on grouped, extract and dictionary charset pages
+	require Dicop::Base 3.04 to fix the "empty ID" bug on adding objects
+	./setup: use Term::Readline
+	./setup: dont add user and group if they already exist
+	wcr lib: Total: lines 11221, words 42324, chars 313570
+	4898 tests
+
+=back
+
 =head2 2006-06-01 (Server/Client v3.03)
 
 =over 2
